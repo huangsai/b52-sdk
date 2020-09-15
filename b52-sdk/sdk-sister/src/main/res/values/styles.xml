@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName">
+
+    <style name="sister_CircleImageView" parent="WrapWrap">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="sister_DialogWindow">
+        <item name="android:windowEnterAnimation">@anim/sister_window_in</item>
+        <item name="android:windowExitAnimation">@anim/sister_window_out</item>
+    </style>
+</resources>

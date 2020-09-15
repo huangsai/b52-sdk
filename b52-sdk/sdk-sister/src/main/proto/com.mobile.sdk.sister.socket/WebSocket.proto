@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package com.mobile.sdk.sister.socket;
+
+option java_package = "com.mobile.sdk.sister.socket";
+
+message CommonMessage {
+  // 业务编号100100 ip分组
+  required int32 bizId = 1;
+
+  // 消息类型：1心跳，2企业
+  required int32 msgType = 2;
+
+  // 数据
+  required bytes content = 3;
+}

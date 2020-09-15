@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/size_10dp"
+    android:paddingBottom="@dimen/size_10dp">
+
+    <ImageView
+        android:id="@+id/iv_picture"
+        android:layout_width="@dimen/size_50dp"
+        android:layout_height="@dimen/size_50dp"
+        android:layout_marginStart="@dimen/size_20dp"
+        android:background="@drawable/sister_chat_more_item_bg"
+        android:padding="@dimen/size_10dp"
+        android:src="@drawable/sister_icon_picture"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_5dp"
+        android:text="@string/sister_chat_more_picture_text"
+        android:textColor="@color/sister_color_white"
+        android:textSize="@dimen/font_10sp"
+        app:layout_constraintLeft_toLeftOf="@id/iv_picture"
+        app:layout_constraintRight_toRightOf="@id/iv_picture"
+        app:layout_constraintTop_toBottomOf="@id/iv_picture" />
+
+    <ImageView
+        android:id="@+id/iv_camera"
+        android:layout_width="@dimen/size_50dp"
+        android:layout_height="@dimen/size_50dp"
+        android:layout_marginStart="@dimen/size_20dp"
+        android:background="@drawable/sister_chat_more_item_bg"
+        android:padding="@dimen/size_10dp"
+        android:src="@drawable/sister_icon_camera"
+        app:layout_constraintLeft_toRightOf="@id/iv_picture"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_5dp"
+        android:text="@string/sister_chat_more_camera_text"
+        android:textColor="@color/sister_color_white"
+        android:textSize="@dimen/font_10sp"
+        app:layout_constraintLeft_toLeftOf="@id/iv_camera"
+        app:layout_constraintRight_toRightOf="@id/iv_camera"
+        app:layout_constraintTop_toBottomOf="@id/iv_camera" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

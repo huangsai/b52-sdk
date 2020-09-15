@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sister_chat_pop_white"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/size_50dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sister_system_notice_item_title"
+        android:textColor="@color/sister_color_D82323"
+        android:textSize="@dimen/font_20sp" />
+
+    <View
+        android:layout_width="@dimen/size_1dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/size_10dp"
+        android:background="@color/sister_color_gray" />
+
+    <TextView
+        android:id="@+id/system_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_10dp"
+        android:layout_weight="1"
+        android:textColor="@color/sister_color_black"
+        android:textSize="@dimen/font_18sp"
+        tools:text="系统通知" />
+
+</LinearLayout>

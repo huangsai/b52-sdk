@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/layout_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/sister_color_EDEDED"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/size_10dp"
+        android:paddingRight="@dimen/size_10dp"
+        android:paddingBottom="@dimen/size_10dp"
+        app:layout_constraintBottom_toTopOf="@id/layout_input"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingTop="@dimen/size_10dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/help_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_10dp"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_40dp"
+        android:layout_marginTop="@dimen/size_10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_recycler">
+
+        <EditText
+            android:id="@+id/chat_et"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/sister_input_et_bg"
+            android:hint="@string/sister_input_hint_text"
+            android:paddingLeft="@dimen/size_10dp"
+            android:paddingRight="@dimen/size_10dp"
+            android:singleLine="true"
+            android:textColor="@color/sister_color_black"
+            android:textColorHint="@color/sister_color_gray"
+            android:textSize="@dimen/font_16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/chat_emoji" />
+
+        <TextView
+            android:id="@+id/press_voice"
+            android:layout_width="@dimen/size_0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/sister_input_et_bg"
+            android:gravity="center"
+            android:text="@string/sister_input_press_voice_text"
+            android:textColor="@color/sister_color_black"
+            android:textSize="@dimen/font_16sp"
+            android:visibility="invisible"
+            app:layout_constraintLeft_toLeftOf="@id/chat_et"
+            app:layout_constraintRight_toRightOf="@id/chat_et" />
+
+        <ImageView
+            android:id="@+id/chat_emoji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_10dp"
+            android:src="@drawable/sister_icon_emoji"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/chat_et"
+            app:layout_constraintRight_toLeftOf="@id/chat_add"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/chat_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_10dp"
+            android:src="@drawable/sister_icon_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/chat_emoji"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

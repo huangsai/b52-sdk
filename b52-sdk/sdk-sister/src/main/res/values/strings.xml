@@ -1,0 +1,14 @@
+<resources>
+    <string name="sister_main_tab_system_text">系\n统</string>
+    <string name="sister_main_tab_csms_text">客\n服</string>
+    <string name="sister_system_notice_item_title">系统</string>
+    <string name="sister_system_notice_mute_text">该频道下无法发言</string>
+    <string name="sister_input_hint_text">点击此处输入文本</string>
+    <string name="sister_input_press_voice_text">按住说话</string>
+    <string name="sister_deposit_type_wechat_text">微信充值</string>
+    <string name="sister_deposit_type_alipay_text">支付宝充值</string>
+    <string name="sister_deposit_click_text">点击开始充值</string>
+    <string name="sister_deposit_receive_text">收款</string>
+    <string name="sister_chat_more_picture_text">照片</string>
+    <string name="sister_chat_more_camera_text">拍摄</string>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+00%=FF（不透明）
+5%=F2
+10%=E5
+15%=D8
+20%=CC
+25%=BF
+30%=B2
+35%=A5
+40%=99
+45%=8c
+50%=7F
+55%=72
+60%=66
+65%=59
+70%=4c
+75%=3F
+80%=33
+85%=21
+90%=19
+95%=0c
+100%=00（全透明）
+-->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName">
+
+    <color name="sister_color_white">#FFFFFF</color>
+    <color name="sister_color_black">#000000</color>
+    <color name="sister_color_black_transparent">#B2000000</color>
+    <color name="sister_color_gray">#939393</color>
+    <color name="sister_color_gray_transparent">#7F939393</color>
+    <color name="sister_color_EDEDED">#EDEDED</color>
+    <color name="sister_color_E3F3FF">#E3F3FF</color>
+    <color name="sister_color_703904">#703904</color>
+    <color name="sister_color_E5D7B0">#E5D7B0</color>
+    <color name="sister_color_D82323">#D82323</color>
+
+</resources>

@@ -1,0 +1,24 @@
+apply from: "../gradle/android_lib_module.gradle"
+apply plugin: 'com.squareup.wire'
+
+android {
+
+    sourceSets {
+        main.java.srcDirs += "${buildDir}/generated/source/wire"
+    }
+
+    resourcePrefix "sister_"
+}
+
+wire {
+    kotlin {
+        javaInterop true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.github.skydoves:balloon:1.2.2"
+
+    api "com.squareup.wire:wire-runtime:3.2.2"
+}
