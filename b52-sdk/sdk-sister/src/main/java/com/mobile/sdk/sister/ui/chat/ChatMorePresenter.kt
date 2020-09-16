@@ -2,9 +2,9 @@ package com.mobile.sdk.sister.ui.chat
 
 import android.view.View
 import android.widget.ImageView
+import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.mvvm.lifecycle.SimplePresenter
 import com.mobile.sdk.sister.R
-import com.mobile.sdk.sister.base.Msg
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.skydoves.balloon.createBalloon
 

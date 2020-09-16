@@ -5,10 +5,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.room.Room
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.android.mvvm.AppContext
+import com.mobile.guava.android.mvvm.AppTimber
 import com.mobile.guava.android.mvvm.showDialogFragment
 import com.mobile.guava.jvm.Guava
 import com.mobile.sdk.sister.base.AppManager
-import com.mobile.sdk.sister.base.AppTimber
 import com.mobile.sdk.sister.dagger.DaggerSisterComponent
 import com.mobile.sdk.sister.dagger.SisterComponent
 import com.mobile.sdk.sister.data.db.RoomAppDatabase

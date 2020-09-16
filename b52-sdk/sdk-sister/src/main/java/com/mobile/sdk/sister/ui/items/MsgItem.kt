@@ -141,32 +141,23 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    fun ofText(): Text = this as Text
+    fun ofText(): MsgItem = this as Text
 
-    @Suppress("UNCHECKED_CAST")
-    fun ofImage(): Image = this as Image
+    fun ofImage(): MsgItem = this as Image
 
-    @Suppress("UNCHECKED_CAST")
-    fun ofAudio(): Audio = this as Audio
+    fun ofAudio(): MsgItem = this as Audio
 
-    @Suppress("UNCHECKED_CAST")
-    fun ofText2(): Text2 = this as Text2
+    fun ofText2(): MsgItem = this as Text2
 
-    @Suppress("UNCHECKED_CAST")
-    fun ofImage2(): Image2 = this as Image2
+    fun ofImage2(): MsgItem = this as Image2
 
-    @Suppress("UNCHECKED_CAST")
-    fun ofAudio2(): Audio2 = this as Audio2
+    fun ofAudio2(): MsgItem = this as Audio2
 
-    @Suppress("UNCHECKED_CAST")
-    fun ofDeposit(): Deposit = this as Deposit
+    fun ofDeposit(): MsgItem = this as Deposit
 
-    @Suppress("UNCHECKED_CAST")
-    fun ofTime(): Time = this as Time
+    fun ofTime(): MsgItem = this as Time
 
-    @Suppress("UNCHECKED_CAST")
-    fun ofSystem(): System = this as System
+    fun ofSystem(): MsgItem = this as System
 
     companion object {
 

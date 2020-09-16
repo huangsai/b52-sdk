@@ -10,10 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.mobile.guava.android.mvvm.BaseAppCompatDialogFragment
+import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.ui.screen.screen
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterLib
-import com.mobile.sdk.sister.base.Msg
 import com.mobile.sdk.sister.databinding.SisterDialogMainBinding
 import com.mobile.sdk.sister.ui.chat.ChatFragment
 import com.mobile.sdk.sister.ui.system.SystemFragment
