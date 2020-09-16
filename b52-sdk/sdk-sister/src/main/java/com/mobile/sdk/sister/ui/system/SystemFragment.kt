@@ -44,17 +44,6 @@ class SystemFragment : TopMainFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val items = listOf(
-            ApiSimpleMessage("0", TYPE_SYSTEM, "系统通知", 12323123).asNormal(),
-            ApiSimpleMessage(
-                "", TYPE_SYSTEM, "系统通知系统通知系统通知", 12323123).asNormal(),
-            ApiSimpleMessage("", TYPE_SYSTEM, "系统通知系统通知系统通知系统通知系统通知", 12323123).asNormal(),
-            ApiSimpleMessage("", TYPE_SYSTEM, "系统通知系统通知", 12323123).asNormal(),
-            ApiSimpleMessage("", TYPE_SYSTEM, "系统通知系统通知系统通知系统通知系统通知系统通知系统通知", 12323123).asNormal(),
-        ).map {
-            MsgItem.create(it)
-        }
-        adapter.addAll(items)
     }
 
     override fun onDestroyView() {

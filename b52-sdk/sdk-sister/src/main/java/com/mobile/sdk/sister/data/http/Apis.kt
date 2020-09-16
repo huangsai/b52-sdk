@@ -9,28 +9,28 @@ const val TYPE_AUDIO = 3
 const val TYPE_TIME = 4
 const val TYPE_SYSTEM = 5
 const val TYPE_DEPOSIT = 6
-const val TYPE_UPGRADE = 7
 
 @JsonClass(generateAdapter = true)
 data class ApiSimpleMessage(
     @Json(name = "id") val id: String,
     @Json(name = "chatType") val type: Int,
-    @Json(name = "sayContent") val content: String,
-    @Json(name = "toUserId") val toUserId: Long
+    @Json(name = "toUserId") val toUserId: Long,
+    @Json(name = "sayContent") val content: String
 )
 
 @JsonClass(generateAdapter = true)
 data class ApiMessage(
     @Json(name = "id") val id: String,
-    @Json(name = "sayContent") val content: String,
-    @Json(name = "toUserId") val toUserId: Long,
     @Json(name = "chatType") val type: Int,
+    @Json(name = "toUserId") val toUserId: Long,
+    @Json(name = "sayContent") val content: String,
     @Json(name = "sayTime") val time: Long,
     @Json(name = "formImgUrl") val fromUserProfile: String,
     @Json(name = "formUserName") val formUsername: String,
     @Json(name = "fromUserId") val fromUserId: Long,
     @Json(name = "formUserType") val fromUserType: Int
 ) {
+
     @JsonClass(generateAdapter = true)
     data class Text(@Json(name = "msg") val msg: String)
 
@@ -55,12 +55,13 @@ data class ApiMessage(
     @JsonClass(generateAdapter = true)
     data class Deposit(
         @Json(name = "name") val name: String,
-        @Json(name = "url") val url: String,
-        @Json(name = "type") val type: Int
+        @Json(name = "type") val type: Int,
+        @Json(name = "url") val url: String
     )
 }
 
+@JsonClass(generateAdapter = true)
 data class ApiHelp(
-    val type: Int,
-    val content: String
+    @Json(name = "type") val type: Int,
+    @Json(name = "content") val content: String
 )

@@ -37,56 +37,7 @@ class ChatListPresenter(
 
     fun load() {
         chatFragment.lifecycleScope.launch(Dispatchers.IO) {
-            val items = listOf(
-                ApiMessage(
-                    0, TYPE_TIME, "2020-09-14 11:09", 12323123,
-                    1, "", "", 1, ""
-                ),
-                ApiMessage(
-                    0, TYPE_TEXT, "系统通知系统通知系统通知系统通知系统通知", 12323123,
-                    1, "", "", 0, ""
-                ),
-                ApiMessage(
-                    0, TYPE_TEXT, "系统通知系通知系统通知系统通知", 12323123,
-                    1, "", "", 0, ""
-                ),
-                ApiMessage(
-                    0, TYPE_TEXT, "系统通知系统通知", 12323123,
-                    1, "", "", 1, ""
-                ),
-                ApiMessage(
-                    0, TYPE_IMAGE, "", 12323123,
-                    1, "", "", 1, ""
-                ),
-                ApiMessage(
-                    0, TYPE_IMAGE, "爱的看哈扣税的啊的口号是", 12323123,
-                    1, "", "", 0, ""
-                ),
-                ApiMessage(
-                    0, TYPE_TIME, "2020-09-14 11:19", 12323123,
-                    1, "", "", 1, ""
-                ),
-                ApiMessage(
-                    0, TYPE_TEXT, "充值方式", 12323123,
-                    1, "", "", 0, ""
-                ),
-                ApiMessage(
-                    0, TYPE_DEPOSIT, "", 12323123,
-                    1, "", "", 0, ""
-                ),
-                ApiMessage(
-                    0, TYPE_TEXT, "爱的看哈扣税的啊的口号是", 12323123,
-                    1, "", "", 0, ""
-                ),
-                ApiMessage(
-                    0, TYPE_AUDIO, "", 12323123,
-                    0, "", "", 0, ""
-                ),
-                ApiMessage(
-                    0, TYPE_AUDIO, "爱的看哈扣税的啊的口号是", 12323123,
-                    1, "", "", 1, ""
-                ),
-            ).map {
+            val items = model.loadMessages().map {
                 MsgItem.create(it)
             }
             withContext(Dispatchers.IO) {
