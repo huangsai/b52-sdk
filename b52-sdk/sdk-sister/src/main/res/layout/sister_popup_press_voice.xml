@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_popup"
+    android:layout_width="180dp"
+    android:layout_height="180dp"
+    android:background="@drawable/sister_press_voice_popup_bg">
+
+    <TextView
+        android:id="@+id/press_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_10dp"
+        android:textColor="@color/sister_color_E5D7B0"
+        android:textSize="@dimen/font_15sp"
+        app:layout_constraintBottom_toTopOf="@id/press_voice_icon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/press_voice_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_10dp"
+        android:src="@drawable/sister_icon_press_voice"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/press_duration" />
+
+    <TextView
+        android:id="@+id/press_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_10dp"
+        android:layout_marginBottom="@dimen/size_10dp"
+        android:textColor="@color/sister_color_E5D7B0"
+        android:textSize="@dimen/font_15sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/press_voice_icon"
+        tools:text="" />
+</androidx.constraintlayout.widget.ConstraintLayout>

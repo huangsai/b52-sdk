@@ -14,7 +14,7 @@
         app:shapeAppearanceOverlay="@style/sister_CircleImageView" />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/sister_chat_pop_white"

@@ -4,16 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.sdk.sister.R
-import com.mobile.sdk.sister.data.http.ApiSimpleMessage
-import com.mobile.sdk.sister.data.http.TYPE_SYSTEM
 import com.mobile.sdk.sister.databinding.SisterFragmentSystemBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
-import com.mobile.sdk.sister.ui.asNormal
 import com.mobile.sdk.sister.ui.items.MsgItem
 import com.pacific.adapter.RecyclerAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SystemFragment : TopMainFragment() {
 
@@ -44,6 +45,18 @@ class SystemFragment : TopMainFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        load()
+    }
+
+    private fun load() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val items = fParent.model.loadSystemNotices().map {
+                MsgItem.create(it)
+            }
+            withContext(Dispatchers.Main) {
+                adapter.addAll(items)
+            }
+        }
     }
 
     override fun onDestroyView() {
