@@ -4,7 +4,9 @@ interface PlatformPreferences {
 
     var username: String
 
-    var userProfile: String
+    var userImage: String
+
+    var userImageRes: Int
 
     var userId: Long
 

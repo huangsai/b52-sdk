@@ -3,7 +3,9 @@ package com.mobile.sdk.sister.dagger
 import com.mobile.guava.android.mvvm.dagger.SingletonScopeViewModelFactoryBinder
 import com.mobile.guava.https.HttpsModule
 import com.mobile.guava.https.SimpleHttpsModule
+import com.mobile.sdk.sister.data.http.ApiConverterFactory
 import com.mobile.sdk.sister.data.http.DataService
+import com.mobile.sdk.sister.data.http.HostSelectionInterceptor
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -11,6 +13,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.LoggingEventListener
 import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 import javax.net.ssl.SSLContext
@@ -55,12 +58,6 @@ class SisterModule : HttpsModule {
 
     @Provides
     @Singleton
-    override fun provideRetrofit(okHttpClient: OkHttpClient, json: Moshi): Retrofit {
-        return delegate.provideRetrofit(okHttpClient, json)
-    }
-
-    @Provides
-    @Singleton
     override fun provideOkHttpClient(
         x509TrustManager: X509TrustManager,
         sslContext: SSLContext,
@@ -68,6 +65,7 @@ class SisterModule : HttpsModule {
         httpLoggingInterceptorLogger: HttpLoggingInterceptor.Logger
     ): OkHttpClient {
         return OkHttpClient().newBuilder()
+            .addInterceptor(HostSelectionInterceptor())
             .addInterceptor(httpLoggingInterceptor)
             .eventListenerFactory(LoggingEventListener.Factory(httpLoggingInterceptorLogger))
             .sslSocketFactory(sslContext.socketFactory, x509TrustManager)
@@ -76,6 +74,17 @@ class SisterModule : HttpsModule {
             .readTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .pingInterval(180 * 1000, TimeUnit.MILLISECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    override fun provideRetrofit(okHttpClient: OkHttpClient, json: Moshi): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://www.google.com/")
+            .client(okHttpClient)
+            .addConverterFactory(ApiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(json))
             .build()
     }
 

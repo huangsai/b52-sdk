@@ -1,6 +1,7 @@
 package com.mobile.sdk.sister.ui
 
 import androidx.lifecycle.ViewModel
+import com.mobile.sdk.sister.data.SisterRepository
 import com.mobile.sdk.sister.data.http.*
 import javax.inject.Inject
 

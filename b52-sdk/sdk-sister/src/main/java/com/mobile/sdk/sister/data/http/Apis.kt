@@ -11,6 +11,15 @@ const val TYPE_SYSTEM = 5
 const val TYPE_DEPOSIT = 6
 
 @JsonClass(generateAdapter = true)
+data class ApiAck(
+    @Json(name = "id") val id: String,
+    @Json(name = "msg") val msg: String,
+    @Json(name = "result") val status: Int
+) {
+    fun success(): Boolean = status == 1
+}
+
+@JsonClass(generateAdapter = true)
 data class ApiSimpleMessage(
     @Json(name = "id") val id: String,
     @Json(name = "chatType") val type: Int,
@@ -25,10 +34,10 @@ data class ApiMessage(
     @Json(name = "toUserId") val toUserId: Long,
     @Json(name = "sayContent") val content: String,
     @Json(name = "sayTime") val time: Long,
-    @Json(name = "formImgUrl") val fromUserProfile: String,
-    @Json(name = "formUserName") val formUsername: String,
+    @Json(name = "fromImgUrl") val fromUserProfile: String,
+    @Json(name = "fromUserName") val formUsername: String,
     @Json(name = "fromUserId") val fromUserId: Long,
-    @Json(name = "formUserType") val fromUserType: Int
+    @Json(name = "fromUserType") val fromUserType: Int
 ) {
 
     @JsonClass(generateAdapter = true)
@@ -64,4 +73,10 @@ data class ApiMessage(
 data class ApiHelp(
     @Json(name = "type") val type: Int,
     @Json(name = "content") val content: String
+)
+
+@JsonClass(generateAdapter = true)
+data class ApiToken(
+    @Json(name = "token") val token: String,
+    @Json(name = "salt") val salt: String
 )

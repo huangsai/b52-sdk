@@ -3,12 +3,17 @@ package com.mobile.sdk.sister.data.file
 object AppPreferences : PlatformPreferences {
 
     override var username: String
+        get() = "anbey123456"
+        set(value) {}
+
+    override var userImage: String
         get() = "Not yet implemented"
         set(value) {}
 
-    override var userProfile: String
-        get() = "Not yet implemented"
+    override var userImageRes: Int
+        get() = TODO("Not yet implemented")
         set(value) {}
+
 
     override var userId: Long
         get() = 0L

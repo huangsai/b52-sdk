@@ -6,7 +6,8 @@ import com.mobile.guava.https.HttpsComponent
 import com.mobile.guava.https.PlatformContext
 import com.mobile.sdk.sister.data.db.AppDatabase
 import com.mobile.sdk.sister.data.http.DataService
-import com.mobile.sdk.sister.data.http.SisterRepository
+import com.mobile.sdk.sister.data.SisterRepository
+import com.mobile.sdk.sister.data.file.PlatformPreferences
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -25,6 +26,7 @@ interface SisterComponent : HttpsComponent, ViewModelFactoryComponent {
             @BindsInstance app: Application,
             @BindsInstance platformContext: PlatformContext,
             @BindsInstance appDatabase: AppDatabase,
+            @BindsInstance platformPreferences: PlatformPreferences
         ): SisterComponent
     }
 }

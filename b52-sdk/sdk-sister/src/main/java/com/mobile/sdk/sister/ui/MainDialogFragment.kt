@@ -13,7 +13,7 @@ import com.mobile.guava.android.mvvm.BaseAppCompatDialogFragment
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.ui.screen.screen
 import com.mobile.sdk.sister.R
-import com.mobile.sdk.sister.SisterLib
+import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.databinding.SisterDialogMainBinding
 import com.mobile.sdk.sister.ui.chat.ChatFragment
 import com.mobile.sdk.sister.ui.system.SystemFragment
@@ -26,7 +26,7 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
 
     private var sCancelable: Boolean = false
 
-    val model: SisterViewModel by viewModels { SisterLib.component.viewModelFactory() }
+    val model: SisterViewModel by viewModels { SisterX.component.viewModelFactory() }
     var currentFragment: TopMainFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

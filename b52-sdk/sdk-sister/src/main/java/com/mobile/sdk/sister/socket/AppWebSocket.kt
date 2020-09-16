@@ -1,7 +1,7 @@
 package com.mobile.sdk.sister.socket
 
 import com.mobile.guava.android.mvvm.AndroidX
-import com.mobile.sdk.sister.SisterLib
+import com.mobile.sdk.sister.SisterX
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
@@ -75,7 +75,7 @@ object AppWebSocket : LongLiveSocket() {
                     .url("ws://192.168.2.91:30302/csms")
                     .build()
             }
-            internalSocket = SisterLib.component.okHttpClient().newWebSocket(request, webSocketListener)
+            internalSocket = SisterX.component.okHttpClient().newWebSocket(request, webSocketListener)
             log("---------connect---------")
         }
     }
