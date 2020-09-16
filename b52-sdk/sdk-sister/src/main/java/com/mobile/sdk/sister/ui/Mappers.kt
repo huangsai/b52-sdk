@@ -5,7 +5,7 @@ import com.mobile.sdk.sister.data.http.ApiMessage
 import com.mobile.sdk.sister.data.http.ApiSimpleMessage
 
 fun ApiMessage.asSimple(): ApiSimpleMessage {
-    return ApiSimpleMessage(id, content, toUserId, type)
+    return ApiSimpleMessage(id,type, content, toUserId)
 }
 
 fun ApiSimpleMessage.asNormal(): ApiMessage {
