@@ -1,5 +1,6 @@
 package com.mobile.sdk.sister.data.http
 
+import com.mobile.sdk.sister.data.db.DbMessage
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -35,7 +36,7 @@ data class ApiMessage(
     @Json(name = "sayContent") val content: String,
     @Json(name = "sayTime") val time: Long,
     @Json(name = "fromImgUrl") val fromUserProfile: String,
-    @Json(name = "fromUserName") val formUsername: String,
+    @Json(name = "fromUserName") val fromUsername: String,
     @Json(name = "fromUserId") val fromUserId: Long,
     @Json(name = "fromUserType") val fromUserType: Int
 ) {
@@ -67,6 +68,22 @@ data class ApiMessage(
         @Json(name = "type") val type: Int,
         @Json(name = "url") val url: String
     )
+
+    @JvmOverloads
+    fun toDbMessage(status: Int = 0): DbMessage {
+        return DbMessage(
+            id,
+            type,
+            toUserId,
+            content,
+            time,
+            fromUserProfile,
+            fromUsername,
+            fromUserId,
+            fromUserType,
+            status
+        )
+    }
 }
 
 @JsonClass(generateAdapter = true)

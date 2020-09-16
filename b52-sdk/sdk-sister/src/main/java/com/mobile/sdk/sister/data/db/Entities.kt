@@ -3,16 +3,34 @@ package com.mobile.sdk.sister.data.db
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.mobile.sdk.sister.data.http.ApiMessage
 
 @Entity(
     tableName = "sister_message"
 )
 data class DbMessage(
-    @ColumnInfo(name = "_id") @PrimaryKey(autoGenerate = true) val _id: Long,
-    @ColumnInfo(name = "type") val type: Int,
-    @ColumnInfo(name = "content") val content: String,
-    @ColumnInfo(name = "fromUserId") val fromUserId: Long,
-    @ColumnInfo(name = "toUserId") val toUserId: Long,
-    @ColumnInfo(name = "status") val status: Int,
-    @ColumnInfo(name = "time") val time: Long
-)
+    @ColumnInfo(name = "_id") @PrimaryKey(autoGenerate = false) val _id: String,
+    val type: Int,
+    val toUserId: Long,
+    val content: String,
+    val time: Long,
+    val fromUserProfile: String,
+    val fromUsername: String,
+    val fromUserId: Long,
+    val fromUserType: Int,
+    val status: Int
+) {
+    fun toApiMessage(): ApiMessage {
+        return ApiMessage(
+            _id,
+            type,
+            toUserId,
+            content,
+            time,
+            fromUserProfile,
+            fromUsername,
+            fromUserId,
+            fromUserType
+        )
+    }
+}
