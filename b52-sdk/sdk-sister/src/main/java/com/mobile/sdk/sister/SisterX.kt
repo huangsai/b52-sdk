@@ -1,6 +1,7 @@
 package com.mobile.sdk.sister
 
 import android.app.Application
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.room.Room
 import com.mobile.guava.android.mvvm.AndroidX
@@ -45,7 +46,7 @@ object SisterX {
         require(obj.username.isNotEmpty()) { "username is empty" }
         require(obj.token.isNotEmpty()) { "token is empty" }
         require(obj.userImage.isNotEmpty() || obj.userImageRes > 0) { "no userImage" }
-        
+
         AppPreferences.userId = obj.userId.safeToLong()
         AppPreferences.token = obj.token
         AppPreferences.username = obj.username
@@ -53,8 +54,10 @@ object SisterX {
         AppPreferences.userImageRes = obj.userImageRes
     }
 
-    fun show(activity: FragmentActivity, cancelable: Boolean) {
-        activity.showDialogFragment(MainDialogFragment.newInstance(cancelable))
+    fun show(activity: FragmentActivity, cancelable: Boolean): DialogFragment {
+        return MainDialogFragment.newInstance(cancelable).also {
+            activity.showDialogFragment(it)
+        }
     }
 
     private fun createRoomDatabase(): RoomAppDatabase {
