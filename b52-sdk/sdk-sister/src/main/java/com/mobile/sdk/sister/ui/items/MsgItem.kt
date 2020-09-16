@@ -7,6 +7,7 @@ import com.mobile.sdk.sister.databinding.*
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
 import com.squareup.moshi.Types
+import java.lang.reflect.Type
 
 abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
@@ -30,6 +31,59 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
     lateinit var upgrade: ApiMessage.Upgrade
         private set
+
+    internal fun ofText(): MsgItem {
+        text = SisterLib.component.json()
+            .adapter<ApiMessage.Text>(subType(ApiMessage.Text::class.java))
+            .fromJson(data.content)!!
+        return this
+    }
+
+    internal fun ofImage(): MsgItem {
+        image = SisterLib.component.json()
+            .adapter<ApiMessage.Image>(subType(ApiMessage.Image::class.java))
+            .fromJson(data.content)!!
+        return this
+    }
+
+    internal fun ofAudio(): MsgItem {
+        audio = SisterLib.component.json()
+            .adapter<ApiMessage.Audio>(subType(ApiMessage.Audio::class.java))
+            .fromJson(data.content)!!
+        return this
+    }
+
+    internal fun ofDeposit(): MsgItem {
+        deposit = SisterLib.component.json()
+            .adapter<ApiMessage.Deposit>(subType(ApiMessage.Deposit::class.java))
+            .fromJson(data.content)!!
+        return this
+    }
+
+    internal fun ofTime(): MsgItem {
+        time = SisterLib.component.json()
+            .adapter<ApiMessage.Time>(subType(ApiMessage.Time::class.java))
+            .fromJson(data.content)!!
+        return this
+    }
+
+    internal fun ofSystem(): MsgItem {
+        system = SisterLib.component.json()
+            .adapter<ApiMessage.System>(subType(ApiMessage.System::class.java))
+            .fromJson(data.content)!!
+        return this
+    }
+
+    internal fun ofUpgrade(): MsgItem {
+        upgrade = SisterLib.component.json()
+            .adapter<ApiMessage.Upgrade>(subType(ApiMessage.Upgrade::class.java))
+            .fromJson(data.content)!!
+        return this
+    }
+
+    private fun subType(type: Type): Type {
+        return Types.newParameterizedType(ApiMessage::class.java, type)
+    }
 
     class Text(data: ApiMessage) : MsgItem(data) {
 
@@ -101,9 +155,6 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    /**
-     * 新版支持的消息类型，用于提示当前app版本过低，无法显示当前消息
-     */
     class Upgrade(data: ApiMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -159,88 +210,6 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         override fun getLayout(): Int {
             return R.layout.sister_item_system_notice
         }
-    }
-
-    internal fun ofText(): MsgItem {
-        text = SisterLib.component.json()
-            .adapter<ApiMessage.Text>(
-                Types.newParameterizedType(
-                    ApiMessage::class.java,
-                    ApiMessage.Text::class.java
-                )
-            ).fromJson(data.content)!!
-        return this
-    }
-
-    internal fun ofImage(): MsgItem {
-        image = SisterLib.component.json()
-            .adapter<ApiMessage.Image>(
-                Types.newParameterizedType(
-                    ApiMessage::class.java,
-                    ApiMessage.Image::class.java
-                )
-            ).fromJson(data.content)!!
-        return this
-    }
-
-    internal fun ofAudio(): MsgItem {
-        audio = SisterLib.component.json()
-            .adapter<ApiMessage.Audio>(
-                Types.newParameterizedType(
-                    ApiMessage::class.java,
-                    ApiMessage.Audio::class.java
-                )
-            )
-            .fromJson(data.content)!!
-        return this
-    }
-
-    internal fun ofDeposit(): MsgItem {
-        deposit = SisterLib.component.json()
-            .adapter<ApiMessage.Deposit>(
-                Types.newParameterizedType(
-                    ApiMessage::class.java,
-                    ApiMessage.Deposit::class.java
-                )
-            )
-            .fromJson(data.content)!!
-        return this
-    }
-
-    internal fun ofTime(): MsgItem {
-        time = SisterLib.component.json()
-            .adapter<ApiMessage.Time>(
-                Types.newParameterizedType(
-                    ApiMessage::class.java,
-                    ApiMessage.Time::class.java
-                )
-            )
-            .fromJson(data.content)!!
-        return this
-    }
-
-    internal fun ofSystem(): MsgItem {
-        system = SisterLib.component.json()
-            .adapter<ApiMessage.System>(
-                Types.newParameterizedType(
-                    ApiMessage::class.java,
-                    ApiMessage.System::class.java
-                )
-            )
-            .fromJson(data.content)!!
-        return this
-    }
-
-    internal fun ofUpgrade(): MsgItem {
-        upgrade = SisterLib.component.json()
-            .adapter<ApiMessage.Upgrade>(
-                Types.newParameterizedType(
-                    ApiMessage::class.java,
-                    ApiMessage.Upgrade::class.java
-                )
-            )
-            .fromJson(data.content)!!
-        return this
     }
 
     companion object {

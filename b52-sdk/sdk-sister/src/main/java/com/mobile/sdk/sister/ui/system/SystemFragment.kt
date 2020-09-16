@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.sdk.sister.R
-import com.mobile.sdk.sister.data.http.ApiMessage
+import com.mobile.sdk.sister.data.http.ApiSimpleMessage
 import com.mobile.sdk.sister.data.http.TYPE_SYSTEM
 import com.mobile.sdk.sister.databinding.SisterFragmentSystemBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
+import com.mobile.sdk.sister.ui.asNormal
 import com.mobile.sdk.sister.ui.items.MsgItem
 import com.pacific.adapter.RecyclerAdapter
 
@@ -44,26 +45,12 @@ class SystemFragment : TopMainFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val items = listOf(
-            ApiMessage(
-                0, TYPE_SYSTEM, "系统通知", 12323123,
-                1, "", "", 1, ""
-            ),
-            ApiMessage(
-                0, TYPE_SYSTEM, "系统通知系统通知系统通知", 12323123,
-                1, "", "", 1, ""
-            ),
-            ApiMessage(
-                0, TYPE_SYSTEM, "系统通知系统通知系统通知系统通知系统通知", 12323123,
-                1, "", "", 1, ""
-            ),
-            ApiMessage(
-                0, TYPE_SYSTEM, "系统通知系统通知", 12323123,
-                1, "", "", 1, ""
-            ),
-            ApiMessage(
-                0, TYPE_SYSTEM, "系统通知系统通知系统通知系统通知系统通知系统通知系统通知", 12323123,
-                1, "", "", 1, ""
-            ),
+            ApiSimpleMessage("0", TYPE_SYSTEM, "系统通知", 12323123).asNormal(),
+            ApiSimpleMessage(
+                "", TYPE_SYSTEM, "系统通知系统通知系统通知", 12323123).asNormal(),
+            ApiSimpleMessage("", TYPE_SYSTEM, "系统通知系统通知系统通知系统通知系统通知", 12323123).asNormal(),
+            ApiSimpleMessage("", TYPE_SYSTEM, "系统通知系统通知", 12323123).asNormal(),
+            ApiSimpleMessage("", TYPE_SYSTEM, "系统通知系统通知系统通知系统通知系统通知系统通知系统通知", 12323123).asNormal(),
         ).map {
             MsgItem.create(it)
         }

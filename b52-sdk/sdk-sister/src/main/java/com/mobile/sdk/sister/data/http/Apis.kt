@@ -14,9 +14,9 @@ const val TYPE_UPGRADE = 7
 @JsonClass(generateAdapter = true)
 data class ApiSimpleMessage(
     @Json(name = "id") val id: String,
+    @Json(name = "chatType") val type: Int,
     @Json(name = "sayContent") val content: String,
-    @Json(name = "toUserId") val toUserId: Long,
-    @Json(name = "chatType") val type: Int
+    @Json(name = "toUserId") val toUserId: Long
 )
 
 @JsonClass(generateAdapter = true)
