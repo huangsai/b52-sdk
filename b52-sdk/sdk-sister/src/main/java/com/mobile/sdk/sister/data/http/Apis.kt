@@ -1,5 +1,8 @@
 package com.mobile.sdk.sister.data.http
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
 const val TYPE_TEXT = 1
 const val TYPE_IMAGE = 2
 const val TYPE_AUDIO = 3
@@ -8,19 +11,55 @@ const val TYPE_SYSTEM = 5
 const val TYPE_DEPOSIT = 6
 const val TYPE_UPGRADE = 7
 
-data class ApiMessage(
-    val id: Long,// 消息id
-    val type: Int,// 消息类别，如文本、语音、图片、充值等
-    val content: String,// 消息内容，客户端根据type类型去解析，它是一个json串
-    val time: Long,// 发送时间（毫秒）
-    val fromUserId: Long,// 发送方用户id
-    val fromUserProfile: String,// 发送方用户头像
-    val fromUsername: String,// 发送方用户名字
-    val toUserId: Long,// 接收方用户id
-    val toUsername: String// 接收方用户名
+@JsonClass(generateAdapter = true)
+data class ApiSimpleMessage(
+    @Json(name = "id") val id: String,
+    @Json(name = "sayContent") val content: String,
+    @Json(name = "toUserId") val toUserId: Long,
+    @Json(name = "chatType") val type: Int
 )
 
-//快捷功能
+@JsonClass(generateAdapter = true)
+data class ApiMessage(
+    @Json(name = "id") val id: String,
+    @Json(name = "sayContent") val content: String,
+    @Json(name = "toUserId") val toUserId: Long,
+    @Json(name = "chatType") val type: Int,
+    @Json(name = "sayTime") val time: Long,
+    @Json(name = "formImgUrl") val fromUserProfile: String,
+    @Json(name = "formUserName") val formUsername: String,
+    @Json(name = "fromUserId") val fromUserId: Long,
+    @Json(name = "formUserType") val fromUserType: Int
+) {
+    @JsonClass(generateAdapter = true)
+    data class Text(@Json(name = "msg") val msg: String)
+
+    @JsonClass(generateAdapter = true)
+    data class Audio(
+        @Json(name = "duration") val duration: Long,
+        @Json(name = "url") val url: String
+    )
+
+    @JsonClass(generateAdapter = true)
+    data class Image(@Json(name = "url") val url: String)
+
+    @JsonClass(generateAdapter = true)
+    data class System(@Json(name = "msg") val msg: String)
+
+    @JsonClass(generateAdapter = true)
+    data class Upgrade(@Json(name = "msg") val msg: String)
+
+    @JsonClass(generateAdapter = true)
+    data class Time(@Json(name = "nano") val nano: Long)
+
+    @JsonClass(generateAdapter = true)
+    data class Deposit(
+        @Json(name = "name") val name: String,
+        @Json(name = "url") val url: String,
+        @Json(name = "type") val type: Int
+    )
+}
+
 data class ApiHelp(
     val type: Int,
     val content: String
