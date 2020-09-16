@@ -16,6 +16,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener {
     private lateinit var chatListPresenter: ChatListPresenter
     private lateinit var chatHelpPresenter: ChatHelpPresenter
     private lateinit var chatMorePresenter: ChatMorePresenter
+    private lateinit var chatVoicePresenter: ChatVoicePresenter
 
     companion object {
         @JvmStatic
@@ -31,6 +32,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener {
         chatListPresenter = ChatListPresenter(this, binding, fParent.model)
         chatHelpPresenter = ChatHelpPresenter(this, binding, fParent.model)
         chatMorePresenter = ChatMorePresenter(this, binding)
+        chatVoicePresenter = ChatVoicePresenter(this, binding)
         binding.chatAdd.setOnClickListener(this)
         return binding.root
     }

@@ -59,7 +59,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/chat_emoji" />
 
-        <TextView
+        <com.mobile.sdk.sister.ui.views.VoiceRecordButton
             android:id="@+id/press_voice"
             android:layout_width="@dimen/size_0dp"
             android:layout_height="match_parent"

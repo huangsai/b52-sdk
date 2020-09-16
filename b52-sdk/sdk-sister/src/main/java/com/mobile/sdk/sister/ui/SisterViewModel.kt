@@ -22,8 +22,8 @@ class SisterViewModel @Inject constructor(
             ApiSimpleMessage(
                 "",
                 TYPE_TEXT,
-                1,
-                ApiMessage.Text("系统通知系统通知系统通知系统通知系统通知").toJson()
+                0,
+                ApiMessage.Text("发送消息").toJson()
             ).asNormal()
         )
 
@@ -32,7 +32,7 @@ class SisterViewModel @Inject constructor(
                 "",
                 TYPE_TEXT,
                 1,
-                ApiMessage.Text("系统通知系通知系统通知系统通知").toJson()
+                ApiMessage.Text("收到消息").toJson()
             ).asNormal()
         )
 
@@ -41,15 +41,23 @@ class SisterViewModel @Inject constructor(
                 "",
                 TYPE_TEXT,
                 1,
-                ApiMessage.Text("系统通知系统通知").toJson()
+                ApiMessage.Text("收到消息收到消息收到消息收到消息").toJson()
             ).asNormal()
         )
 
+        list.add(
+            ApiSimpleMessage(
+                "",
+                TYPE_TEXT,
+                0,
+                ApiMessage.Text("发送消息发送消息发送消息发送消息发送消息").toJson()
+            ).asNormal()
+        )
         list.add(
             ApiSimpleMessage(
                 "",
                 TYPE_IMAGE,
-                1,
+                0,
                 ApiMessage.Image("").toJson()
             ).asNormal()
         )
@@ -58,7 +66,7 @@ class SisterViewModel @Inject constructor(
                 "",
                 TYPE_IMAGE,
                 1,
-                ApiMessage.Image("爱的看哈扣税的啊的口号是").toJson()
+                ApiMessage.Image("").toJson()
             ).asNormal()
         )
 
@@ -75,7 +83,7 @@ class SisterViewModel @Inject constructor(
             ApiSimpleMessage(
                 "",
                 TYPE_TEXT,
-                1,
+                0,
                 ApiMessage.Text("充值方式").toJson()
             ).asNormal()
         )
@@ -96,6 +104,56 @@ class SisterViewModel @Inject constructor(
                 TYPE_AUDIO,
                 1,
                 ApiMessage.Audio(5000L, "").toJson()
+            ).asNormal()
+        )
+
+        list.add(
+            ApiSimpleMessage(
+                "",
+                TYPE_AUDIO,
+                0,
+                ApiMessage.Audio(5000L, "").toJson()
+            ).asNormal()
+        )
+
+        return list
+    }
+
+    suspend fun loadSystemNotices(): List<ApiMessage> {
+        val list = ArrayList<ApiMessage>()
+        list.add(
+            ApiSimpleMessage(
+                "",
+                TYPE_SYSTEM,
+                1,
+                ApiMessage.System("系统通知").toJson()
+            ).asNormal()
+        )
+
+        list.add(
+            ApiSimpleMessage(
+                "",
+                TYPE_SYSTEM,
+                1,
+                ApiMessage.System("系统通知系统通知系统通知系统通知系统通知").toJson()
+            ).asNormal()
+        )
+
+        list.add(
+            ApiSimpleMessage(
+                "",
+                TYPE_SYSTEM,
+                1,
+                ApiMessage.System("系统通知系统通知系统通知").toJson()
+            ).asNormal()
+        )
+
+        list.add(
+            ApiSimpleMessage(
+                "",
+                TYPE_SYSTEM,
+                1,
+                ApiMessage.System("系统通知系统通知").toJson()
             ).asNormal()
         )
 

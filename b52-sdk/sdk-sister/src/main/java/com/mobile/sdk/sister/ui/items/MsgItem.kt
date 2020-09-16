@@ -1,5 +1,6 @@
 package com.mobile.sdk.sister.ui.items
 
+import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.databinding.*
@@ -93,6 +94,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToAudioBinding::bind)
+            binding.duration.text = "${audio.duration / 1000}''"
         }
 
         override fun getLayout(): Int {
@@ -104,7 +106,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromTextBinding::bind)
-            binding.content.text = data.content
+            binding.content.text = text.msg
         }
 
         override fun getLayout(): Int {
@@ -128,6 +130,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromAudioBinding::bind)
+            binding.duration.text = "${audio.duration / 1000}''"
         }
 
         override fun getLayout(): Int {
@@ -172,7 +175,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatTimeBinding::bind)
-            binding.time.text = data.content
+            binding.time.text = time.nano.yyyy_mm_dd_hh_mm_ss()
         }
 
         override fun getLayout(): Int {
@@ -184,7 +187,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemSystemNoticeBinding::bind)
-            binding.systemContent.text = data.content
+            binding.systemContent.text = system.msg
         }
 
         override fun getLayout(): Int {
