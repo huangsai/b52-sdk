@@ -9,20 +9,21 @@ import com.mobile.sdk.sister.data.http.ApiMessage
     tableName = "sister_message"
 )
 data class DbMessage(
-    @ColumnInfo(name = "_id") @PrimaryKey(autoGenerate = false) val _id: String,
-    val type: Int,
-    val toUserId: Long,
-    val content: String,
-    val time: Long,
-    val fromUserImage: String,
-    val fromUsername: String,
-    val fromUserId: Long,
-    val fromUserType: Int,
-    val status: Int
+    @ColumnInfo(name = "_id") @PrimaryKey(autoGenerate = true) val _id: Long,
+    @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "type") val type: Int,
+    @ColumnInfo(name = "toUserId") val toUserId: Long,
+    @ColumnInfo(name = "content") val content: String,
+    @ColumnInfo(name = "time") val time: Long,
+    @ColumnInfo(name = "fromUserImage") val fromUserImage: String,
+    @ColumnInfo(name = "fromUsername") val fromUsername: String,
+    @ColumnInfo(name = "fromUserId") val fromUserId: Long,
+    @ColumnInfo(name = "fromUserType") val fromUserType: Int,
+    @ColumnInfo(name = "status") val status: Int
 ) {
     fun toApiMessage(): ApiMessage {
         return ApiMessage(
-            _id,
+            id,
             type,
             toUserId,
             content,

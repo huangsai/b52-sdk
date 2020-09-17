@@ -77,6 +77,7 @@ data class ApiMessage(
 
     fun toDbMessage(): DbMessage {
         return DbMessage(
+            0L,
             id,
             type,
             toUserId,
