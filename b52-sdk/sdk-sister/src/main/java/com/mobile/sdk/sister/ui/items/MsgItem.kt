@@ -5,6 +5,9 @@ import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.databinding.*
 import com.mobile.sdk.sister.ui.*
+import com.mobile.sdk.sister.ui.views.MsgStatusImageView.Companion.STATUS_FAIL
+import com.mobile.sdk.sister.ui.views.MsgStatusImageView.Companion.STATUS_SENDING
+import com.mobile.sdk.sister.ui.views.MsgStatusImageView.Companion.STATUS_SUCCESS
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
 
@@ -66,11 +69,39 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         return this
     }
 
+    internal fun AdapterViewHolder.profileHandle() {
+        attachImageLoader(R.id.profile)
+        attachOnClickListener(R.id.profile)
+    }
+
+    internal fun AdapterViewHolder.imageHandle() {
+        attachImageLoader(R.id.image_content)
+        attachOnClickListener(R.id.image_content)
+    }
+
+    internal fun AdapterViewHolder.audioClick() {
+        attachOnClickListener(R.id.audio_content)
+    }
+
+    internal fun AdapterViewHolder.depositClick() {
+        attachOnClickListener(R.id.deposit_wechat)
+        attachOnClickListener(R.id.deposit_alipay)
+    }
+
+    internal fun AdapterViewHolder.failClick(status: Int) {
+        if (status == STATUS_FAIL) {
+            attachOnClickListener(R.id.status)
+        }
+    }
+
     class Text(data: ApiMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToTextBinding::bind)
-            binding.content.text = text.msg
+            binding.textContent.text = text.msg
+            binding.status.status = STATUS_SUCCESS
+            holder.profileHandle()
+            holder.failClick(binding.status.status)
         }
 
         override fun getLayout(): Int {
@@ -82,7 +113,10 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToImageBinding::bind)
-
+            binding.status.status = STATUS_SENDING
+            holder.profileHandle()
+            holder.imageHandle()
+            holder.failClick(binding.status.status)
         }
 
         override fun getLayout(): Int {
@@ -94,7 +128,11 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToAudioBinding::bind)
-            binding.duration.text = "${audio.duration / 1000}''"
+            binding.audioContent.text = "${audio.duration / 1000}''"
+            binding.status.status = STATUS_FAIL
+            holder.profileHandle()
+            holder.audioClick()
+            holder.failClick(binding.status.status)
         }
 
         override fun getLayout(): Int {
@@ -106,7 +144,8 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromTextBinding::bind)
-            binding.content.text = text.msg
+            binding.textContent.text = text.msg
+            holder.profileHandle()
         }
 
         override fun getLayout(): Int {
@@ -118,7 +157,8 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromImageBinding::bind)
-
+            holder.profileHandle()
+            holder.imageHandle()
         }
 
         override fun getLayout(): Int {
@@ -130,7 +170,9 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromAudioBinding::bind)
-            binding.duration.text = "${audio.duration / 1000}''"
+            binding.audioContent.text = "${audio.duration / 1000}''"
+            holder.profileHandle()
+            holder.audioClick()
         }
 
         override fun getLayout(): Int {
@@ -164,6 +206,8 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatDepositBinding::bind)
+            holder.profileHandle()
+            holder.depositClick()
         }
 
         override fun getLayout(): Int {
