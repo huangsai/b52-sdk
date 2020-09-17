@@ -11,6 +11,7 @@ import com.skydoves.balloon.createBalloon
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.disposables.Disposable
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class ChatVoicePresenter(
@@ -46,7 +47,6 @@ class ChatVoicePresenter(
 
     private fun stopRecord() {
         Msg.toast("结束录制")
-        clearDisposable()
     }
 
     private fun sendMsg() {
@@ -105,7 +105,9 @@ class ChatVoicePresenter(
      * 松手，隐藏弹窗
      */
     override fun onTerminate() {
-        balloon.dismiss()
+        Timber.tag("test").d("onTerminate")
+        clearDisposable()
+        balloon.dismissWithDelay(50)
     }
 
     /**

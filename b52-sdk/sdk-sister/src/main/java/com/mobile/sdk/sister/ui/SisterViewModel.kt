@@ -120,44 +120,13 @@ class SisterViewModel @Inject constructor(
         return list
     }
 
-    suspend fun loadSystemNotices(): List<ApiMessage> {
-        val list = ArrayList<ApiMessage>()
-        list.add(
-            ApiSimpleMessage(
-                "",
-                TYPE_SYSTEM,
-                1,
-                ApiMessage.System("系统通知").toJson()
-            ).asNormal()
+    suspend fun loadSystemNotices(): List<ApiNotice> {
+        return listOf(
+            ApiNotice(1L, "系统通知"),
+            ApiNotice(1L, "系统通知系统通知系统通知系统通知"),
+            ApiNotice(1L, "系统通知系统通知系统通知"),
+            ApiNotice(1L, "系统通知系统通知系统通知系统通知系统通知系统通知"),
+            ApiNotice(1L, "系统通知系统通知"),
         )
-
-        list.add(
-            ApiSimpleMessage(
-                "",
-                TYPE_SYSTEM,
-                1,
-                ApiMessage.System("系统通知系统通知系统通知系统通知系统通知").toJson()
-            ).asNormal()
-        )
-
-        list.add(
-            ApiSimpleMessage(
-                "",
-                TYPE_SYSTEM,
-                1,
-                ApiMessage.System("系统通知系统通知系统通知").toJson()
-            ).asNormal()
-        )
-
-        list.add(
-            ApiSimpleMessage(
-                "",
-                TYPE_SYSTEM,
-                1,
-                ApiMessage.System("系统通知系统通知").toJson()
-            ).asNormal()
-        )
-
-        return list
     }
 }
