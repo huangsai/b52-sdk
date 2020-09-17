@@ -1,33 +1,42 @@
 package com.mobile.sdk.sister.data.file
 
+import com.mobile.guava.android.mvvm.AndroidX
+import com.tencent.mmkv.MMKV
+
 object AppPreferences : PlatformPreferences {
 
+    private val prefs: MMKV by lazy {
+        MMKV.initialize(AndroidX.myApp)
+        MMKV.defaultMMKV()
+    }
+
     override var username: String
-        get() = "anbey123456"
-        set(value) {}
+        get() = prefs.decodeString("username", "")
+        set(value) {
+            prefs.encode("username", value)
+        }
 
     override var userImage: String
-        get() = "Not yet implemented"
-        set(value) {}
+        get() = prefs.decodeString("userImage", "")
+        set(value) {
+            prefs.encode("userImage", value)
+        }
 
     override var userImageRes: Int
-        get() = TODO("Not yet implemented")
-        set(value) {}
-
+        get() = prefs.decodeInt("userImageRes", 0)
+        set(value) {
+            prefs.encode("userImageRes", value)
+        }
 
     override var userId: Long
-        get() = 0L
-        set(value) {}
+        get() = prefs.decodeLong("userId", 0)
+        set(value) {
+            prefs.encode("userId", value)
+        }
 
     override var token: String
-        get() = "Not yet implemented"
-        set(value) {}
-
-    override var softKeyboardHeight: Int
-        get() = 0
-        set(value) {}
-
-    override var deviceId: String
-        get() = "Not yet implemented"
-        set(value) {}
+        get() = prefs.decodeString("token", "")
+        set(value) {
+            prefs.encode("token", value)
+        }
 }

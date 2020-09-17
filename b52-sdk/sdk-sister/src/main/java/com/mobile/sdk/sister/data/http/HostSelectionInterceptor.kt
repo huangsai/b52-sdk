@@ -11,17 +11,25 @@ class HostSelectionInterceptor : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
+
+        if (isWebSocketApi(request.url.toString())) {
+            return chain.proceed(request)
+        }
+
         val dynamicHttpUrl = createHttpUrl(request.url.toString())
         val newHttpUrl = request.url.newBuilder()
             .host(dynamicHttpUrl.host)
             .scheme(dynamicHttpUrl.scheme)
             .port(dynamicHttpUrl.port)
             .build()
-
         return chain.proceed(request.newBuilder().url(newHttpUrl).build())
     }
 
     private fun createHttpUrl(original: String): HttpUrl {
         return "http://192.168.2.91:30301/".toHttpUrl()
+    }
+
+    private fun isWebSocketApi(original: String): Boolean {
+        return original.startsWith("ws") || original.startsWith("tcp")
     }
 }

@@ -11,8 +11,4 @@ interface PlatformPreferences {
     var userId: Long
 
     var token: String
-
-    var softKeyboardHeight: Int
-
-    var deviceId: String
 }

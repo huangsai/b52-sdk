@@ -14,7 +14,7 @@ data class DbMessage(
     val toUserId: Long,
     val content: String,
     val time: Long,
-    val fromUserProfile: String,
+    val fromUserImage: String,
     val fromUsername: String,
     val fromUserId: Long,
     val fromUserType: Int,
@@ -27,7 +27,7 @@ data class DbMessage(
             toUserId,
             content,
             time,
-            fromUserProfile,
+            fromUserImage,
             fromUsername,
             fromUserId,
             fromUserType

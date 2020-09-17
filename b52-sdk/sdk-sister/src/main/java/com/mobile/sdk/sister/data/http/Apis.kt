@@ -11,11 +11,17 @@ const val TYPE_TIME = 4
 const val TYPE_SYSTEM = 5
 const val TYPE_DEPOSIT = 6
 
+const val IM_BUZ_MSG = 30001
+const val IM_BUZ_NOTIFICATION = 30002
+const val IM_BUZ_CLOSE = 30002
+const val IM_BUZ_LOGIN = 20001
+const val IM_BUZ_LOGOUT = 20002
+
 @JsonClass(generateAdapter = true)
 data class ApiAck(
-    @Json(name = "id") val id: String,
-    @Json(name = "msg") val msg: String,
-    @Json(name = "result") val status: Int
+    @Json(name = "id") val id: String = "",
+    @Json(name = "msg") val msg: String = "",
+    @Json(name = "result") val status: Int = 1
 ) {
     fun success(): Boolean = status == 1
 }
@@ -35,7 +41,7 @@ data class ApiMessage(
     @Json(name = "toUserId") val toUserId: Long,
     @Json(name = "sayContent") val content: String,
     @Json(name = "sayTime") val time: Long,
-    @Json(name = "fromImgUrl") val fromUserProfile: String,
+    @Json(name = "fromImgUrl") val fromUserImage: String,
     @Json(name = "fromUserName") val fromUsername: String,
     @Json(name = "fromUserId") val fromUserId: Long,
     @Json(name = "fromUserType") val fromUserType: Int
@@ -69,19 +75,18 @@ data class ApiMessage(
         @Json(name = "url") val url: String
     )
 
-    @JvmOverloads
-    fun toDbMessage(status: Int = 0): DbMessage {
+    fun toDbMessage(): DbMessage {
         return DbMessage(
             id,
             type,
             toUserId,
             content,
             time,
-            fromUserProfile,
+            fromUserImage,
             fromUsername,
             fromUserId,
             fromUserType,
-            status
+            0
         )
     }
 }
@@ -96,4 +101,12 @@ data class ApiHelp(
 data class ApiToken(
     @Json(name = "token") val token: String,
     @Json(name = "salt") val salt: String
+)
+
+@JsonClass(generateAdapter = true)
+data class ReqLogin(
+    @Json(name = "userName") val username: String,
+    @Json(name = "token") val token: String,
+    @Json(name = "userType") val userType: Int,
+    @Json(name = "chatType") val chatType: Int
 )

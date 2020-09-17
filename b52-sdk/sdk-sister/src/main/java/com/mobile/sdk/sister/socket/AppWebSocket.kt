@@ -37,10 +37,7 @@ object AppWebSocket : LongLiveSocket() {
 
         override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
             log("---------onMessage---bytes------%${bytes.size}")
-            val msg = CommonMessage.ADAPTER.decode(decrypt(bytes))
-            if (msg.bizId == 3001) {
-                return
-            }
+            SocketUtils.onMessage(CommonMessage.ADAPTER.decode(SocketUtils.decrypt(bytes)))
         }
 
         override fun onOpen(webSocket: WebSocket, response: Response) {
@@ -72,10 +69,10 @@ object AppWebSocket : LongLiveSocket() {
                 socket.close(1000, "reconnect")
             } else {
                 request = Request.Builder()
-                    .url("ws://192.168.2.91:30302/csms")
+                    .url("ws://127.0.0.1:30302/csms")
                     .build()
             }
-            internalSocket = SisterX.component.okHttpClient().newWebSocket(request, webSocketListener)
+            // internalSocket = SisterX.component.okHttpClient().newWebSocket(request, webSocketListener)
             log("---------connect---------")
         }
     }
@@ -94,7 +91,7 @@ object AppWebSocket : LongLiveSocket() {
     override fun post(bytes: ByteString) {
         if (internalSocket != null && true == AndroidX.isSocketConnected.value) {
             suspendAction {
-                socket.send(encrypt(bytes))
+                socket.send(SocketUtils.encrypt(bytes))
                 log("---------post---bytes[${bytes.size}]")
             }
         }
