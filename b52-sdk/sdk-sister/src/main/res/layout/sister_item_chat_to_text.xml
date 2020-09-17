@@ -15,7 +15,7 @@
         app:shapeAppearanceOverlay="@style/sister_CircleImageView" />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/size_5dp"
@@ -24,10 +24,20 @@
         android:maxWidth="200dp"
         android:minHeight="@dimen/size_40dp"
         android:textColor="@color/sister_color_white"
+        android:textIsSelectable="true"
         android:textSize="@dimen/font_15sp"
         app:layout_constraintRight_toLeftOf="@id/profile"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="盛大点卡实践活动卡死奥" />
+
+    <com.mobile.sdk.sister.ui.views.MsgStatusImageView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/size_10dp"
+        app:layout_constraintBottom_toBottomOf="@id/text_content"
+        app:layout_constraintRight_toLeftOf="@id/text_content"
+        app:layout_constraintTop_toTopOf="@id/text_content" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

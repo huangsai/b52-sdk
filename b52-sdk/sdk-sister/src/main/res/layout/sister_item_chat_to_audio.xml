@@ -14,7 +14,7 @@
         app:shapeAppearanceOverlay="@style/sister_CircleImageView" />
 
     <TextView
-        android:id="@+id/duration"
+        android:id="@+id/audio_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/size_5dp"
@@ -30,5 +30,16 @@
         app:layout_constraintRight_toLeftOf="@id/profile"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <com.mobile.sdk.sister.ui.views.MsgStatusImageView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/size_10dp"
+        android:src="@drawable/sister_icon_fail"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/audio_content"
+        app:layout_constraintRight_toLeftOf="@id/audio_content"
+        app:layout_constraintTop_toTopOf="@id/audio_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

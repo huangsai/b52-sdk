@@ -15,7 +15,7 @@
         app:shapeAppearanceOverlay="@style/sister_CircleImageView" />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_5dp"
@@ -24,6 +24,7 @@
         android:maxWidth="200dp"
         android:minHeight="@dimen/size_40dp"
         android:textColor="@color/sister_color_black"
+        android:textIsSelectable="true"
         android:textSize="@dimen/font_15sp"
         app:layout_constraintLeft_toRightOf="@id/profile"
         app:layout_constraintTop_toTopOf="parent"

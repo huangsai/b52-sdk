@@ -37,4 +37,8 @@ class ChatMorePresenter(
             }
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 }
