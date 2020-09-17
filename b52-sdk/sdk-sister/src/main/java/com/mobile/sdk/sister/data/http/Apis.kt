@@ -93,6 +93,12 @@ data class ApiHelp(
 )
 
 @JsonClass(generateAdapter = true)
+data class ApiNotice(
+    @Json(name = "id") val id: Long,
+    @Json(name = "content") val content: String
+)
+
+@JsonClass(generateAdapter = true)
 data class ApiToken(
     @Json(name = "token") val token: String,
     @Json(name = "salt") val salt: String

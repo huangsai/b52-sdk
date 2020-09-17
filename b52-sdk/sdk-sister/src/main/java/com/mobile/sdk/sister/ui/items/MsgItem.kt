@@ -186,12 +186,11 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
     class System(data: ApiMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
-            val binding = holder.binding(SisterItemSystemNoticeBinding::bind)
-            binding.systemContent.text = system.msg
+            TODO("Not yet implemented")
         }
 
         override fun getLayout(): Int {
-            return R.layout.sister_item_system_notice
+            TODO("Not yet implemented")
         }
     }
 
