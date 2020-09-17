@@ -1,8 +1,6 @@
 package com.mobile.sdk.sister.socket
 
-import com.mobile.guava.android.mvvm.Msg
-import com.mobile.guava.jvm.domain.Source
-import com.mobile.guava.jvm.extension.exhaustive
+import com.mobile.guava.jvm.coroutines.Bus
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
@@ -67,7 +65,7 @@ object SocketUtils {
         }
     }
 
-    fun postLogout() = GlobalScope.launch {
+    fun postLogout() = GlobalScope.launch(Dispatchers.IO) {
         try {
             CommonMessage.Builder()
                 .bizId(IM_BUZ_LOGOUT)
@@ -83,6 +81,7 @@ object SocketUtils {
     }
 
     fun postMessage(dbMessage: DbMessage) = GlobalScope.launch(Dispatchers.IO) {
+        var newDbMessage: DbMessage
         try {
             val content = SisterX.component.json()
                 .adapter(ApiSimpleMessage::class.java)
@@ -97,8 +96,17 @@ object SocketUtils {
                 .also {
                     AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
                 }
+
+            newDbMessage = dbMessage
         } catch (e: Exception) {
             Timber.e(e)
+            newDbMessage = dbMessage.copy(status = STATUS_MSG_FAILED)
+        }
+        if (SisterX.component.sisterRepository().insetMessage(newDbMessage) > 0) {
+            if (newDbMessage.status == STATUS_MSG_FAILED) {
+                Timber.tag("AppWebSocket").d("发送失败->${newDbMessage.id}")
+                Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
+            }
         }
     }
 
@@ -120,8 +128,20 @@ object SocketUtils {
             IM_BUZ_NOTIFICATION -> {
             }
             IM_BUZ_MSG -> {
+                require(!ack.id.isNullOrEmpty())
+                markDbMessageSuccess(ack.id)
             }
             else -> Timber.tag("AppWebSocket").d("未知socket业务消息")
+        }
+    }
+
+    private fun markDbMessageSuccess(id: String) = GlobalScope.launch(Dispatchers.IO) {
+        val repo = SisterX.component.sisterRepository()
+        repo.getMessageById(id)?.let { dbMessage ->
+            if (repo.updateMessage(dbMessage.copy(status = STATUS_MSG_SUCCESS)) == 1) {
+                Timber.tag("AppWebSocket").d("发送成功->$id")
+                Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
+            }
         }
     }
 }

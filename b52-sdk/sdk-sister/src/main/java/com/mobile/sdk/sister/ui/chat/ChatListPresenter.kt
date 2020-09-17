@@ -8,6 +8,7 @@ import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.mvvm.lifecycle.SimplePresenter
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.sdk.sister.R
+import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.items.MsgItem
@@ -16,7 +17,6 @@ import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -45,10 +45,11 @@ class ChatListPresenter(
 
     fun load() {
         chatFragment.lifecycleScope.launch(Dispatchers.IO) {
+            val userId = AppPreferences.userId
             val items = model.loadMessages().map {
-                MsgItem.create(it)
+                MsgItem.create(it, userId)
             }
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Main) {
                 adapter.addAll(items)
             }
         }
@@ -100,5 +101,4 @@ class ChatListPresenter(
     override fun onDestroyView() {
         binding.chatRecycler.adapter = null
     }
-
 }

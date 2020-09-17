@@ -2,6 +2,7 @@ package com.mobile.sdk.sister.ui.items
 
 import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
 import com.mobile.sdk.sister.R
+import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.databinding.*
 import com.mobile.sdk.sister.ui.*
@@ -11,7 +12,7 @@ import com.mobile.sdk.sister.ui.views.MsgStatusImageView.Companion.STATUS_SUCCES
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
 
-abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
+abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
     lateinit var text: ApiMessage.Text
         private set
@@ -94,7 +95,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class Text(data: ApiMessage) : MsgItem(data) {
+    class Text(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToTextBinding::bind)
@@ -109,7 +110,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class Image(data: ApiMessage) : MsgItem(data) {
+    class Image(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToImageBinding::bind)
@@ -124,7 +125,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class Audio(data: ApiMessage) : MsgItem(data) {
+    class Audio(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToAudioBinding::bind)
@@ -140,7 +141,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class Text2(data: ApiMessage) : MsgItem(data) {
+    class Text2(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromTextBinding::bind)
@@ -153,7 +154,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class Image2(data: ApiMessage) : MsgItem(data) {
+    class Image2(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromImageBinding::bind)
@@ -166,7 +167,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class Audio2(data: ApiMessage) : MsgItem(data) {
+    class Audio2(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromAudioBinding::bind)
@@ -180,7 +181,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class Upgrade(data: ApiMessage) : MsgItem(data) {
+    class Upgrade(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             TODO("Not yet implemented")
@@ -191,7 +192,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class Upgrade2(data: ApiMessage) : MsgItem(data) {
+    class Upgrade2(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             TODO("Not yet implemented")
@@ -202,7 +203,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class Deposit(data: ApiMessage) : MsgItem(data) {
+    class Deposit(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatDepositBinding::bind)
@@ -215,7 +216,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class Time(data: ApiMessage) : MsgItem(data) {
+    class Time(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatTimeBinding::bind)
@@ -227,7 +228,7 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class System(data: ApiMessage) : MsgItem(data) {
+    class System(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             TODO("Not yet implemented")
@@ -241,11 +242,11 @@ abstract class MsgItem(val data: ApiMessage) : SimpleRecyclerItem() {
     companion object {
 
         @JvmStatic
-        fun create(data: ApiMessage): MsgItem {
+        fun create(data: DbMessage, _userId: Long): MsgItem {
             return when (data.type) {
-                TYPE_TEXT -> (if (data.toUserId == 0L) Text(data) else Text2(data)).ofText()
-                TYPE_IMAGE -> (if (data.toUserId == 0L) Image(data) else Image2(data)).ofImage()
-                TYPE_AUDIO -> (if (data.toUserId == 0L) Audio(data) else Audio2(data)).ofAudio()
+                TYPE_TEXT -> (if (data.toUserId == _userId) Text(data) else Text2(data)).ofText()
+                TYPE_IMAGE -> (if (data.toUserId == _userId) Image(data) else Image2(data)).ofImage()
+                TYPE_AUDIO -> (if (data.toUserId == _userId) Audio(data) else Audio2(data)).ofAudio()
                 TYPE_TIME -> Time(data).ofTime()
                 TYPE_SYSTEM -> System(data).ofSystem()
                 TYPE_DEPOSIT -> Deposit(data).ofDeposit()

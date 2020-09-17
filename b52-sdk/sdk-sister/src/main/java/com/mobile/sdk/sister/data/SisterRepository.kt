@@ -9,10 +9,8 @@ import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.PlatformPreferences
 import com.mobile.sdk.sister.data.http.ApiUser
 import com.mobile.sdk.sister.data.http.DataService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -49,33 +47,52 @@ class SisterRepository @Inject constructor(
         }
     }
 
-    fun loadMessage(): Flow<List<DbMessage>> {
-        val dao = appDatabase.messageDao()
+    fun loadMessage(): List<DbMessage> {
         return try {
-            dao.getByUserId(platformPreferences.userId)
+            appDatabase.messageDao().getByUserId(platformPreferences.userId)
         } catch (e: Exception) {
             Timber.d(e)
-            flow { emit(emptyList<DbMessage>()) }
+            emptyList()
         }
+    }
+
+    fun getMessageById(id: String): DbMessage? {
+        return appDatabase.messageDao().getById(id)
     }
 
     fun updateMessage(dbMessage: DbMessage): Int {
         return try {
-            val dao = appDatabase.messageDao()
-            dao.update(dbMessage)
+            return appDatabase.messageDao().update(dbMessage)
         } catch (e: Exception) {
-            Guava.timber.e(e)
+            Timber.d(e)
             0
         }
     }
 
-    fun insetMessage(dbMessage: DbMessage):Long {
+    fun insetMessage(dbMessage: DbMessage): Long {
         return try {
-            val dao = appDatabase.messageDao()
-            dao.insert(dbMessage)
+            return appDatabase.messageDao().insert(dbMessage)
         } catch (e: Exception) {
-            Guava.timber.e(e)
+            Timber.d(e)
             0L
+        }
+    }
+
+    fun uploadImage(file: File): String {
+        return try {
+            return "url"
+        } catch (e: Exception) {
+            Timber.d(e)
+            ""
+        }
+    }
+
+    fun uploadAudio(file: File): String {
+        return try {
+            return "url"
+        } catch (e: Exception) {
+            Timber.d(e)
+            ""
         }
     }
 

@@ -24,6 +24,8 @@ import timber.log.Timber
 
 object SisterX {
 
+    const val BUS_MSG_STATUS = 2049
+
     lateinit var component: SisterComponent
         private set
 
