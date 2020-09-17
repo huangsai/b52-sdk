@@ -1,5 +1,8 @@
 package com.mobile.sdk.sister.socket
 
+import com.mobile.guava.android.mvvm.Msg
+import com.mobile.guava.jvm.domain.Source
+import com.mobile.guava.jvm.extension.exhaustive
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
@@ -46,12 +49,15 @@ object SocketUtils {
                 2,
                 1
             )
+            val content = SisterX.component.json()
+                .adapter(ReqLogin::class.java)
+                .toJson(req)
+                .encodeUtf8()
+
             CommonMessage.Builder()
                 .bizId(IM_BUZ_LOGIN)
                 .msgType(2)
-                .content(
-                    SisterX.component.json().adapter(ReqLogin::class.java).toJson(req).encodeUtf8()
-                )
+                .content(content)
                 .build()
                 .also {
                     AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))

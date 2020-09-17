@@ -22,10 +22,10 @@ object AppPreferences : PlatformPreferences {
             prefs.encode("userImage", value)
         }
 
-    override var userImageRes: Int
-        get() = prefs.decodeInt("userImageRes", 0)
+    override var nickname: String
+        get() = prefs.decodeString("nickname", "")
         set(value) {
-            prefs.encode("userImageRes", value)
+            prefs.encode("nickname", value)
         }
 
     override var userId: Long

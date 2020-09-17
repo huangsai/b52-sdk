@@ -104,15 +104,26 @@ data class ApiNotice(
 )
 
 @JsonClass(generateAdapter = true)
-data class ApiToken(
-    @Json(name = "token") val token: String,
-    @Json(name = "salt") val salt: String
-)
-
-@JsonClass(generateAdapter = true)
 data class ReqLogin(
     @Json(name = "userName") val username: String,
     @Json(name = "token") val token: String,
     @Json(name = "userType") val userType: Int,
     @Json(name = "chatType") val chatType: Int
+)
+
+@JsonClass(generateAdapter = true)
+data class ApiUser(
+    @Json(name = "visitIp") val visitIp: String,
+    @Json(name = "comeFrom") val comeFrom: Int,
+    @Json(name = "id") val id: String,
+    @Json(name = "username") val username: String,
+    @Json(name = "level") val level: Int,
+    @Json(name = "nickname") val nickname: String,
+    @Json(name = "remark") val remark: String,
+    @Json(name = "avatar") val userImage: String,
+    @Json(name = "userIp") val userIp: String,
+    @Json(name = "userId") val userId: Long,
+    @Json(name = "userLevel") val userLevel: String,
+    @Json(name = "salt") val salt: String,
+    @Json(name = "token") val token: String
 )

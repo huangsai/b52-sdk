@@ -6,7 +6,7 @@ import com.mobile.guava.jvm.Guava
 import com.mobile.guava.jvm.domain.Source
 import com.mobile.sdk.sister.data.db.AppDatabase
 import com.mobile.sdk.sister.data.file.PlatformPreferences
-import com.mobile.sdk.sister.data.http.ApiToken
+import com.mobile.sdk.sister.data.http.ApiUser
 import com.mobile.sdk.sister.data.http.DataService
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,14 +19,27 @@ class SisterRepository @Inject constructor(
     private val platformPreferences: PlatformPreferences
 ) {
 
-    suspend fun token(): Source<ApiToken> {
-        val call = dataService.token(2, platformPreferences.username, "192.168.2.208")
+    suspend fun user(username: String): Source<ApiUser> {
+        val call = dataService.token(2, platformPreferences.username)
         return try {
             call.execute().toSource {
+                platformPreferences.userId = it.userId
+                platformPreferences.username = it.username
                 platformPreferences.token = it.token
+                platformPreferences.userImage = it.userImage
+                platformPreferences.nickname = if (it.nickname.isEmpty()) {
+                    it.username
+                } else {
+                    it.nickname
+                }
                 return@toSource it
             }
         } catch (e: Exception) {
+            platformPreferences.userId = 0L
+            platformPreferences.username = ""
+            platformPreferences.token = ""
+            platformPreferences.userImage = ""
+            platformPreferences.nickname = "游客"
             errorSource(e)
         }
     }

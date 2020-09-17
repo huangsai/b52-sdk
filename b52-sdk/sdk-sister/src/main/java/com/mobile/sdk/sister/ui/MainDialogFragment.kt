@@ -15,7 +15,6 @@ import com.mobile.guava.android.ui.screen.screen
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.databinding.SisterDialogMainBinding
-import com.mobile.sdk.sister.socket.SocketUtils
 import com.mobile.sdk.sister.ui.chat.ChatFragment
 import com.mobile.sdk.sister.ui.system.SystemFragment
 
@@ -36,8 +35,6 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
         arguments?.let {
             sCancelable = it.getBoolean("cancelable")
         }
-
-        SocketUtils.postLogin()
     }
 
     override fun onCreateView(

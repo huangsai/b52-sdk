@@ -8,8 +8,7 @@ interface DataService {
 
     @GET("/member/getToken")
     fun token(
-        @Query("comeForm") from: Int,
-        @Query("username") username: String,
-        @Query("visitIp") ipv6: String
-    ): Call<ApiToken>
+        @Query("comeFrom") from: Int,
+        @Query("username") username: String
+    ): Call<ApiUser>
 }

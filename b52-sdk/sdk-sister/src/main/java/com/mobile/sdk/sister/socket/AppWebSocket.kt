@@ -72,7 +72,7 @@ object AppWebSocket : LongLiveSocket() {
                     .url("ws://127.0.0.1:30302/csms")
                     .build()
             }
-            // internalSocket = SisterX.component.okHttpClient().newWebSocket(request, webSocketListener)
+            internalSocket = SisterX.component.okHttpClient().newWebSocket(request, webSocketListener)
             log("---------connect---------")
         }
     }
