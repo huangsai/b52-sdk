@@ -6,9 +6,6 @@ import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.databinding.*
 import com.mobile.sdk.sister.ui.*
-import com.mobile.sdk.sister.ui.views.MsgStatusImageView.Companion.STATUS_FAIL
-import com.mobile.sdk.sister.ui.views.MsgStatusImageView.Companion.STATUS_SENDING
-import com.mobile.sdk.sister.ui.views.MsgStatusImageView.Companion.STATUS_SUCCESS
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
 
@@ -90,7 +87,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     }
 
     internal fun AdapterViewHolder.failClick(status: Int) {
-        if (status == STATUS_FAIL) {
+        if (status == STATUS_MSG_FAILED) {
             attachOnClickListener(R.id.status)
         }
     }
@@ -100,7 +97,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToTextBinding::bind)
             binding.textContent.text = text.msg
-            binding.status.status = STATUS_SUCCESS
+            binding.status.status = data.status
             holder.profileHandle()
             holder.failClick(binding.status.status)
         }
@@ -114,7 +111,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToImageBinding::bind)
-            binding.status.status = STATUS_SENDING
+            binding.status.status = data.status
             holder.profileHandle()
             holder.imageHandle()
             holder.failClick(binding.status.status)
@@ -130,7 +127,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToAudioBinding::bind)
             binding.audioContent.text = "${audio.duration / 1000}''"
-            binding.status.status = STATUS_FAIL
+            binding.status.status = data.status
             holder.profileHandle()
             holder.audioClick()
             holder.failClick(binding.status.status)

@@ -12,7 +12,6 @@ import com.mobile.guava.android.mvvm.lifecycle.SimplePresenter
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.guava.android.ui.view.recyclerview.keepItemViewVisible
 import com.mobile.sdk.sister.R
-import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
@@ -58,20 +57,10 @@ class ChatListPresenter(
             }
             withContext(Dispatchers.Main) {
                 adapter.addAll(items)
-                binding.chatRecycler.keepItemViewVisible(items.size - 1, false)
             }
         }
     }
 
-    fun onMessageStatusChanged(dbMessage: DbMessage) {
-        adapter.getAll()
-            .filterIsInstance<MsgItem>()
-            .first { it.data.id == dbMessage.id }
-            .let {
-                it.data.status = dbMessage.status
-                adapter.notifyItemChanged(adapter.indexOf(it), dbMessage.status)
-            }
-    }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
@@ -135,7 +124,7 @@ class ChatListPresenter(
             withContext(Dispatchers.Main) {
                 adapter.add(item)
                 binding.chatEt.setText("")
-                binding.chatRecycler.keepItemViewVisible(adapter.indexOf(item), true)
+                binding.chatRecycler.keepItemViewVisible(adapter.indexOf(item))
             }
         }
     }
