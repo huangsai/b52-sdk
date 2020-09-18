@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
+import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
 
@@ -58,6 +60,13 @@ class ChatFragment : TopMainFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.chat_add -> chatMorePresenter.createPop()
+        }
+    }
+
+    override fun onBusEvent(event: Pair<Int, Any>) {
+        if (event.first == SisterX.BUS_MSG_STATUS) {
+            chatListPresenter.onMessageStatusChanged(event.second.cast())
+            return
         }
     }
 }
