@@ -1,6 +1,8 @@
 package com.mobile.sdk.sister.ui.chat
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +12,7 @@ import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
 
-class ChatFragment : TopMainFragment(), View.OnClickListener {
+class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
 
     private var _binding: SisterFragmentChatBinding? = null
     private val binding: SisterFragmentChatBinding get() = _binding!!
@@ -36,6 +38,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener {
         chatMorePresenter = ChatMorePresenter(this, binding)
         chatVoicePresenter = ChatVoicePresenter(this, binding)
         binding.chatAdd.setOnClickListener(this)
+        binding.chatEt.addTextChangedListener(this)
         return binding.root
     }
 
@@ -59,7 +62,13 @@ class ChatFragment : TopMainFragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.chat_add -> chatMorePresenter.createPop()
+            R.id.chat_add -> {
+                if (binding.chatAdd.isSelected) {
+                    chatListPresenter.postText(binding.chatEt.text.toString().trim())
+                } else {
+                    chatMorePresenter.createPop()
+                }
+            }
         }
     }
 
@@ -68,5 +77,15 @@ class ChatFragment : TopMainFragment(), View.OnClickListener {
             chatListPresenter.onMessageStatusChanged(event.second.cast())
             return
         }
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+    }
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+    }
+
+    override fun afterTextChanged(s: Editable?) {
+        binding.chatAdd.isSelected = binding.chatEt.text.toString().trim().isNotEmpty()
     }
 }
