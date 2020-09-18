@@ -79,26 +79,21 @@ class ChatListPresenter(
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.profile -> {
-                //TODO 点击头像
                 Msg.toast("点击头像")
             }
             R.id.image_content -> {
-                //TODO 点击图片
                 Msg.toast("点击图片")
             }
             R.id.audio_content -> {
-                //TODO 点击语音
                 Msg.toast("点击语音")
             }
             R.id.deposit_wechat -> {
-                //TODO 点击微信充值
                 Msg.toast("点击微信充值")
             }
             R.id.deposit_alipay -> {
-                //TODO 点击支付宝充值
                 Msg.toast("点击支付宝充值")
             }
-            R.id.status -> retryPostMsg(AdapterUtils.getHolder(v).item<MsgItem>().data)
+            R.id.status_failed -> retryPostMsg(AdapterUtils.getHolder(v).item<MsgItem>().data)
         }
     }
 

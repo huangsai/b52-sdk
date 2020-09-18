@@ -30,14 +30,21 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="盛大点卡实践活动卡死奥" />
 
-    <com.mobile.sdk.sister.ui.views.MsgStatusImageView
-        android:id="@+id/status"
-        android:layout_width="@dimen/size_16dp"
-        android:layout_height="@dimen/size_16dp"
-        android:layout_marginEnd="@dimen/size_2dp"
+    <ImageView
+        android:id="@+id/status_failed"
+        style="@style/sister_MsgStatusIFailed"
+        android:src="@drawable/sister_icon_fail"
+        app:layout_constraintBottom_toBottomOf="@id/text_content"
+        app:layout_constraintRight_toLeftOf="@id/text_content"
+        app:layout_constraintTop_toTopOf="@id/text_content"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/status_processing"
+        style="@style/sister_MsgStatusProcessing"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/text_content"
         app:layout_constraintRight_toLeftOf="@id/text_content"
         app:layout_constraintTop_toTopOf="@id/text_content" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

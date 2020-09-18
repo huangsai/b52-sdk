@@ -1,5 +1,7 @@
 package com.mobile.sdk.sister.ui.items
 
+import android.view.View
+import androidx.core.view.isVisible
 import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.data.db.DbMessage
@@ -27,12 +29,6 @@ internal fun AdapterViewHolder.audioClick() {
 internal fun AdapterViewHolder.depositClick() {
     attachOnClickListener(R.id.deposit_wechat)
     attachOnClickListener(R.id.deposit_alipay)
-}
-
-internal fun AdapterViewHolder.failClick(status: Int) {
-    if (status == STATUS_MSG_FAILED) {
-        attachOnClickListener(R.id.status)
-    }
 }
 
 abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
@@ -93,14 +89,31 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         return this
     }
 
+    protected fun setStatus(statusFailed: View, statusProcessing: View) {
+        when (data.status) {
+            STATUS_MSG_PROCESSING -> {
+                statusProcessing.isVisible = true
+                statusFailed.isVisible = false
+            }
+            STATUS_MSG_FAILED -> {
+                statusProcessing.isVisible = false
+                statusFailed.isVisible = true
+            }
+            else -> {
+                statusProcessing.isVisible = false
+                statusFailed.isVisible = false
+            }
+        }
+    }
+
     class Text(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToTextBinding::bind)
             binding.textContent.text = text.msg
-            binding.status.status = data.status
+            setStatus(binding.statusFailed, binding.statusProcessing)
+            holder.attachOnClickListener(R.id.status_failed)
             holder.profileHandle()
-            holder.failClick(binding.status.status)
         }
 
         override fun getLayout(): Int {
@@ -112,10 +125,11 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToImageBinding::bind)
-            binding.status.status = data.status
+            setStatus(binding.statusFailed, binding.statusProcessing)
+            holder.attachOnClickListener(R.id.status_failed)
+
             holder.profileHandle()
             holder.imageHandle()
-            holder.failClick(binding.status.status)
         }
 
         override fun getLayout(): Int {
@@ -125,13 +139,16 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
     class Audio(data: DbMessage) : MsgItem(data) {
 
+        private val durationText = "${audio.duration / 1000}''"
+
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToAudioBinding::bind)
-            binding.audioContent.text = "${audio.duration / 1000}''"
-            binding.status.status = data.status
+            binding.audioContent.text = durationText
+            setStatus(binding.statusFailed, binding.statusProcessing)
+            holder.attachOnClickListener(R.id.status_failed)
+
             holder.profileHandle()
             holder.audioClick()
-            holder.failClick(binding.status.status)
         }
 
         override fun getLayout(): Int {

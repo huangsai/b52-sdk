@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -13,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/sister_CircleImageView" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/image_content"
         android:layout_width="170dp"
         android:layout_height="170dp"
@@ -23,11 +24,19 @@
         app:layout_constraintRight_toLeftOf="@id/profile"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.mobile.sdk.sister.ui.views.MsgStatusImageView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/size_10dp"
+    <ImageView
+        android:id="@+id/status_failed"
+        style="@style/sister_MsgStatusIFailed"
+        android:src="@drawable/sister_icon_fail"
+        app:layout_constraintBottom_toBottomOf="@id/image_content"
+        app:layout_constraintRight_toLeftOf="@id/image_content"
+        app:layout_constraintTop_toTopOf="@id/image_content"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/status_processing"
+        style="@style/sister_MsgStatusProcessing"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/image_content"
         app:layout_constraintRight_toLeftOf="@id/image_content"
         app:layout_constraintTop_toTopOf="@id/image_content" />
