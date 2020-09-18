@@ -3,6 +3,7 @@ package com.mobile.sdk.sister.ui.items
 import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.data.db.DbMessage
+import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.databinding.*
 import com.mobile.sdk.sister.ui.*
@@ -100,11 +101,6 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             binding.status.status = data.status
             holder.profileHandle()
             holder.failClick(binding.status.status)
-        }
-
-        override fun bindPayloads(holder: AdapterViewHolder, payloads: List<Any>?) {
-            val binding: SisterItemChatToTextBinding = holder.binding()
-            binding.status.status = data.status
         }
 
         override fun getLayout(): Int {
@@ -244,11 +240,12 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     companion object {
 
         @JvmStatic
-        fun create(data: DbMessage, _userId: Long): MsgItem {
+        fun create(data: DbMessage): MsgItem {
+            val myself = data.fromUserId == AppPreferences.userId
             return when (data.type) {
-                TYPE_TEXT -> (if (data.toUserId == _userId) Text(data) else Text2(data)).ofText()
-                TYPE_IMAGE -> (if (data.toUserId == _userId) Image(data) else Image2(data)).ofImage()
-                TYPE_AUDIO -> (if (data.toUserId == _userId) Audio(data) else Audio2(data)).ofAudio()
+                TYPE_TEXT -> (if (myself) Text(data) else Text2(data)).ofText()
+                TYPE_IMAGE -> (if (myself) Image(data) else Image2(data)).ofImage()
+                TYPE_AUDIO -> (if (myself) Audio(data) else Audio2(data)).ofAudio()
                 TYPE_TIME -> Time(data).ofTime()
                 TYPE_SYSTEM -> System(data).ofSystem()
                 TYPE_DEPOSIT -> Deposit(data).ofDeposit()

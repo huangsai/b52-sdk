@@ -11,8 +11,9 @@ import com.mobile.sdk.sister.data.http.ApiMessage
 data class DbMessage(
     @ColumnInfo(name = "_id") @PrimaryKey(autoGenerate = true) val _id: Long,
     @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "type") val type: Int,
     @ColumnInfo(name = "toUserId") val toUserId: Long,
-    @ColumnInfo(name = "content") val content: String,
+    @ColumnInfo(name = "content") var content: String,
     @ColumnInfo(name = "time") val time: Long,
     @ColumnInfo(name = "fromUserImage") val fromUserImage: String,
     @ColumnInfo(name = "fromUsername") val fromUsername: String,
@@ -23,6 +24,7 @@ data class DbMessage(
     fun toApiMessage(): ApiMessage {
         return ApiMessage(
             id,
+            type,
             toUserId,
             content,
             time,

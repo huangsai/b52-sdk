@@ -1,42 +1,39 @@
 package com.mobile.sdk.sister.ui.chat
 
 import android.view.View
+import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.guava.android.mvvm.Msg
-import com.mobile.guava.android.mvvm.lifecycle.SimplePresenter
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
-import com.mobile.guava.android.ui.view.recyclerview.keepItemViewVisible
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.data.http.ApiHelp
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.items.HelpItem
 import com.pacific.adapter.AdapterUtils
+import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/**
- * 快捷功能
- */
 class ChatHelpPresenter(
-    private val chatFragment: ChatFragment,
-    private val binding: SisterFragmentChatBinding,
-    private val model: SisterViewModel
-) : SimplePresenter(), View.OnClickListener {
+    fragment: ChatFragment,
+    binding: SisterFragmentChatBinding,
+    model: SisterViewModel
+) : BaseChatPresenter(fragment, binding, model) {
 
     private val adapter = RecyclerAdapter()
 
     init {
         binding.helpRecycler.layoutManager = LinearLayoutManager(
-            chatFragment.requireContext(),
+            fragment.requireContext(),
             LinearLayoutManager.HORIZONTAL,
             false
         )
         binding.helpRecycler.addItemDecoration(
-            LinearItemDecoration.builder(chatFragment.requireContext())
+            LinearItemDecoration.builder(fragment.requireContext())
                 .color(android.R.color.transparent, R.dimen.size_6dp)
                 .horizontal()
                 .build()
@@ -45,8 +42,8 @@ class ChatHelpPresenter(
         adapter.onClickListener = this
     }
 
-    fun load() {
-        chatFragment.lifecycleScope.launch(Dispatchers.IO) {
+    override fun load() {
+        fragment.lifecycleScope.launch(Dispatchers.IO) {
             val items = listOf(
                 ApiHelp(1, "充值方式"),
                 ApiHelp(2, "游戏准入"),
@@ -76,5 +73,9 @@ class ChatHelpPresenter(
 
     private fun sendMsg(data: ApiHelp) {
         Msg.toast("发送快捷功能消息-->" + data.content)
+    }
+
+    override fun load(view: ImageView, holder: AdapterViewHolder) {
+        TODO("Not yet implemented")
     }
 }

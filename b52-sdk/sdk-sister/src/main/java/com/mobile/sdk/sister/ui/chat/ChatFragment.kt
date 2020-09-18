@@ -35,8 +35,8 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
         _binding = SisterFragmentChatBinding.inflate(inflater, container, false)
         chatListPresenter = ChatListPresenter(this, binding, fParent.model)
         chatHelpPresenter = ChatHelpPresenter(this, binding, fParent.model)
-        chatMorePresenter = ChatMorePresenter(this, binding)
-        chatVoicePresenter = ChatVoicePresenter(this, binding)
+        chatMorePresenter = ChatMorePresenter(this, binding, fParent.model)
+        chatVoicePresenter = ChatVoicePresenter(this, binding, fParent.model)
         binding.chatAdd.setOnClickListener(this)
         binding.chatEt.addTextChangedListener(this)
         return binding.root
@@ -75,6 +75,10 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
     override fun onBusEvent(event: Pair<Int, Any>) {
         if (event.first == SisterX.BUS_MSG_STATUS) {
             chatListPresenter.onMessageStatusChanged(event.second.cast())
+            return
+        }
+        if (event.first == SisterX.BUS_MSG_NEW) {
+            chatListPresenter.onNewMessage(event.second.cast())
             return
         }
     }

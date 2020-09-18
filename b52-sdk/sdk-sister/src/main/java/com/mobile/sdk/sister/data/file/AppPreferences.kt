@@ -29,7 +29,7 @@ object AppPreferences : PlatformPreferences {
         }
 
     override var userId: Long
-        get() = prefs.decodeLong("userId", 0)
+        get() = prefs.decodeLong("userId", -1L)
         set(value) {
             prefs.encode("userId", value)
         }

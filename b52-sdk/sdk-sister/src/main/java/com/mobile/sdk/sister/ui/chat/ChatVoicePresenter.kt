@@ -1,11 +1,14 @@
 package com.mobile.sdk.sister.ui.chat
 
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.mobile.guava.android.mvvm.Msg
-import com.mobile.guava.android.mvvm.lifecycle.SimplePresenter
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
+import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.views.RecordButtonTouchCallback
+import com.pacific.adapter.AdapterViewHolder
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -15,9 +18,10 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class ChatVoicePresenter(
-    private val chatFragment: ChatFragment,
-    private val binding: SisterFragmentChatBinding
-) : SimplePresenter(), RecordButtonTouchCallback {
+    fragment: ChatFragment,
+    binding: SisterFragmentChatBinding,
+    model: SisterViewModel
+) : BaseChatPresenter(fragment, binding, model), RecordButtonTouchCallback {
 
     private val balloon: Balloon
     private val pressDuration: TextView
@@ -26,7 +30,7 @@ class ChatVoicePresenter(
 
     init {
         binding.pressVoice.setButtonTouchCallback(this)
-        balloon = createBalloon(chatFragment.requireContext()) {
+        balloon = createBalloon(fragment.requireContext()) {
             setLayout(R.layout.sister_popup_press_voice)
             cornerRadius = 0f
             arrowVisible = false
@@ -114,20 +118,32 @@ class ChatVoicePresenter(
      * 录制时间太短
      */
     override fun onTouchIntervalTimeSmall() {
-        Msg.toast(chatFragment.getString(R.string.sister_popup_voice_duration_less))
+        Msg.toast(fragment.getString(R.string.sister_popup_voice_duration_less))
     }
 
     /**
      * 滑动到了取消区域
      */
     override fun onTouchCancelArea() {
-        pressStatus.text = chatFragment.getString(R.string.sister_popup_voice_press_cancel_text)
+        pressStatus.text = fragment.getString(R.string.sister_popup_voice_press_cancel_text)
     }
 
     /**
      * 滑动到正常区域
      */
     override fun onRestoreNormalTouchArea() {
-        pressStatus.text = chatFragment.getString(R.string.sister_popup_voice_press_send_text)
+        pressStatus.text = fragment.getString(R.string.sister_popup_voice_press_send_text)
+    }
+
+    override fun load() {
+        TODO("Not yet implemented")
+    }
+
+    override fun load(view: ImageView, holder: AdapterViewHolder) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClick(v: View?) {
+        TODO("Not yet implemented")
     }
 }

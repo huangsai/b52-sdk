@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        SisterX.setUsername("AnBey123456".toLowerCase())
+        SisterX.setUsername("barry123")
         binding.csmsOpen.setOnClickListener {
             SisterX.show(this, false)
         }

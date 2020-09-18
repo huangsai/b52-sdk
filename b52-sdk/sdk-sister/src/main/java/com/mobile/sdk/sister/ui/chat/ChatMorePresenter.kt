@@ -6,16 +6,19 @@ import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.mvvm.lifecycle.SimplePresenter
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
+import com.mobile.sdk.sister.ui.SisterViewModel
+import com.pacific.adapter.AdapterViewHolder
 import com.skydoves.balloon.createBalloon
 
 class ChatMorePresenter(
-    private val chatFragment: ChatFragment,
-    private val binding: SisterFragmentChatBinding
-) : SimplePresenter(), View.OnClickListener {
+    fragment: ChatFragment,
+    binding: SisterFragmentChatBinding,
+    model: SisterViewModel
+) : BaseChatPresenter(fragment, binding, model) {
 
     fun createPop() {
         val popWidth = binding.layoutInput.width
-        val balloon = createBalloon(chatFragment.requireContext()) {
+        val balloon = createBalloon(fragment.requireContext()) {
             setLayout(R.layout.sister_popup_chat_more)
             cornerRadius = 0f
             arrowVisible = false
@@ -40,5 +43,13 @@ class ChatMorePresenter(
 
     override fun onDestroyView() {
         super.onDestroyView()
+    }
+
+    override fun load() {
+        TODO("Not yet implemented")
+    }
+
+    override fun load(view: ImageView, holder: AdapterViewHolder) {
+        TODO("Not yet implemented")
     }
 }

@@ -3,10 +3,13 @@ package com.mobile.sdk.sister.ui
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.ViewModel
 import com.mobile.guava.android.ensureWorkThread
+import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.SisterRepository
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
-import com.mobile.sdk.sister.data.http.*
+import com.mobile.sdk.sister.data.http.ApiMessage
+import com.mobile.sdk.sister.data.http.ApiNotice
+import com.mobile.sdk.sister.data.http.STATUS_MSG_PROCESSING
 import com.mobile.sdk.sister.socket.SocketUtils
 import java.io.File
 import java.util.*
@@ -23,67 +26,49 @@ class SisterViewModel @Inject constructor(
     }
 
     @WorkerThread
-    fun postText(content: String, toUserId: Long): DbMessage {
+    fun postText(dbMessage: DbMessage) {
         ensureWorkThread()
-        return DbMessage(
-            0,
-            UUID.randomUUID().toString(),
-            TYPE_TEXT,
-            toUserId,
-            ApiMessage.Text(content).toJson(),
-            System.currentTimeMillis(),
-            AppPreferences.username,
-            AppPreferences.userImage,
-            AppPreferences.userId,
-            2,
-            STATUS_MSG_PROCESSING
-        ).also {
-            SocketUtils.postMessage(it)
+        return SocketUtils.postMessage(dbMessage)
+    }
+
+    @WorkerThread
+    fun postImage(dbMessage: DbMessage) {
+        ensureWorkThread()
+        val image = dbMessage.content.jsonToImage()
+        val uploadedUrl = sisterRepository.uploadImage(File(image.url))
+        if (uploadedUrl.isNotEmpty()) {
+            dbMessage.content = ApiMessage.Image(uploadedUrl).toJson()
+            SocketUtils.postMessage(dbMessage)
         }
     }
 
     @WorkerThread
-    fun postImage(file: File, toUserId: Long): DbMessage {
+    fun postAudio(dbMessage: DbMessage) {
         ensureWorkThread()
-        val uploadedUrl = sisterRepository.uploadImage(file)
-        return DbMessage(
-            0,
-            UUID.randomUUID().toString(),
-            TYPE_IMAGE,
-            toUserId,
-            ApiMessage.Image(uploadedUrl).toJson(),
-            System.currentTimeMillis(),
-            AppPreferences.username,
-            AppPreferences.userImage,
-            AppPreferences.userId,
-            2,
-            STATUS_MSG_PROCESSING
-        ).also {
-            SocketUtils.postMessage(it)
+        val audio = dbMessage.content.jsonToAudio()
+        val uploadedUrl = sisterRepository.uploadAudio(File(audio.url))
+        if (uploadedUrl.isNotEmpty()) {
+            dbMessage.content = ApiMessage.Audio(audio.duration, uploadedUrl).toJson()
+            SocketUtils.postMessage(dbMessage)
         }
     }
 
     @WorkerThread
-    fun postAudio(file: File, duration: Long, toUserId: Long): DbMessage {
+    fun createDbMessage(type: Int, jsonContent: String): DbMessage {
         ensureWorkThread()
-        val uploadedUrl = sisterRepository.uploadAudio(file).ifEmpty {
-            file.absolutePath
-        }
         return DbMessage(
             0,
             UUID.randomUUID().toString(),
-            TYPE_AUDIO,
-            toUserId,
-            ApiMessage.Audio(duration, uploadedUrl).toJson(),
+            type,
+            SisterX.toUserId,
+            jsonContent,
             System.currentTimeMillis(),
             AppPreferences.username,
             AppPreferences.userImage,
             AppPreferences.userId,
             2,
             STATUS_MSG_PROCESSING
-        ).also {
-            SocketUtils.postMessage(it)
-        }
+        )
     }
 
     fun loadSystemNotices(): List<ApiNotice> {

@@ -9,6 +9,7 @@ import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.ui.asSimple
+import com.mobile.sdk.sister.ui.items.MsgItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -109,13 +110,6 @@ object SocketUtils {
     }
 
     fun onMessage(commonMessage: CommonMessage) {
-        val ack = SisterX.component.json()
-            .adapter(ApiAck::class.java)
-            .fromJson(commonMessage.content.string(Charsets.UTF_8))!!
-            .also {
-                Timber.tag("AppWebSocket").d("Ack->${it.msg}->${it.id}")
-            }
-
         when (commonMessage.bizId) {
             IM_BUZ_LOGIN -> {
             }
@@ -124,17 +118,29 @@ object SocketUtils {
             IM_BUZ_CLOSE -> {
             }
             IM_BUZ_NOTIFICATION -> {
+                SisterX.component.json()
+                    .adapter(ApiMessage::class.java)
+                    .fromJson(commonMessage.content.string(Charsets.UTF_8))!!
+                    .also {
+                        insertDbMessage(it.toDbMessage())
+                    }
             }
             IM_BUZ_MSG -> {
-                require(!ack.id.isNullOrEmpty())
-                setDbMessageSuccess(ack.id)
+                SisterX.component.json()
+                    .adapter(ApiAck::class.java)
+                    .fromJson(commonMessage.content.string(Charsets.UTF_8))!!
+                    .also {
+                        Timber.tag("AppWebSocket").d("Ack->${it.msg}->${it.id}")
+                        require(!it.id.isNullOrEmpty())
+                        setDbMessageSuccess(it.id)
+                    }
             }
             else -> Timber.tag("AppWebSocket").d("未知socket业务消息")
         }
     }
 
     private fun setDbMessageSuccess(id: String) = GlobalScope.launch(Dispatchers.IO) {
-        SisterX.component.sisterRepository().also {
+        SisterX.component.sisterRepository().let {
             it.getMessageById(id)?.let { dbMessage ->
                 dbMessage.status = STATUS_MSG_SUCCESS
                 if (it.updateMessage(dbMessage) == 1) {
@@ -142,6 +148,13 @@ object SocketUtils {
                     Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
                 }
             }
+        }
+    }
+
+    private fun insertDbMessage(dbMessage: DbMessage) = GlobalScope.launch(Dispatchers.IO) {
+        SisterX.component.sisterRepository().let {
+            it.insetMessage(dbMessage)
+            Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))
         }
     }
 }

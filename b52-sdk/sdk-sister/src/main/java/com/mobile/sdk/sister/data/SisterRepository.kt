@@ -23,7 +23,7 @@ class SisterRepository @Inject constructor(
 ) {
 
     suspend fun user(username: String): Source<ApiUser> {
-        val call = dataService.token(2, platformPreferences.username)
+        val call = dataService.token(2, username)
         return try {
             call.execute().toSource {
                 platformPreferences.userId = it.userId
@@ -38,8 +38,8 @@ class SisterRepository @Inject constructor(
                 return@toSource it
             }
         } catch (e: Exception) {
-            platformPreferences.userId = 0L
-            platformPreferences.username = ""
+            platformPreferences.userId = -1L
+            platformPreferences.username = username
             platformPreferences.token = ""
             platformPreferences.userImage = ""
             platformPreferences.nickname = "游客"

@@ -4,41 +4,40 @@ import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mobile.ext.glide.GlideApp
 import com.mobile.guava.android.mvvm.Msg
-import com.mobile.guava.android.mvvm.lifecycle.SimplePresenter
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.guava.android.ui.view.recyclerview.keepItemViewVisible
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.data.db.DbMessage
-import com.mobile.sdk.sister.data.file.AppPreferences
+import com.mobile.sdk.sister.data.http.ApiMessage
+import com.mobile.sdk.sister.data.http.TYPE_AUDIO
+import com.mobile.sdk.sister.data.http.TYPE_IMAGE
 import com.mobile.sdk.sister.data.http.TYPE_TEXT
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.items.MsgItem
-import com.mobile.sdk.sister.ui.jsonToText
-import com.pacific.adapter.AdapterImageLoader
+import com.mobile.sdk.sister.ui.toJson
 import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
-/**
- * 聊天列表
- */
 class ChatListPresenter(
-    private val chatFragment: ChatFragment,
-    private val binding: SisterFragmentChatBinding,
-    private val model: SisterViewModel
-) : SimplePresenter(), View.OnClickListener, AdapterImageLoader {
+    fragment: ChatFragment,
+    binding: SisterFragmentChatBinding,
+    model: SisterViewModel
+) : BaseChatPresenter(fragment, binding, model) {
 
     private val adapter = RecyclerAdapter()
 
     init {
-        binding.chatRecycler.layoutManager = LinearLayoutManager(chatFragment.requireContext())
+        binding.chatRecycler.layoutManager = LinearLayoutManager(fragment.requireContext())
         binding.chatRecycler.addItemDecoration(
-            LinearItemDecoration.builder(chatFragment.requireContext())
+            LinearItemDecoration.builder(fragment.requireContext())
                 .color(android.R.color.transparent, R.dimen.size_10dp)
                 .build()
         )
@@ -47,11 +46,14 @@ class ChatListPresenter(
         binding.chatRecycler.adapter = adapter
     }
 
-    fun load() {
-        chatFragment.lifecycleScope.launch(Dispatchers.IO) {
-            val userId = AppPreferences.userId
+    override fun onDestroyView() {
+        binding.chatRecycler.adapter = null
+    }
+
+    override fun load() {
+        fragment.lifecycleScope.launch(Dispatchers.IO) {
             val items = model.loadMessages().map {
-                MsgItem.create(it, userId)
+                MsgItem.create(it)
             }
             withContext(Dispatchers.Main) {
                 adapter.addAll(items)
@@ -66,8 +68,12 @@ class ChatListPresenter(
             .first { it.data.id == dbMessage.id }
             .let {
                 it.data.status = dbMessage.status
-                adapter.notifyItemChanged(adapter.indexOf(it), dbMessage.status)
+                adapter.notifyItemChanged(adapter.indexOf(it))
             }
+    }
+
+    fun onNewMessage(msgItem: MsgItem) {
+        adapter.add(msgItem)
     }
 
     override fun onClick(v: View?) {
@@ -92,46 +98,81 @@ class ChatListPresenter(
                 //TODO 点击支付宝充值
                 Msg.toast("点击支付宝充值")
             }
-            R.id.status -> {
-                val data = AdapterUtils.getHolder(v).item<MsgItem>().data
-                retryPostMsg(data)
-            }
+            R.id.status -> retryPostMsg(AdapterUtils.getHolder(v).item<MsgItem>().data)
         }
     }
 
     override fun load(view: ImageView, holder: AdapterViewHolder) {
         when (view.id) {
             R.id.profile -> {
-                //TODO 加载头像
+                GlideApp.with(fragment)
+                    .load(holder.item<MsgItem>().data.fromUserImage)
+                    .into(view)
             }
             R.id.image_content -> {
-                //TODO 加载图片内容
-            }
-        }
-    }
-
-    override fun onDestroyView() {
-        binding.chatRecycler.adapter = null
-    }
-
-    private fun retryPostMsg(data: DbMessage) {
-        when (data.type) {
-            TYPE_TEXT -> {
-                postText(data.content.jsonToText().msg)
+                GlideApp.with(fragment)
+                    .load(holder.item<MsgItem>().image.url)
+                    .into(view)
             }
         }
     }
 
     fun postText(text: String) {
-        chatFragment.lifecycleScope.launch(Dispatchers.IO) {
-            val item = MsgItem.create(
-                model.postText(text, 0L),
-                AppPreferences.userId
+        fragment.lifecycleScope.launch(Dispatchers.IO) {
+            val dbMessage = model.createDbMessage(
+                TYPE_TEXT,
+                ApiMessage.Text(text).toJson()
             )
+            val item = MsgItem.create(dbMessage)
             withContext(Dispatchers.Main) {
-                adapter.add(item)
+                addMsgItem(item)
                 binding.chatEt.setText("")
-                binding.chatRecycler.keepItemViewVisible(adapter.indexOf(item), true)
+            }
+            model.postText(dbMessage)
+        }
+    }
+
+    fun postImage(image: File) {
+        fragment.lifecycleScope.launch(Dispatchers.IO) {
+            val dbMessage = model.createDbMessage(
+                TYPE_IMAGE,
+                ApiMessage.Image(image.path).toJson()
+            )
+            val item = MsgItem.create(dbMessage)
+            withContext(Dispatchers.Main) {
+                addMsgItem(item)
+            }
+            model.postImage(dbMessage)
+        }
+    }
+
+    fun postAudio(duration: Long, audio: File) {
+        fragment.lifecycleScope.launch(Dispatchers.IO) {
+            val dbMessage = model.createDbMessage(
+                TYPE_AUDIO,
+                ApiMessage.Audio(duration, audio.path).toJson()
+            )
+            val item = MsgItem.create(dbMessage)
+            withContext(Dispatchers.Main) {
+                addMsgItem(item)
+            }
+            model.postAudio(dbMessage)
+        }
+    }
+
+    private fun addMsgItem(item: MsgItem) {
+        adapter.add(item)
+        binding.chatRecycler.keepItemViewVisible(adapter.itemCount - 1, true)
+    }
+
+    private fun retryPostMsg(dbMessage: DbMessage) {
+        fragment.lifecycleScope.launch(Dispatchers.IO) {
+            when (dbMessage.type) {
+                TYPE_TEXT -> model.postText(dbMessage)
+                TYPE_IMAGE -> model.postImage(dbMessage)
+                TYPE_AUDIO -> model.postImage(dbMessage)
+                else -> {
+                }
             }
         }
     }
