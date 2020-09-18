@@ -9,6 +9,31 @@ import com.mobile.sdk.sister.ui.*
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
 
+internal fun AdapterViewHolder.profileHandle() {
+    attachImageLoader(R.id.profile)
+    attachOnClickListener(R.id.profile)
+}
+
+internal fun AdapterViewHolder.imageHandle() {
+    attachImageLoader(R.id.image_content)
+    attachOnClickListener(R.id.image_content)
+}
+
+internal fun AdapterViewHolder.audioClick() {
+    attachOnClickListener(R.id.audio_content)
+}
+
+internal fun AdapterViewHolder.depositClick() {
+    attachOnClickListener(R.id.deposit_wechat)
+    attachOnClickListener(R.id.deposit_alipay)
+}
+
+internal fun AdapterViewHolder.failClick(status: Int) {
+    if (status == STATUS_MSG_FAILED) {
+        attachOnClickListener(R.id.status)
+    }
+}
+
 abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
     lateinit var text: ApiMessage.Text
@@ -67,31 +92,6 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         return this
     }
 
-    internal fun AdapterViewHolder.profileHandle() {
-        attachImageLoader(R.id.profile)
-        attachOnClickListener(R.id.profile)
-    }
-
-    internal fun AdapterViewHolder.imageHandle() {
-        attachImageLoader(R.id.image_content)
-        attachOnClickListener(R.id.image_content)
-    }
-
-    internal fun AdapterViewHolder.audioClick() {
-        attachOnClickListener(R.id.audio_content)
-    }
-
-    internal fun AdapterViewHolder.depositClick() {
-        attachOnClickListener(R.id.deposit_wechat)
-        attachOnClickListener(R.id.deposit_alipay)
-    }
-
-    internal fun AdapterViewHolder.failClick(status: Int) {
-        if (status == STATUS_MSG_FAILED) {
-            attachOnClickListener(R.id.status)
-        }
-    }
-
     class Text(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -100,6 +100,11 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             binding.status.status = data.status
             holder.profileHandle()
             holder.failClick(binding.status.status)
+        }
+
+        override fun bindPayloads(holder: AdapterViewHolder, payloads: List<Any>?) {
+            val binding: SisterItemChatToTextBinding = holder.binding()
+            binding.status.status = data.status
         }
 
         override fun getLayout(): Int {

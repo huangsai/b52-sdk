@@ -10,16 +10,16 @@ interface MessageDao : SqlDao<DbMessage> {
     @Query("SELECT * FROM sister_message ORDER BY time DESC")
     fun get(): List<DbMessage>
 
-    @Query("SELECT * FROM sister_message WHERE id =:id ORDER BY time DESC")
+    @Query("SELECT * FROM sister_message WHERE id =:id ORDER BY time ASC")
     fun getById(id: String): DbMessage?
 
-    @Query("SELECT * FROM sister_message WHERE type =:type ORDER BY time DESC")
+    @Query("SELECT * FROM sister_message WHERE type =:type ORDER BY time ASC")
     fun getByType(type: Int): List<DbMessage>
 
-    @Query("SELECT * FROM sister_message WHERE type =:status ORDER BY time DESC")
+    @Query("SELECT * FROM sister_message WHERE type =:status ORDER BY time ASC")
     fun getByStatus(status: Int): List<DbMessage>
 
-    @Query("SELECT * FROM sister_message WHERE toUserId =:userId OR fromUserId=:userId ORDER BY time DESC")
+    @Query("SELECT * FROM sister_message WHERE toUserId =:userId OR fromUserId=:userId ORDER BY time ASC")
     fun getByUserId(userId: Long): List<DbMessage>
 
     @Query("DELETE FROM sister_message WHERE toUserId =:userId OR fromUserId=:userId")
