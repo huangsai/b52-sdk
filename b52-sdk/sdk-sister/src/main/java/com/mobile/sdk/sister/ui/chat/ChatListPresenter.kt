@@ -1,12 +1,16 @@
 package com.mobile.sdk.sister.ui.chat
 
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.mvvm.lifecycle.SimplePresenter
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
+import com.mobile.guava.android.ui.view.recyclerview.keepItemViewVisible
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
@@ -27,7 +31,7 @@ class ChatListPresenter(
     private val chatFragment: ChatFragment,
     private val binding: SisterFragmentChatBinding,
     private val model: SisterViewModel
-) : SimplePresenter(), View.OnClickListener, AdapterImageLoader {
+) : SimplePresenter(), View.OnClickListener, AdapterImageLoader, TextView.OnEditorActionListener {
 
     private val adapter = RecyclerAdapter()
 
@@ -41,6 +45,8 @@ class ChatListPresenter(
         adapter.onClickListener = this
         adapter.imageLoader = this
         binding.chatRecycler.adapter = adapter
+
+        binding.chatEt.setOnEditorActionListener(this)
     }
 
     fun load() {
@@ -100,5 +106,26 @@ class ChatListPresenter(
 
     override fun onDestroyView() {
         binding.chatRecycler.adapter = null
+    }
+
+    override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
+        if (actionId == EditorInfo.IME_ACTION_SEND) {
+            postText(v.text.toString())
+        }
+        return false
+    }
+
+    private fun postText(text: String) {
+        chatFragment.lifecycleScope.launch(Dispatchers.IO) {
+            val item = MsgItem.create(
+                model.postText(text, 0L),
+                AppPreferences.userId
+            )
+            withContext(Dispatchers.Main) {
+                adapter.add(item)
+                binding.chatEt.setText("")
+                binding.chatRecycler.keepItemViewVisible(adapter.indexOf(item))
+            }
+        }
     }
 }

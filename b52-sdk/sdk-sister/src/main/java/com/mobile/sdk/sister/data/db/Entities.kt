@@ -19,7 +19,7 @@ data class DbMessage(
     @ColumnInfo(name = "fromUsername") val fromUsername: String,
     @ColumnInfo(name = "fromUserId") val fromUserId: Long,
     @ColumnInfo(name = "fromUserType") val fromUserType: Int,
-    @ColumnInfo(name = "status") val status: Int
+    @ColumnInfo(name = "status") var status: Int
 ) {
     fun toApiMessage(): ApiMessage {
         return ApiMessage(

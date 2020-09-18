@@ -1,5 +1,8 @@
 package com.mobile.sdk.sister.socket
 
+import androidx.annotation.WorkerThread
+import com.mobile.guava.android.ensureWorkThread
+import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.jvm.coroutines.Bus
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
@@ -39,72 +42,67 @@ object SocketUtils {
         return decryptedAES.toByteString()
     }
 
-    fun postLogin() = GlobalScope.launch(Dispatchers.IO) {
-        try {
-            val req = ReqLogin(
-                AppPreferences.username,
-                AppPreferences.token,
-                2,
-                1
-            )
-            val content = SisterX.component.json()
-                .adapter(ReqLogin::class.java)
-                .toJson(req)
-                .encodeUtf8()
+    @WorkerThread
+    fun postLogin() {
+        ensureWorkThread()
+        val req = ReqLogin(
+            AppPreferences.username,
+            AppPreferences.token,
+            2,
+            1
+        )
+        val content = SisterX.component.json()
+            .adapter(ReqLogin::class.java)
+            .toJson(req)
+            .encodeUtf8()
 
-            CommonMessage.Builder()
-                .bizId(IM_BUZ_LOGIN)
-                .msgType(2)
-                .content(content)
-                .build()
-                .also {
-                    AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
-                }
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
+        CommonMessage.Builder()
+            .bizId(IM_BUZ_LOGIN)
+            .msgType(2)
+            .content(content)
+            .build()
+            .also {
+                AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
+            }
     }
 
-    fun postLogout() = GlobalScope.launch(Dispatchers.IO) {
-        try {
-            CommonMessage.Builder()
-                .bizId(IM_BUZ_LOGOUT)
-                .msgType(2)
-                .content("{}".encodeUtf8())
-                .build()
-                .also {
-                    AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
-                }
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
+    @WorkerThread
+    fun postLogout() {
+        ensureWorkThread()
+        CommonMessage.Builder()
+            .bizId(IM_BUZ_LOGOUT)
+            .msgType(2)
+            .content("{}".encodeUtf8())
+            .build()
+            .also {
+                AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
+            }
     }
 
-    fun postMessage(dbMessage: DbMessage) = GlobalScope.launch(Dispatchers.IO) {
-        var newDbMessage: DbMessage
-        try {
-            val content = SisterX.component.json()
-                .adapter(ApiSimpleMessage::class.java)
-                .toJson(dbMessage.toApiMessage().asSimple())
-                .encodeUtf8()
+    @WorkerThread
+    fun postMessage(dbMessage: DbMessage) {
+        ensureWorkThread()
+        val content = SisterX.component.json()
+            .adapter(ApiSimpleMessage::class.java)
+            .toJson(dbMessage.toApiMessage().asSimple())
+            .encodeUtf8()
 
-            CommonMessage.Builder()
-                .bizId(IM_BUZ_MSG)
-                .msgType(2)
-                .content(content)
-                .build()
-                .also {
+        CommonMessage.Builder()
+            .bizId(IM_BUZ_MSG)
+            .msgType(2)
+            .content(content)
+            .build()
+            .also {
+                if (true == AndroidX.isSocketConnected.value) {
                     AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
+                } else {
+                    dbMessage.status = STATUS_MSG_FAILED
                 }
+            }
 
-            newDbMessage = dbMessage
-        } catch (e: Exception) {
-            Timber.e(e)
-            newDbMessage = dbMessage.copy(status = STATUS_MSG_FAILED)
-        }
-        if (SisterX.component.sisterRepository().insetMessage(newDbMessage) > 0) {
-            if (newDbMessage.status == STATUS_MSG_FAILED) {
-                Timber.tag("AppWebSocket").d("发送失败->${newDbMessage.id}")
+        if (SisterX.component.sisterRepository().insetMessage(dbMessage) > 0) {
+            if (dbMessage.status == STATUS_MSG_FAILED) {
+                Timber.tag("AppWebSocket").d("发送失败->${dbMessage.id}")
                 Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
             }
         }
@@ -129,18 +127,20 @@ object SocketUtils {
             }
             IM_BUZ_MSG -> {
                 require(!ack.id.isNullOrEmpty())
-                markDbMessageSuccess(ack.id)
+                setDbMessageSuccess(ack.id)
             }
             else -> Timber.tag("AppWebSocket").d("未知socket业务消息")
         }
     }
 
-    private fun markDbMessageSuccess(id: String) = GlobalScope.launch(Dispatchers.IO) {
-        val repo = SisterX.component.sisterRepository()
-        repo.getMessageById(id)?.let { dbMessage ->
-            if (repo.updateMessage(dbMessage.copy(status = STATUS_MSG_SUCCESS)) == 1) {
-                Timber.tag("AppWebSocket").d("发送成功->$id")
-                Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
+    private fun setDbMessageSuccess(id: String) = GlobalScope.launch(Dispatchers.IO) {
+        SisterX.component.sisterRepository().also {
+            it.getMessageById(id)?.let { dbMessage ->
+                dbMessage.status = STATUS_MSG_SUCCESS
+                if (it.updateMessage(dbMessage) == 1) {
+                    Timber.tag("AppWebSocket").d("发送成功->$id")
+                    Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
+                }
             }
         }
     }
