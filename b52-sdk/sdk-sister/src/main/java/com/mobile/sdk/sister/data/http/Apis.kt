@@ -33,7 +33,7 @@ data class ApiAck(
 @JsonClass(generateAdapter = true)
 data class ApiSimpleMessage(
     @Json(name = "id") val id: String,
-    @Json(name = "chatType") val type: Int,
+    @Json(name = "msgType") val type: Int,
     @Json(name = "toUserId") val toUserId: Long,
     @Json(name = "sayContent") val content: String
 )
@@ -41,7 +41,7 @@ data class ApiSimpleMessage(
 @JsonClass(generateAdapter = true)
 data class ApiMessage(
     @Json(name = "id") val id: String,
-    @Json(name = "type") val type: Int,
+    @Json(name = "msgType") val type: Int,
     @Json(name = "toUserId") val toUserId: Long,
     @Json(name = "sayContent") val content: String,
     @Json(name = "sayTime") val time: Long,

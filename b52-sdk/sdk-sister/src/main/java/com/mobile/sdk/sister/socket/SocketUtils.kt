@@ -122,7 +122,7 @@ object SocketUtils {
                     .adapter(ApiMessage::class.java)
                     .fromJson(commonMessage.content.string(Charsets.UTF_8))!!
                     .also {
-                        insertDbMessage(it.toDbMessage())
+                        saveDbMessage(it.toDbMessage())
                     }
             }
             IM_BUZ_MSG -> {
@@ -151,7 +151,7 @@ object SocketUtils {
         }
     }
 
-    private fun insertDbMessage(dbMessage: DbMessage) = GlobalScope.launch(Dispatchers.IO) {
+    private fun saveDbMessage(dbMessage: DbMessage) = GlobalScope.launch(Dispatchers.IO) {
         SisterX.component.sisterRepository().let {
             it.insetMessage(dbMessage)
             Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))
