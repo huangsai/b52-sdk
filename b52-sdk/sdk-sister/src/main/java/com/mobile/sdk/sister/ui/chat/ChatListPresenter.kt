@@ -101,11 +101,13 @@ class ChatListPresenter(
             R.id.profile -> {
                 GlideApp.with(fragment)
                     .load(holder.item<MsgItem>().data.fromUserImage)
+                    .placeholder(R.drawable.sister_default_profile)
                     .into(view)
             }
             R.id.image_content -> {
                 GlideApp.with(fragment)
                     .load(holder.item<MsgItem>().image.url)
+                    .placeholder(R.drawable.sister_default_img)
                     .into(view)
             }
         }

@@ -2,12 +2,11 @@ package com.mobile.sdk.sister.ui.chat
 
 import android.view.View
 import android.widget.ImageView
-import com.mobile.guava.android.mvvm.Msg
-import com.mobile.guava.android.mvvm.lifecycle.SimplePresenter
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.pacific.adapter.AdapterViewHolder
+import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
 
 class ChatMorePresenter(
@@ -16,9 +15,11 @@ class ChatMorePresenter(
     model: SisterViewModel
 ) : BaseChatPresenter(fragment, binding, model) {
 
+    private lateinit var balloon: Balloon
+
     fun createPop() {
         val popWidth = binding.layoutInput.width
-        val balloon = createBalloon(fragment.requireContext()) {
+        balloon = createBalloon(fragment.requireContext()) {
             setLayout(R.layout.sister_popup_chat_more)
             cornerRadius = 0f
             arrowVisible = false
@@ -33,12 +34,13 @@ class ChatMorePresenter(
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.iv_picture -> {
-                Msg.toast("点击照片")
+                fragment.startPictureLaunch.launch(null)
             }
             R.id.iv_camera -> {
-                Msg.toast("点击拍摄")
+                fragment.startCameraLaunch.launch(null)
             }
         }
+        balloon.dismiss()
     }
 
     override fun onDestroyView() {

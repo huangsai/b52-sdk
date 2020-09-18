@@ -6,13 +6,21 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.mobile.guava.android.io.FileUtils
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
+import com.mobile.sdk.sister.base.PickContent
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
 
+
 class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
+
+    lateinit var startCameraLaunch: ActivityResultLauncher<Void>
+    lateinit var startPictureLaunch: ActivityResultLauncher<Void>
 
     private var _binding: SisterFragmentChatBinding? = null
     private val binding: SisterFragmentChatBinding get() = _binding!!
@@ -22,9 +30,25 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
     private lateinit var chatMorePresenter: ChatMorePresenter
     private lateinit var chatVoicePresenter: ChatVoicePresenter
 
+
     companion object {
         @JvmStatic
         fun newInstance(): ChatFragment = ChatFragment()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        startCameraLaunch =
+            registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+                if (it != null) {
+                    chatListPresenter.postImage(FileUtils.createFile(it, requireContext()))
+                }
+            }
+        startPictureLaunch = registerForActivityResult(PickContent(requireContext())) {
+            if (it != null) {
+                chatListPresenter.postImage(it)
+            }
+        }
     }
 
     override fun onCreateView(
