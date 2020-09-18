@@ -6,6 +6,9 @@ import android.view.animation.AnimationUtils
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.widget.AppCompatImageView
 import com.mobile.sdk.sister.R
+import com.mobile.sdk.sister.data.http.STATUS_MSG_FAILED
+import com.mobile.sdk.sister.data.http.STATUS_MSG_PROCESSING
+import com.mobile.sdk.sister.data.http.STATUS_MSG_SUCCESS
 
 class MsgStatusImageView @JvmOverloads constructor(
     context: Context,
@@ -20,16 +23,16 @@ class MsgStatusImageView @JvmOverloads constructor(
         set(value) {
             _status = value
             when (value) {
-                STATUS_SUCCESS -> {
+                STATUS_MSG_SUCCESS -> {
                     this.clearAnimation()
                     this.visibility = GONE
                 }
-                STATUS_FAIL -> {
+                STATUS_MSG_FAILED -> {
                     this.clearAnimation()
                     this.visibility = VISIBLE
                     setImageResource(R.drawable.sister_icon_fail)
                 }
-                STATUS_SENDING -> {
+                STATUS_MSG_PROCESSING -> {
                     this.visibility = VISIBLE
                     setImageResource(R.drawable.sister_icon_sending)
                     val rotateAnimation =
@@ -39,10 +42,4 @@ class MsgStatusImageView @JvmOverloads constructor(
                 }
             }
         }
-
-    companion object {
-        const val STATUS_SUCCESS = 0
-        const val STATUS_SENDING = 1
-        const val STATUS_FAIL = 2
-    }
 }
