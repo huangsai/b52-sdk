@@ -1,10 +1,7 @@
 package com.mobile.sdk.sister.ui.chat
 
-import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.guava.android.mvvm.Msg
@@ -14,9 +11,11 @@ import com.mobile.guava.android.ui.view.recyclerview.keepItemViewVisible
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
+import com.mobile.sdk.sister.data.http.TYPE_TEXT
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.items.MsgItem
+import com.mobile.sdk.sister.ui.jsonToText
 import com.pacific.adapter.AdapterImageLoader
 import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
@@ -32,7 +31,7 @@ class ChatListPresenter(
     private val chatFragment: ChatFragment,
     private val binding: SisterFragmentChatBinding,
     private val model: SisterViewModel
-) : SimplePresenter(), View.OnClickListener, AdapterImageLoader, TextView.OnEditorActionListener {
+) : SimplePresenter(), View.OnClickListener, AdapterImageLoader {
 
     private val adapter = RecyclerAdapter()
 
@@ -46,7 +45,6 @@ class ChatListPresenter(
         adapter.onClickListener = this
         adapter.imageLoader = this
         binding.chatRecycler.adapter = adapter
-        binding.chatEt.setOnEditorActionListener(this)
     }
 
     fun load() {
@@ -95,10 +93,8 @@ class ChatListPresenter(
                 Msg.toast("点击支付宝充值")
             }
             R.id.status -> {
-                //TODO 失败，点击重新发送消息
-                val item = AdapterUtils.getHolder(v).item<MsgItem>()
-                val content = item.data.content
-                Msg.toast("重新发送消息${content}")
+                val data = AdapterUtils.getHolder(v).item<MsgItem>().data
+                retryPostMsg(data)
             }
         }
     }
@@ -118,14 +114,15 @@ class ChatListPresenter(
         binding.chatRecycler.adapter = null
     }
 
-    override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
-        if (actionId == EditorInfo.IME_ACTION_SEND) {
-            postText(v.text.toString())
+    private fun retryPostMsg(data: DbMessage) {
+        when (data.type) {
+            TYPE_TEXT -> {
+                postText(data.content.jsonToText().msg)
+            }
         }
-        return false
     }
 
-    private fun postText(text: String) {
+    fun postText(text: String) {
         chatFragment.lifecycleScope.launch(Dispatchers.IO) {
             val item = MsgItem.create(
                 model.postText(text, 0L),
