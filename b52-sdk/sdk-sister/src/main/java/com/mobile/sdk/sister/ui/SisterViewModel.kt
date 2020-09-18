@@ -7,7 +7,6 @@ import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.SisterRepository
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
-import com.mobile.sdk.sister.data.http.ApiMessage
 import com.mobile.sdk.sister.data.http.ApiNotice
 import com.mobile.sdk.sister.data.http.STATUS_MSG_PROCESSING
 import com.mobile.sdk.sister.socket.SocketUtils
@@ -37,7 +36,7 @@ class SisterViewModel @Inject constructor(
         val image = dbMessage.content.jsonToImage()
         val uploadedUrl = sisterRepository.uploadImage(File(image.url))
         if (uploadedUrl.isNotEmpty()) {
-            dbMessage.content = ApiMessage.Image(uploadedUrl).toJson()
+            dbMessage.content = DbMessage.Image(uploadedUrl).toJson()
             SocketUtils.postMessage(dbMessage)
         }
     }
@@ -48,7 +47,7 @@ class SisterViewModel @Inject constructor(
         val audio = dbMessage.content.jsonToAudio()
         val uploadedUrl = sisterRepository.uploadAudio(File(audio.url))
         if (uploadedUrl.isNotEmpty()) {
-            dbMessage.content = ApiMessage.Audio(audio.duration, uploadedUrl).toJson()
+            dbMessage.content = DbMessage.Audio(audio.duration, uploadedUrl).toJson()
             SocketUtils.postMessage(dbMessage)
         }
     }

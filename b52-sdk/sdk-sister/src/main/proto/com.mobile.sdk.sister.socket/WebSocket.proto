@@ -5,12 +5,46 @@ package com.mobile.sdk.sister.socket;
 option java_package = "com.mobile.sdk.sister.socket";
 
 message CommonMessage {
-  // 业务编号100100 ip分组
   required int32 bizId = 1;
-
-  // 消息类型：1心跳，2企业
-  required int32 msgType = 2;
-
-  // 数据
+  optional int32 msgType = 2;
   required bytes content = 3;
+}
+
+message LoginReq{
+  required string  userName = 1;
+  required string  token = 2;
+  required int32  userType = 3;
+  required int32 chatType = 4;
+  required string salt = 5 ;
+}
+
+message LoginRes{
+  required int32 result = 1;
+  required string msg = 2;
+}
+
+message ChatReq{
+  required string  id=1 ;
+  required string sayContent=2;
+  required string toUserId= 3;
+  required int32 chatType=4;
+  required int32 msgType=5;
+
+}
+message ChatRes{
+  required int32 result=1;
+  required string msg=2;
+  required string  id=3 ;
+}
+
+message ChatMsg{
+  required string  id=1 ;
+  required string sayContent=2;
+  required int32 chatType=3;
+  required int64 sayTime =4;
+  required string fromImgUrl=5;
+  required int32 fromUserType=6;
+  required string fromUserName=7;
+  required string fromUserId=8;
+  required int32 msgType=9;
 }

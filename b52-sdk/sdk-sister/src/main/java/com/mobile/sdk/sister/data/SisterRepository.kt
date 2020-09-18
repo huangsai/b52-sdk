@@ -29,6 +29,7 @@ class SisterRepository @Inject constructor(
                 platformPreferences.userId = it.userId
                 platformPreferences.username = it.username
                 platformPreferences.token = it.token
+                platformPreferences.salt = it.salt
                 platformPreferences.userImage = it.userImage
                 platformPreferences.nickname = if (it.nickname.isEmpty()) {
                     it.username
@@ -41,6 +42,7 @@ class SisterRepository @Inject constructor(
             platformPreferences.userId = -1L
             platformPreferences.username = username
             platformPreferences.token = ""
+            platformPreferences.salt = ""
             platformPreferences.userImage = ""
             platformPreferences.nickname = "游客"
             errorSource(e)

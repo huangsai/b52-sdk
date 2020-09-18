@@ -33,25 +33,25 @@ internal fun AdapterViewHolder.depositClick() {
 
 abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
-    lateinit var text: ApiMessage.Text
+    lateinit var text: DbMessage.Text
         private set
 
-    lateinit var audio: ApiMessage.Audio
+    lateinit var audio: DbMessage.Audio
         private set
 
-    lateinit var image: ApiMessage.Image
+    lateinit var image: DbMessage.Image
         private set
 
-    lateinit var deposit: ApiMessage.Deposit
+    lateinit var deposit: DbMessage.Deposit
         private set
 
-    lateinit var time: ApiMessage.Time
+    lateinit var time: DbMessage.Time
         private set
 
-    lateinit var system: ApiMessage.System
+    lateinit var system: DbMessage.System
         private set
 
-    lateinit var upgrade: ApiMessage.Upgrade
+    lateinit var upgrade: DbMessage.Upgrade
         private set
 
     internal fun ofText(): MsgItem {

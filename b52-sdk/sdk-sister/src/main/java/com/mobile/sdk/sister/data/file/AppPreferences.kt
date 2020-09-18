@@ -39,4 +39,10 @@ object AppPreferences : PlatformPreferences {
         set(value) {
             prefs.encode("token", value)
         }
+
+    override var salt: String
+        get() = prefs.decodeString("salt", "")
+        set(value) {
+            prefs.encode("salt", value)
+        }
 }

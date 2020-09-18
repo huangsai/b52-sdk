@@ -1,108 +1,118 @@
 package com.mobile.sdk.sister.ui
 
+import com.mobile.guava.https.safeToLong
 import com.mobile.sdk.sister.SisterX
+import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
-import com.mobile.sdk.sister.data.http.ApiMessage
-import com.mobile.sdk.sister.data.http.ApiSimpleMessage
+import com.mobile.sdk.sister.socket.ChatMsg
+import com.mobile.sdk.sister.socket.ChatReq
 
-fun String.jsonToText(): ApiMessage.Text {
+fun String.jsonToText(): DbMessage.Text {
     return SisterX.component.json()
-        .adapter(ApiMessage.Text::class.java)
+        .adapter(DbMessage.Text::class.java)
         .fromJson(this)!!
 }
 
-fun String.jsonToImage(): ApiMessage.Image {
+fun String.jsonToImage(): DbMessage.Image {
     return SisterX.component.json()
-        .adapter(ApiMessage.Image::class.java)
+        .adapter(DbMessage.Image::class.java)
         .fromJson(this)!!
 }
 
-fun String.jsonToAudio(): ApiMessage.Audio {
+fun String.jsonToAudio(): DbMessage.Audio {
     return SisterX.component.json()
-        .adapter(ApiMessage.Audio::class.java)
+        .adapter(DbMessage.Audio::class.java)
         .fromJson(this)!!
 }
 
-fun String.jsonToDeposit(): ApiMessage.Deposit {
+fun String.jsonToDeposit(): DbMessage.Deposit {
     return SisterX.component.json()
-        .adapter(ApiMessage.Deposit::class.java)
+        .adapter(DbMessage.Deposit::class.java)
         .fromJson(this)!!
 }
 
-fun String.jsonToTime(): ApiMessage.Time {
+fun String.jsonToTime(): DbMessage.Time {
     return SisterX.component.json()
-        .adapter(ApiMessage.Time::class.java)
+        .adapter(DbMessage.Time::class.java)
         .fromJson(this)!!
 }
 
-fun String.jsonToSystem(): ApiMessage.System {
+fun String.jsonToSystem(): DbMessage.System {
     return SisterX.component.json()
-        .adapter(ApiMessage.System::class.java)
+        .adapter(DbMessage.System::class.java)
         .fromJson(this)!!
 }
 
-fun String.jsonToUpgrade(): ApiMessage.Upgrade {
+fun String.jsonToUpgrade(): DbMessage.Upgrade {
     return SisterX.component.json()
-        .adapter(ApiMessage.Upgrade::class.java)
+        .adapter(DbMessage.Upgrade::class.java)
         .fromJson(this)!!
 }
 
-fun ApiMessage.Text.toJson(): String {
+fun DbMessage.Text.toJson(): String {
     return SisterX.component.json()
-        .adapter(ApiMessage.Text::class.java)
+        .adapter(DbMessage.Text::class.java)
         .toJson(this)
 }
 
-fun ApiMessage.Image.toJson(): String {
+fun DbMessage.Image.toJson(): String {
     return SisterX.component.json()
-        .adapter(ApiMessage.Image::class.java)
+        .adapter(DbMessage.Image::class.java)
         .toJson(this)
 }
 
-fun ApiMessage.Audio.toJson(): String {
+fun DbMessage.Audio.toJson(): String {
     return SisterX.component.json()
-        .adapter(ApiMessage.Audio::class.java)
+        .adapter(DbMessage.Audio::class.java)
         .toJson(this)
 }
 
-fun ApiMessage.Deposit.toJson(): String {
+fun DbMessage.Deposit.toJson(): String {
     return SisterX.component.json()
-        .adapter(ApiMessage.Deposit::class.java)
+        .adapter(DbMessage.Deposit::class.java)
         .toJson(this)
 }
 
-fun ApiMessage.Time.toJson(): String {
+fun DbMessage.Time.toJson(): String {
     return SisterX.component.json()
-        .adapter(ApiMessage.Time::class.java)
+        .adapter(DbMessage.Time::class.java)
         .toJson(this)
 }
 
-fun ApiMessage.System.toJson(): String {
+fun DbMessage.System.toJson(): String {
     return SisterX.component.json()
-        .adapter(ApiMessage.System::class.java)
+        .adapter(DbMessage.System::class.java)
         .toJson(this)
 }
 
-fun ApiMessage.Upgrade.toJson(): String {
+fun DbMessage.Upgrade.toJson(): String {
     return SisterX.component.json()
-        .adapter(ApiMessage.Upgrade::class.java)
+        .adapter(DbMessage.Upgrade::class.java)
         .toJson(this)
 }
 
-fun ApiMessage.asSimple(): ApiSimpleMessage {
-    return ApiSimpleMessage(id, type, toUserId, content)
-}
-
-fun ApiSimpleMessage.asNormal(): ApiMessage {
-    return ApiMessage(
+fun ChatMsg.toDbMessage(): DbMessage {
+    return DbMessage(
+        0L,
         id,
-        type,
-        toUserId,
-        content,
-        System.currentTimeMillis(),
-        AppPreferences.userImage,
-        AppPreferences.username,
+        msgType,
         AppPreferences.userId,
-        2
+        sayContent,
+        sayTime,
+        fromImgUrl,
+        fromUserName,
+        fromUserId.safeToLong(),
+        fromUserType,
+        0
     )
+}
+
+fun DbMessage.toChatRes(): ChatReq {
+    return ChatReq.Builder()
+        .id(id)
+        .msgType(type)
+        .sayContent(content)
+        .chatType(1)
+        .toUserId(toUserId.toString())
+        .build()
 }

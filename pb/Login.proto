@@ -1,0 +1,28 @@
+syntax = "proto3";
+ option java_package="com.universe.csms.dependency.common.core.msg.protobuf";
+ option java_outer_classname="LoginMessageProto";
+ //登录20001
+ message LoginReq{
+  //用户名
+  string  userName=1;
+  //token
+  string  token=2;
+  //1客服2会员
+  int32  userType=3;
+  //1普通2充值
+  int32 chatType=4;
+  //token验证盐
+  string salt=5 ;
+ }
+ message LoginRes{
+  //1成功0失败
+  int32 result=1;
+  string msg=2;
+ }
+ //登出20002
+ message LogoutReq{
+
+ }
+ message LogoutRes{
+
+ }

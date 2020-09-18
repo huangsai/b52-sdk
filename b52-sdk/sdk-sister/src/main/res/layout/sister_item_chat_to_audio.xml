@@ -33,7 +33,7 @@
 
     <ImageView
         android:id="@+id/status_failed"
-        style="@style/sister_MsgStatusIFailed"
+        style="@style/sister_MsgStatusFailed"
         android:src="@drawable/sister_icon_fail"
         app:layout_constraintBottom_toBottomOf="@id/audio_content"
         app:layout_constraintRight_toLeftOf="@id/audio_content"

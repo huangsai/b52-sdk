@@ -1,0 +1,46 @@
+syntax = "proto3";
+ option java_package="com.universe.csms.dependency.common.core.msg.protobuf";
+ option java_outer_classname="ChatMessageProto";
+ //发送聊天消息30001
+ message ChatReq{
+  //消息id
+  string  id=1 ;
+  //聊天内容
+  string sayContent=2;
+  string toUserId= 3;
+   //1普通2充值
+  int32 chatType=4;
+  //消息类型1普通2图片3语音
+  int32 msgType=5;
+
+  }
+ message ChatRes{
+  //1成功0失败
+  int32 result=1;
+  string msg=2;
+  string  id=3 ;
+ }
+ //消息通知30002
+ message ChatMsg{
+   string  id=1 ;
+   //内容
+   string sayContent=2;
+   //1普通2充值
+   int32 chatType=3;
+   //发言时间
+   int64 sayTime =4;
+   string fromImgUrl=5;
+   //1客服2会员
+   int32 fromUserType=6;
+   string fromUserName=7;
+   string fromUserId=8;
+   //消息类型1普通2图片3语音
+   int32 msgType=9;
+ }
+ //关闭聊天30002
+ message closeChatReq{
+
+ }
+ message closeChatRes{
+
+ }

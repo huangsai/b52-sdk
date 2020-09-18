@@ -10,7 +10,6 @@ import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.guava.android.ui.view.recyclerview.keepItemViewVisible
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.data.db.DbMessage
-import com.mobile.sdk.sister.data.http.ApiMessage
 import com.mobile.sdk.sister.data.http.TYPE_AUDIO
 import com.mobile.sdk.sister.data.http.TYPE_IMAGE
 import com.mobile.sdk.sister.data.http.TYPE_TEXT
@@ -116,7 +115,7 @@ class ChatListPresenter(
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             val dbMessage = model.createDbMessage(
                 TYPE_TEXT,
-                ApiMessage.Text(text).toJson()
+                DbMessage.Text(text).toJson()
             )
             val item = MsgItem.create(dbMessage)
             withContext(Dispatchers.Main) {
@@ -131,7 +130,7 @@ class ChatListPresenter(
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             val dbMessage = model.createDbMessage(
                 TYPE_IMAGE,
-                ApiMessage.Image(image.path).toJson()
+                DbMessage.Image(image.path).toJson()
             )
             val item = MsgItem.create(dbMessage)
             withContext(Dispatchers.Main) {
@@ -145,7 +144,7 @@ class ChatListPresenter(
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             val dbMessage = model.createDbMessage(
                 TYPE_AUDIO,
-                ApiMessage.Audio(duration, audio.path).toJson()
+                DbMessage.Audio(duration, audio.path).toJson()
             )
             val item = MsgItem.create(dbMessage)
             withContext(Dispatchers.Main) {

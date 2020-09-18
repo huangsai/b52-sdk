@@ -11,4 +11,6 @@ interface PlatformPreferences {
     var userId: Long
 
     var token: String
+
+    var salt: String
 }

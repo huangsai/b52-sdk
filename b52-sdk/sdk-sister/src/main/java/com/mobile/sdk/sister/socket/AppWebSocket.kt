@@ -15,7 +15,6 @@ object AppWebSocket : LongLiveSocket() {
 
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
             log("---------onClosed---------")
-            AndroidX.isSocketConnected.postValue(false)
         }
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
