@@ -11,16 +11,21 @@ import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
+import java.io.File
 
 class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
 
     private var _binding: SisterFragmentChatBinding? = null
     private val binding: SisterFragmentChatBinding get() = _binding!!
 
-    private lateinit var chatListPresenter: ChatListPresenter
-    private lateinit var chatHelpPresenter: ChatHelpPresenter
-    private lateinit var chatMorePresenter: ChatMorePresenter
-    private lateinit var chatVoicePresenter: ChatVoicePresenter
+    lateinit var chatListPresenter: ChatListPresenter
+        private set
+    lateinit var chatHelpPresenter: ChatHelpPresenter
+        private set
+    lateinit var chatMorePresenter: ChatMorePresenter
+        private set
+    lateinit var chatVoicePresenter: ChatVoicePresenter
+        private set
 
     companion object {
         @JvmStatic

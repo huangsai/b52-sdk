@@ -1,7 +1,10 @@
 package com.mobile.sdk.sister.ui.chat
 
+import android.net.Uri
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toFile
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.ext.glide.GlideApp
@@ -101,6 +104,7 @@ class ChatListPresenter(
             R.id.profile -> {
                 GlideApp.with(fragment)
                     .load(holder.item<MsgItem>().data.fromUserImage)
+                    .placeholder(R.drawable.sister_icon_emoji)
                     .into(view)
             }
             R.id.image_content -> {
@@ -112,6 +116,10 @@ class ChatListPresenter(
     }
 
     fun postText(text: String) {
+        if (text.isNullOrEmpty()) {
+            Msg.toast("不能发送空消息")
+            return
+        }
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             val dbMessage = model.createDbMessage(
                 TYPE_TEXT,

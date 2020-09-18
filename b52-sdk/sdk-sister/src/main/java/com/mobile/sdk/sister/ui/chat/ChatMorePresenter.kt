@@ -2,6 +2,8 @@ package com.mobile.sdk.sister.ui.chat
 
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toFile
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.mvvm.lifecycle.SimplePresenter
 import com.mobile.sdk.sister.R
@@ -15,6 +17,12 @@ class ChatMorePresenter(
     binding: SisterFragmentChatBinding,
     model: SisterViewModel
 ) : BaseChatPresenter(fragment, binding, model) {
+
+    private val getContent = fragment.registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) {
+        fragment.chatListPresenter.postImage(it.toFile())
+    }
 
     fun createPop() {
         val popWidth = binding.layoutInput.width
