@@ -41,7 +41,6 @@ data class ApiSimpleMessage(
 @JsonClass(generateAdapter = true)
 data class ApiMessage(
     @Json(name = "id") val id: String,
-    @Json(name = "chatType") val type: Int,
     @Json(name = "toUserId") val toUserId: Long,
     @Json(name = "sayContent") val content: String,
     @Json(name = "sayTime") val time: Long,
@@ -83,7 +82,6 @@ data class ApiMessage(
         return DbMessage(
             0L,
             id,
-            type,
             toUserId,
             content,
             time,
