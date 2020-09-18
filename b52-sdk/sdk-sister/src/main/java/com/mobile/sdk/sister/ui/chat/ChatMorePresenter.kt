@@ -1,16 +1,23 @@
 package com.mobile.sdk.sister.ui.chat
 
+import android.app.Activity
+import android.content.ContentValues
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toFile
-import com.mobile.guava.android.mvvm.Msg
-import com.mobile.guava.android.mvvm.lifecycle.SimplePresenter
+import androidx.core.content.FileProvider
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.pacific.adapter.AdapterViewHolder
+import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
+import java.io.File
 
 class ChatMorePresenter(
     fragment: ChatFragment,
@@ -18,15 +25,34 @@ class ChatMorePresenter(
     model: SisterViewModel
 ) : BaseChatPresenter(fragment, binding, model) {
 
-    private val getContent = fragment.registerForActivityResult(
-        ActivityResultContracts.GetContent()
+    private val authorities = "com.mobile.sdk.sister.provider"
+    private var cameraImageFile: File? = null
+    private val requestImage = fragment.registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
     ) {
-        fragment.chatListPresenter.postImage(it.toFile())
+        if (it.resultCode == Activity.RESULT_OK) {
+            if (cameraImageFile == null) {
+                it.data?.data?.let { uri: Uri -> fragment.chatListPresenter.postImage(uri) }
+            } else {
+                val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    FileProvider.getUriForFile(
+                        fragment.requireContext(),
+                        authorities,
+                        cameraImageFile!!
+                    )
+                } else {
+                    Uri.fromFile(cameraImageFile!!)
+                }
+                fragment.chatListPresenter.postImage(uri)
+            }
+        }
     }
+
+    private lateinit var balloon: Balloon
 
     fun createPop() {
         val popWidth = binding.layoutInput.width
-        val balloon = createBalloon(fragment.requireContext()) {
+        balloon = createBalloon(fragment.requireContext()) {
             setLayout(R.layout.sister_popup_chat_more)
             cornerRadius = 0f
             arrowVisible = false
@@ -41,16 +67,43 @@ class ChatMorePresenter(
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.iv_picture -> {
-                Msg.toast("点击照片")
+                requestImage.launch(requestGalleryIntent())
             }
             R.id.iv_camera -> {
-                Msg.toast("点击拍摄")
+                requestImage.launch(requestCameraIntent())
             }
+        }
+        balloon.dismiss()
+    }
+
+    private fun requestGalleryIntent(): Intent {
+        cameraImageFile = null
+        return Intent().apply {
+            setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+            action = Intent.ACTION_PICK
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    private fun requestCameraIntent(): Intent {
+        cameraImageFile = null
+        val tempFile = File(
+            fragment.requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            System.currentTimeMillis().toString() + ".jpeg"
+        )
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.flags = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            val contentUri = FileProvider.getUriForFile(
+                fragment.requireContext(),
+                authorities,
+                tempFile
+            )
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri)
+        } else {
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile))
+        }
+        cameraImageFile = tempFile
+        return intent
     }
 
     override fun load() {
@@ -59,5 +112,9 @@ class ChatMorePresenter(
 
     override fun load(view: ImageView, holder: AdapterViewHolder) {
         TODO("Not yet implemented")
+    }
+
+    override fun onDestroy() {
+        cameraImageFile = null
     }
 }

@@ -3,8 +3,7 @@ package com.mobile.sdk.sister.ui.chat
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.ext.glide.GlideApp
@@ -104,12 +103,14 @@ class ChatListPresenter(
             R.id.profile -> {
                 GlideApp.with(fragment)
                     .load(holder.item<MsgItem>().data.fromUserImage)
-                    .placeholder(R.drawable.sister_icon_emoji)
+                    .placeholder(R.drawable.sister_default_profile)
                     .into(view)
             }
             R.id.image_content -> {
+                val url = holder.item<MsgItem>().image.url
                 GlideApp.with(fragment)
-                    .load(holder.item<MsgItem>().image.url)
+                    .load(url.toUri())
+                    .placeholder(R.drawable.sister_default_img)
                     .into(view)
             }
         }
@@ -134,11 +135,11 @@ class ChatListPresenter(
         }
     }
 
-    fun postImage(image: File) {
+    fun postImage(uri: Uri) {
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             val dbMessage = model.createDbMessage(
                 TYPE_IMAGE,
-                DbMessage.Image(image.path).toJson()
+                DbMessage.Image(uri.toString()).toJson()
             )
             val item = MsgItem.create(dbMessage)
             withContext(Dispatchers.Main) {

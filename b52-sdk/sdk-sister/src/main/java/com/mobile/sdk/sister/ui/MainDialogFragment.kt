@@ -1,11 +1,13 @@
 package com.mobile.sdk.sister.ui
 
+import android.Manifest
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
+import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -21,6 +23,8 @@ import com.mobile.sdk.sister.ui.system.SystemFragment
 class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedChangeListener,
     View.OnClickListener {
 
+    private val permissionsContract = RequestMultiplePermissions()
+
     private var _binding: SisterDialogMainBinding? = null
     private val binding: SisterDialogMainBinding get() = _binding!!
 
@@ -35,6 +39,42 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
         arguments?.let {
             sCancelable = it.getBoolean("cancelable")
         }
+        requestPermission()
+    }
+
+    private fun requestPermission() {
+        val permissions = arrayOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO
+        )
+        registerForActivityResult(permissionsContract) {
+            var hasNeededPermission = true
+            for ((key, value) in it.entries) {
+                if (!value) {
+                    when (key) {
+                        Manifest.permission.CAMERA -> {
+                            hasNeededPermission = false
+                        }
+                        Manifest.permission.READ_PHONE_STATE -> {
+                            hasNeededPermission = false
+                        }
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE -> {
+                            hasNeededPermission = false
+                        }
+                        Manifest.permission.RECORD_AUDIO -> {
+                            hasNeededPermission = false
+                        }
+                    }
+                }
+            }
+            if (!hasNeededPermission) {
+                Msg.toast(R.string.sister_pls_request_permission)
+                this.dismissAllowingStateLoss()
+            }
+        }.launch(permissions)
+
     }
 
     override fun onCreateView(
@@ -133,4 +173,5 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
             return 2
         }
     }
+
 }

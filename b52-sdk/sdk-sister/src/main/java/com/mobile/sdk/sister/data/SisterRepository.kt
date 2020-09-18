@@ -1,5 +1,6 @@
 package com.mobile.sdk.sister.data
 
+import android.net.Uri
 import com.mobile.guava.https.PlatformContext
 import com.mobile.guava.https.toSource
 import com.mobile.guava.jvm.Guava
@@ -80,9 +81,9 @@ class SisterRepository @Inject constructor(
         }
     }
 
-    fun uploadImage(file: File): String {
+    fun uploadImage(uri: Uri): String {
         return try {
-            return "url"
+            return uri.toString()
         } catch (e: Exception) {
             Timber.d(e)
             ""
@@ -91,7 +92,7 @@ class SisterRepository @Inject constructor(
 
     fun uploadAudio(file: File): String {
         return try {
-            return "url"
+            return file.path
         } catch (e: Exception) {
             Timber.d(e)
             ""

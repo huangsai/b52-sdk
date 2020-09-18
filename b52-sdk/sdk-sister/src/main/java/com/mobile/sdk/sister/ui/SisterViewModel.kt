@@ -1,6 +1,8 @@
 package com.mobile.sdk.sister.ui
 
+import android.net.Uri
 import androidx.annotation.WorkerThread
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import com.mobile.guava.android.ensureWorkThread
 import com.mobile.sdk.sister.SisterX
@@ -34,7 +36,7 @@ class SisterViewModel @Inject constructor(
     fun postImage(dbMessage: DbMessage) {
         ensureWorkThread()
         val image = dbMessage.content.jsonToImage()
-        val uploadedUrl = sisterRepository.uploadImage(File(image.url))
+        val uploadedUrl = sisterRepository.uploadImage(image.url.toUri())
         if (uploadedUrl.isNotEmpty()) {
             dbMessage.content = DbMessage.Image(uploadedUrl).toJson()
             SocketUtils.postMessage(dbMessage)

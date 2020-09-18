@@ -11,7 +11,6 @@ import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
-import java.io.File
 
 class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
 
@@ -20,12 +19,11 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
 
     lateinit var chatListPresenter: ChatListPresenter
         private set
-    lateinit var chatHelpPresenter: ChatHelpPresenter
-        private set
-    lateinit var chatMorePresenter: ChatMorePresenter
-        private set
-    lateinit var chatVoicePresenter: ChatVoicePresenter
-        private set
+
+    private lateinit var chatHelpPresenter: ChatHelpPresenter
+    private lateinit var chatMorePresenter: ChatMorePresenter
+    private lateinit var chatVoicePresenter: ChatVoicePresenter
+
 
     companion object {
         @JvmStatic
@@ -63,6 +61,14 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
         chatHelpPresenter.onDestroyView()
         chatListPresenter.onDestroyView()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        chatListPresenter.onDestroy()
+        chatHelpPresenter.onDestroy()
+        chatMorePresenter.onDestroy()
+        chatVoicePresenter.onDestroy()
     }
 
     override fun onClick(v: View?) {

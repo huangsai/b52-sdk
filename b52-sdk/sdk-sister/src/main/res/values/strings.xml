@@ -14,4 +14,5 @@
     <string name="sister_popup_voice_press_cancel_text">手指松开\n取消发送</string>
     <string name="sister_popup_voice_press_send_text">手指松开\n立即发送</string>
     <string name="sister_popup_voice_duration_less">录制时间太短</string>
+    <string name="sister_pls_request_permission">请申请权限</string>
 </resources>
