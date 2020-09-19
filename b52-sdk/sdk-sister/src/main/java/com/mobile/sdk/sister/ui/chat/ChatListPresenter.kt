@@ -1,5 +1,8 @@
 package com.mobile.sdk.sister.ui.chat
 
+import android.media.AudioAttributes
+import android.media.AudioAttributes.CONTENT_TYPE_MUSIC
+import android.media.MediaPlayer
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
@@ -18,6 +21,7 @@ import com.mobile.sdk.sister.data.http.TYPE_TEXT
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.items.MsgItem
+import com.mobile.sdk.sister.ui.jsonToAudio
 import com.mobile.sdk.sister.ui.toJson
 import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
@@ -34,6 +38,8 @@ class ChatListPresenter(
 ) : BaseChatPresenter(fragment, binding, model) {
 
     private val adapter = RecyclerAdapter()
+    private var mMediaPlayer = MediaPlayer()
+    private var isAudioPlaying = false
 
     init {
         binding.chatRecycler.layoutManager = LinearLayoutManager(fragment.requireContext())
@@ -86,7 +92,8 @@ class ChatListPresenter(
                 Msg.toast("点击图片")
             }
             R.id.audio_content -> {
-                Msg.toast("点击语音")
+                val data = AdapterUtils.getHolder(v).item<MsgItem>().data
+                playAudio(data.content.jsonToAudio().url)
             }
             R.id.deposit_wechat -> {
                 Msg.toast("点击微信充值")
@@ -178,5 +185,36 @@ class ChatListPresenter(
                 }
             }
         }
+    }
+
+    private fun playAudio(filePath: String) {
+        if (isAudioPlaying) {
+            isAudioPlaying = false
+            mMediaPlayer.reset()
+            return
+        }
+        mMediaPlayer.setOnErrorListener { _, _, _ ->
+            mMediaPlayer.reset()
+            false
+        }
+        try {
+            mMediaPlayer.setAudioAttributes(
+                AudioAttributes.Builder().setContentType(CONTENT_TYPE_MUSIC).build()
+            )
+            mMediaPlayer.setOnCompletionListener {
+                it.reset()
+                isAudioPlaying = false
+            }
+            mMediaPlayer.setDataSource(filePath)
+            mMediaPlayer.prepare()
+            mMediaPlayer.start()
+            isAudioPlaying = true
+        } catch (e: Exception) {
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mMediaPlayer.release()
     }
 }
