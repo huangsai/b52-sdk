@@ -45,7 +45,6 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
     private fun requestPermission() {
         val permissions = arrayOf(
             Manifest.permission.CAMERA,
-            Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.RECORD_AUDIO
         )
@@ -55,9 +54,6 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
                 if (!value) {
                     when (key) {
                         Manifest.permission.CAMERA -> {
-                            hasNeededPermission = false
-                        }
-                        Manifest.permission.READ_PHONE_STATE -> {
                             hasNeededPermission = false
                         }
                         Manifest.permission.WRITE_EXTERNAL_STORAGE -> {

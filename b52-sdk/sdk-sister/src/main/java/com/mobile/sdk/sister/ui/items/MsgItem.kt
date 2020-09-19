@@ -139,11 +139,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
     class Audio(data: DbMessage) : MsgItem(data) {
 
-        private val durationText = "${audio.duration / 1000}''"
-
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToAudioBinding::bind)
-            binding.audioContent.text = durationText
+            binding.audioContent.text = "${audio.duration / 1000}''"
             setStatus(binding.statusFailed, binding.statusProcessing)
             holder.attachOnClickListener(R.id.status_failed)
 

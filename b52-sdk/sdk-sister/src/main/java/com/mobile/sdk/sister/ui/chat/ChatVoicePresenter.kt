@@ -1,5 +1,7 @@
 package com.mobile.sdk.sister.ui.chat
 
+import android.media.MediaRecorder
+import android.os.Environment.DIRECTORY_MUSIC
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,8 +16,9 @@ import com.skydoves.balloon.createBalloon
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.disposables.Disposable
-import timber.log.Timber
+import java.io.File
 import java.util.concurrent.TimeUnit
+
 
 class ChatVoicePresenter(
     fragment: ChatFragment,
@@ -27,6 +30,12 @@ class ChatVoicePresenter(
     private val pressDuration: TextView
     private val pressStatus: TextView
     private var disposable: Disposable? = null
+    private var mMediaRecorder = MediaRecorder()
+    private var duration: Long = 0
+    private val audioFile = File(
+        fragment.requireContext().getExternalFilesDir(DIRECTORY_MUSIC),
+        System.currentTimeMillis().toString() + ".arm"
+    )
 
     init {
         binding.pressVoice.setButtonTouchCallback(this)
@@ -45,16 +54,36 @@ class ChatVoicePresenter(
     }
 
     private fun startRecord() {
-        Msg.toast("开始录制")
         countDuration()
+        try {
+            //创建录音文件
+            audioFile.createNewFile()
+            //从麦克风采集
+            mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
+            //最终的保存文件为arm格式
+            mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB)
+            //所有android系统都支持的适中采样的频率
+            mMediaRecorder.setAudioSamplingRate(44100)
+            //通用的ARM编码格式
+            mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            //设置音质频率
+            mMediaRecorder.setAudioEncodingBitRate(1024 * 1024)
+            //设置文件录音的位置
+            mMediaRecorder.setOutputFile(audioFile.absolutePath)
+            //开始录音
+            mMediaRecorder.prepare()
+            mMediaRecorder.start()
+        } catch (e: Exception) {
+        }
     }
 
     private fun stopRecord() {
-        Msg.toast("结束录制")
+        mMediaRecorder.stop()
+        mMediaRecorder.release()
     }
 
     private fun sendMsg() {
-        Msg.toast("发送语音消息")
+        fragment.chatListPresenter.postAudio(duration * 1000, audioFile)
     }
 
     /**
@@ -64,9 +93,9 @@ class ChatVoicePresenter(
         clearDisposable()
         disposable = Flowable.interval(1, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .map { it + 1 }
+            .map { duration = it + 1 }
             .subscribe {
-                pressDuration.text = "${it}''"
+                pressDuration.text = "${duration}''"
             }
     }
 
@@ -109,7 +138,6 @@ class ChatVoicePresenter(
      * 松手，隐藏弹窗
      */
     override fun onTerminate() {
-        Timber.tag("test").d("onTerminate")
         clearDisposable()
         balloon.dismissWithDelay(50)
     }
@@ -145,5 +173,10 @@ class ChatVoicePresenter(
 
     override fun onClick(v: View?) {
         TODO("Not yet implemented")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mMediaRecorder.release()
     }
 }

@@ -24,7 +24,6 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
     private lateinit var chatMorePresenter: ChatMorePresenter
     private lateinit var chatVoicePresenter: ChatVoicePresenter
 
-
     companion object {
         @JvmStatic
         fun newInstance(): ChatFragment = ChatFragment()
