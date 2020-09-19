@@ -46,21 +46,22 @@ object SisterX {
             Timber.plant(Timber.DebugTree())
         }
 
+        AppPreferences.username = ""
         AppWebSocket.toString()
         AppManager.initialize()
     }
 
     fun setUsername(username: String) {
         GlobalScope.launch(Dispatchers.IO) {
-            component.sisterRepository().user(username).also {
-                SocketUtils.postLogin()
+            component.sisterRepository().user(username).let {
                 AndroidX.notifyLogin()
+                SocketUtils.postLogin()
             }
         }
     }
 
     fun isLoginUser(): Boolean {
-        return AppPreferences.token.isNotEmpty() && AppPreferences.token.length > 8
+        return AppPreferences.username.isNotEmpty() && AppPreferences.token.isNotEmpty()
     }
 
     fun show(activity: FragmentActivity, cancelable: Boolean): DialogFragment {

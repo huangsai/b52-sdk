@@ -12,7 +12,7 @@ const val TYPE_DEPOSIT = 6
 
 const val IM_BUZ_MSG = 30001
 const val IM_BUZ_NOTIFICATION = 30002
-const val IM_BUZ_CLOSE = 30002
+const val IM_BUZ_CLOSE = 30003
 const val IM_BUZ_LOGIN = 20001
 const val IM_BUZ_LOGOUT = 20002
 

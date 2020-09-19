@@ -46,13 +46,17 @@ object AppWebSocket : LongLiveSocket() {
         }
     }
 
-    private var internalSocket: WebSocket? = null
-    private val socket: WebSocket get() = internalSocket!!
+    private var realSocket: WebSocket? = null
+    private val socket: WebSocket get() = realSocket!!
 
     init {
         AndroidX.isSocketConnected.observeForever {
             if (false == it) {
                 reconnect(connectFailCount * 2000L)
+            } else if (true == it) {
+                if (SisterX.isLoginUser()) {
+                    suspendAction { SocketUtils.postLogin() }
+                }
             }
         }
     }
@@ -63,7 +67,7 @@ object AppWebSocket : LongLiveSocket() {
 
         suspendAction {
             val request: Request
-            if (internalSocket != null) {
+            if (realSocket != null) {
                 request = socket.request()
                 socket.close(1000, "reconnect")
             } else {
@@ -71,7 +75,9 @@ object AppWebSocket : LongLiveSocket() {
                     .url("ws://192.168.2.91:30302/csms")
                     .build()
             }
-            internalSocket = SisterX.component.okHttpClient().newWebSocket(request, webSocketListener)
+            realSocket = SisterX.component.okHttpClient().newWebSocket(
+                request, webSocketListener
+            )
             log("---------connect---------")
         }
     }
@@ -80,7 +86,7 @@ object AppWebSocket : LongLiveSocket() {
         if (true != AndroidX.isNetworkConnected.value) return
         if (true != AndroidX.isSocketConnected.value) return
         suspendAction {
-            if (internalSocket != null) {
+            if (realSocket != null) {
                 socket.close(1000, "disconnect")
                 log("---------disconnect---------")
             }
@@ -88,7 +94,7 @@ object AppWebSocket : LongLiveSocket() {
     }
 
     override fun post(bytes: ByteString) {
-        if (internalSocket != null && true == AndroidX.isSocketConnected.value) {
+        if (realSocket != null && true == AndroidX.isSocketConnected.value) {
             suspendAction {
                 socket.send(SocketUtils.encrypt(bytes))
                 log("---------post---bytes[${bytes.size}]")

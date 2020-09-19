@@ -101,8 +101,6 @@ object SocketUtils {
                 saveDbMessage(it.toDbMessage())
             }
             IM_BUZ_MSG -> ChatRes.ADAPTER.decode(commonMessage.content).let {
-                Timber.tag("AppWebSocket").d("Ack->${it.msg}->${it.id}")
-                require(!it.id.isNullOrEmpty())
                 setDbMessageSuccess(it.id)
             }
             else -> Timber.tag("AppWebSocket").d("未知socket业务消息")

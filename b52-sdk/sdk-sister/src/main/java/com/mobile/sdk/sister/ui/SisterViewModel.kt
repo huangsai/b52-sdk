@@ -1,6 +1,5 @@
 package com.mobile.sdk.sister.ui
 
-import android.net.Uri
 import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel

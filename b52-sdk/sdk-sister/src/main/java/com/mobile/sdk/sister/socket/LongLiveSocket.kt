@@ -1,7 +1,8 @@
 package com.mobile.sdk.sister.socket
 
 import com.mobile.guava.android.mvvm.AndroidX
-import com.mobile.guava.jvm.coroutines.ControlledRunner
+import com.mobile.guava.jvm.coroutines.SingleRunner
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -9,7 +10,7 @@ import okio.ByteString
 
 abstract class LongLiveSocket {
 
-    private val controlledRunner = ControlledRunner<Unit>()
+    private val singleRunner = SingleRunner()
 
     protected var connectFailCount = 0L
 
@@ -29,14 +30,12 @@ abstract class LongLiveSocket {
         }
     }
 
-    protected fun suspendAction(action: suspend () -> Unit) {
-        GlobalScope.launch {
-            controlledRunner.cancelPreviousThenRun {
-                try {
-                    action.invoke()
-                } catch (e: Exception) {
-                    log(e)
-                }
+    protected fun suspendAction(action: suspend () -> Unit) = GlobalScope.launch(Dispatchers.IO) {
+        singleRunner.afterPrevious {
+            try {
+                action.invoke()
+            } catch (e: Exception) {
+                log(e)
             }
         }
     }
