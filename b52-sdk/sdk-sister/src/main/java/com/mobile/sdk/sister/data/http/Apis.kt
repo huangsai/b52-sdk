@@ -48,3 +48,6 @@ data class ApiUser(
     @Json(name = "salt") val salt: String,
     @Json(name = "token") val token: String
 )
+
+@JsonClass(generateAdapter = true)
+data class ApiFile(@Json(name = "url") val url: String)

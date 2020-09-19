@@ -30,6 +30,7 @@ class HostSelectionInterceptor : Interceptor {
     private fun isHttpApi(original: String): Boolean {
         return when {
             original.contains("member/getToken") -> true
+            original.contains("oss/uploadFiles") -> true
             else -> false
         }
     }

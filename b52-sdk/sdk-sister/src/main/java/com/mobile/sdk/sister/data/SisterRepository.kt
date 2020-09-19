@@ -1,6 +1,5 @@
 package com.mobile.sdk.sister.data
 
-import android.net.Uri
 import com.mobile.guava.https.PlatformContext
 import com.mobile.guava.https.toSource
 import com.mobile.guava.jvm.Guava
@@ -10,8 +9,9 @@ import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.PlatformPreferences
 import com.mobile.sdk.sister.data.http.ApiUser
 import com.mobile.sdk.sister.data.http.DataService
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,9 +24,8 @@ class SisterRepository @Inject constructor(
 ) {
 
     suspend fun user(username: String): Source<ApiUser> {
-        val call = dataService.token(2, username)
         return try {
-            call.execute().toSource {
+            dataService.token(2, username).execute().toSource {
                 platformPreferences.userId = it.userId
                 platformPreferences.username = it.username
                 platformPreferences.token = it.token
@@ -81,20 +80,10 @@ class SisterRepository @Inject constructor(
         }
     }
 
-    fun uploadImage(uri: Uri): String {
+    fun uploadFile(body: RequestBody): String {
         return try {
-            return uri.toString()
+            dataService.uploadFile(body).execute()?.body()?.url ?: ""
         } catch (e: Exception) {
-            Timber.d(e)
-            ""
-        }
-    }
-
-    fun uploadAudio(file: File): String {
-        return try {
-            return file.path
-        } catch (e: Exception) {
-            Timber.d(e)
             ""
         }
     }
