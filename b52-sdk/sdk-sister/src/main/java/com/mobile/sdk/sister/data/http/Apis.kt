@@ -43,7 +43,7 @@ data class ApiUser(
     @Json(name = "remark") val remark: String,
     @Json(name = "avatar") val userImage: String,
     @Json(name = "userIp") val userIp: String,
-    @Json(name = "userId") val userId: Long,
+    @Json(name = "userId") val userId: String,
     @Json(name = "userLevel") val userLevel: String,
     @Json(name = "salt") val salt: String,
     @Json(name = "token") val token: String

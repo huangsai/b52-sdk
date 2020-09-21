@@ -39,7 +39,7 @@ class SisterRepository @Inject constructor(
                 return@toSource it
             }
         } catch (e: Exception) {
-            platformPreferences.userId = -1L
+            platformPreferences.userId = ""
             platformPreferences.username = username
             platformPreferences.token = ""
             platformPreferences.salt = ""

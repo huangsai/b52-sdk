@@ -20,7 +20,7 @@ interface MessageDao : SqlDao<DbMessage> {
     fun getByStatus(status: Int): List<DbMessage>
 
     @Query("SELECT * FROM sister_message WHERE toUserId =:userId OR fromUserId=:userId ORDER BY time ASC")
-    fun getByUserId(userId: Long): List<DbMessage>
+    fun getByUserId(userId: String): List<DbMessage>
 
     @Query("DELETE FROM sister_message WHERE toUserId =:userId OR fromUserId=:userId")
     fun clearByUserId(userId: Long): Int

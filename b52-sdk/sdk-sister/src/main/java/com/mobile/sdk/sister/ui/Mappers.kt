@@ -101,7 +101,7 @@ fun ChatMsg.toDbMessage(): DbMessage {
         sayTime,
         fromImgUrl,
         fromUserName,
-        fromUserId.safeToLong(),
+        fromUserId,
         fromUserType,
         0
     )

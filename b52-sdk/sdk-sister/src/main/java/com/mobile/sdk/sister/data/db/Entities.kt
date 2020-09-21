@@ -13,12 +13,12 @@ data class DbMessage(
     @ColumnInfo(name = "_id") @PrimaryKey(autoGenerate = true) val _id: Long,
     @ColumnInfo(name = "id") val id: String,
     @ColumnInfo(name = "type") val type: Int,
-    @ColumnInfo(name = "toUserId") val toUserId: Long,
+    @ColumnInfo(name = "toUserId") val toUserId: String,
     @ColumnInfo(name = "content") var content: String,
     @ColumnInfo(name = "time") val time: Long,
     @ColumnInfo(name = "fromUserImage") val fromUserImage: String,
     @ColumnInfo(name = "fromUsername") val fromUsername: String,
-    @ColumnInfo(name = "fromUserId") val fromUserId: Long,
+    @ColumnInfo(name = "fromUserId") val fromUserId: String,
     @ColumnInfo(name = "fromUserType") val fromUserType: Int,
     @ColumnInfo(name = "status") var status: Int
 ){
@@ -28,11 +28,11 @@ data class DbMessage(
     @JsonClass(generateAdapter = true)
     data class Audio(
         @Json(name = "duration") val duration: Long,
-        @Json(name = "url") val url: String
+        @Json(name = "msg") val url: String
     )
 
     @JsonClass(generateAdapter = true)
-    data class Image(@Json(name = "url") val url: String)
+    data class Image(@Json(name = "msg") val url: String)
 
     @JsonClass(generateAdapter = true)
     data class System(@Json(name = "msg") val msg: String)

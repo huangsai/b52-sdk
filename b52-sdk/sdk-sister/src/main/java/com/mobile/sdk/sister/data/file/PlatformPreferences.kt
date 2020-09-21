@@ -8,7 +8,7 @@ interface PlatformPreferences {
 
     var userImage: String
 
-    var userId: Long
+    var userId: String
 
     var token: String
 
