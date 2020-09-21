@@ -1,7 +1,7 @@
 package com.mobile.sdk.sister.ui.chat
 
 import android.media.MediaRecorder
-import android.os.Environment.DIRECTORY_MUSIC
+import android.os.Environment
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -32,10 +32,7 @@ class ChatVoicePresenter(
     private var disposable: Disposable? = null
     private var mMediaRecorder = MediaRecorder()
     private var duration: Long = 0
-    private val audioFile = File(
-        fragment.requireContext().getExternalFilesDir(DIRECTORY_MUSIC),
-        System.currentTimeMillis().toString() + ".arm"
-    )
+    private var audioFile: File? = null
 
     init {
         binding.pressVoice.setButtonTouchCallback(this)
@@ -56,8 +53,12 @@ class ChatVoicePresenter(
     private fun startRecord() {
         countDuration()
         try {
+            audioFile = File(
+                fragment.requireContext().getExternalFilesDir(Environment.DIRECTORY_MUSIC),
+                System.currentTimeMillis().toString() + ".arm"
+            )
             //创建录音文件
-            audioFile.createNewFile()
+            audioFile?.createNewFile()
             //从麦克风采集
             mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
             //最终的保存文件为arm格式
@@ -69,7 +70,7 @@ class ChatVoicePresenter(
             //设置音质频率
             mMediaRecorder.setAudioEncodingBitRate(1024 * 1024)
             //设置文件录音的位置
-            mMediaRecorder.setOutputFile(audioFile.absolutePath)
+            mMediaRecorder.setOutputFile(audioFile?.absolutePath)
             //开始录音
             mMediaRecorder.prepare()
             mMediaRecorder.start()
@@ -78,12 +79,12 @@ class ChatVoicePresenter(
     }
 
     private fun stopRecord() {
-        mMediaRecorder.stop()
-        mMediaRecorder.release()
+        mMediaRecorder.reset()
     }
 
     private fun sendMsg() {
-        fragment.chatListPresenter.postAudio(duration * 1000, audioFile)
+        if (audioFile != null)
+            fragment.chatListPresenter.postAudio(duration * 1000, audioFile!!)
     }
 
     /**
