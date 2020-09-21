@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profile"
@@ -13,13 +14,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/sister_CircleImageView" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/image_content"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/sister_deposit_wechat_bg"
+        android:layout_width="@dimen/size_172dp"
+        android:layout_height="wrap_content"
+        tools:layout_height="@dimen/size_172dp"
         android:layout_marginStart="@dimen/size_10dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         app:layout_constraintLeft_toRightOf="@id/profile"
         app:layout_constraintTop_toTopOf="parent" />
 
