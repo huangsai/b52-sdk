@@ -38,10 +38,12 @@ class ChatListPresenter(
     fragment: ChatFragment,
     binding: SisterFragmentChatBinding,
     model: SisterViewModel
-) : BaseChatPresenter(fragment, binding, model) {
+) : BaseChatPresenter(fragment, binding, model), MediaPlayer.OnPreparedListener,
+    MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
 
     private val adapter = RecyclerAdapter()
     private var mMediaPlayer = MediaPlayer()
+    private var currentPlayAudioDBMsg: DbMessage? = null
     private var isAudioPlaying = false
 
     private val scrollListener: RecyclerView.OnScrollListener =
@@ -75,6 +77,13 @@ class ChatListPresenter(
         adapter.onClickListener = this
         adapter.imageLoader = this
         binding.chatRecycler.adapter = adapter
+
+        mMediaPlayer.setOnPreparedListener(this)
+        mMediaPlayer.setOnCompletionListener(this)
+        mMediaPlayer.setOnErrorListener(this)
+        mMediaPlayer.setAudioAttributes(
+            AudioAttributes.Builder().setContentType(CONTENT_TYPE_MUSIC).build()
+        )
     }
 
     override fun onDestroyView() {
@@ -136,8 +145,9 @@ class ChatListPresenter(
                     )
                 )
             }
-            R.id.audio_content -> {
-                playAudio(AdapterUtils.getHolder(v).item<MsgItem>().data.content.jsonToAudio().url)
+            R.id.layout_audio -> {
+                val data = AdapterUtils.getHolder(v).item<MsgItem>().data
+                clickAudio(data)
             }
             R.id.deposit_wechat -> {
                 Msg.toast("点击微信充值")
@@ -231,30 +241,56 @@ class ChatListPresenter(
         }
     }
 
-    private fun playAudio(filePath: String) {
+    private fun clickAudio(data: DbMessage) {
         if (isAudioPlaying) {
-            isAudioPlaying = false
             mMediaPlayer.reset()
-            return
-        }
-        mMediaPlayer.setOnErrorListener { _, _, _ ->
-            mMediaPlayer.reset()
-            false
+            if (currentPlayAudioDBMsg?.id == data.id) { //点击的语音是当前正在播放的语音
+                isAudioPlaying = false
+                onAudioStatusChanged()
+                return
+            }
         }
         try {
-            mMediaPlayer.setAudioAttributes(
-                AudioAttributes.Builder().setContentType(CONTENT_TYPE_MUSIC).build()
-            )
-            mMediaPlayer.setOnCompletionListener {
-                it.reset()
-                isAudioPlaying = false
-            }
-            mMediaPlayer.setDataSource(filePath)
+            currentPlayAudioDBMsg = data
+            mMediaPlayer.setDataSource(data.content.jsonToAudio().url)
             mMediaPlayer.prepare()
             mMediaPlayer.start()
-            isAudioPlaying = true
         } catch (e: Exception) {
         }
+    }
+
+    private fun onAudioStatusChanged() {
+        adapter.getAll()
+            .filterIsInstance<MsgItem>()
+            .filter {
+                it is MsgItem.Audio || it is MsgItem.Audio2
+            }
+            .forEach {
+                if (it.data.id == currentPlayAudioDBMsg?.id) {
+                    it.audio.isPlaying = isAudioPlaying
+                } else {
+                    it.audio.isPlaying = false
+                }
+                adapter.notifyItemChanged(adapter.indexOf(it))
+            }
+    }
+
+    override fun onPrepared(mp: MediaPlayer?) {
+        isAudioPlaying = true
+        onAudioStatusChanged()
+    }
+
+    override fun onCompletion(mp: MediaPlayer?) {
+        mp?.reset()
+        isAudioPlaying = false
+        onAudioStatusChanged()
+    }
+
+    override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
+        isAudioPlaying = false
+        mMediaPlayer.reset()
+        onAudioStatusChanged()
+        return false
     }
 
     private fun getImageUrls(): List<DbMessage.Image> {

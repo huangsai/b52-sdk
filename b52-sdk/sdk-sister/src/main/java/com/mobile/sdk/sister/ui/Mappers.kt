@@ -1,6 +1,5 @@
 package com.mobile.sdk.sister.ui
 
-import com.mobile.guava.https.safeToLong
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
@@ -115,4 +114,28 @@ fun DbMessage.toChatRes(): ChatReq {
         .chatType(1)
         .toUserId(toUserId.toString())
         .build()
+}
+
+fun Int.toAudioText(): String {
+    val audioContent = StringBuilder()
+    audioContent.append("$this''")
+    val lengths = this / 6
+    for (len: Int in 1..lengths) {
+        if (len <= 10) {
+            audioContent.append("\u3000")
+        }
+    }
+    return audioContent.toString()
+}
+
+fun Int.toAudio2Text(): String {
+    val audioContent = StringBuilder()
+    val lengths = this / 6
+    for (len: Int in 1..lengths) {
+        if (len <= 10) {
+            audioContent.append("\u3000")
+        }
+    }
+    audioContent.append("$this''")
+    return audioContent.toString()
 }

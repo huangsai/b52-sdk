@@ -21,7 +21,7 @@ import java.io.File
 class ChatMorePresenter(
     fragment: ChatFragment,
     binding: SisterFragmentChatBinding,
-    model: SisterViewModel
+    model: SisterViewModel,
 ) : BaseChatPresenter(fragment, binding, model) {
 
     private val authorities = "com.mobile.sdk.sister.provider"

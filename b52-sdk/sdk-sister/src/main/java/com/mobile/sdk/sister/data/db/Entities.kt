@@ -21,15 +21,17 @@ data class DbMessage(
     @ColumnInfo(name = "fromUserId") val fromUserId: String,
     @ColumnInfo(name = "fromUserType") val fromUserType: Int,
     @ColumnInfo(name = "status") var status: Int
-){
+) {
     @JsonClass(generateAdapter = true)
     data class Text(@Json(name = "msg") val msg: String)
 
     @JsonClass(generateAdapter = true)
     data class Audio(
         @Json(name = "duration") val duration: Long,
-        @Json(name = "msg") val url: String
-    )
+        @Json(name = "msg") val url: String,
+    ) {
+        var isPlaying: Boolean = false
+    }
 
     @JsonClass(generateAdapter = true)
     data class Image(@Json(name = "msg") val url: String)
