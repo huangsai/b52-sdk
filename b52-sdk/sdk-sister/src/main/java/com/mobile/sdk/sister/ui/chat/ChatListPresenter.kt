@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.ext.glide.GlideApp
 import com.mobile.guava.android.mvvm.Msg
+import com.mobile.guava.android.mvvm.showDialogFragment
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.guava.android.ui.view.recyclerview.keepItemViewVisible
 import com.mobile.sdk.sister.R
@@ -89,11 +90,17 @@ class ChatListPresenter(
                 Msg.toast("点击头像")
             }
             R.id.image_content -> {
-                Msg.toast("点击图片")
+                val holder = AdapterUtils.getHolder(v)
+                val list = getImageUrls()
+                fragment.showDialogFragment(
+                    ImageViewerDialogFragment.newInstance(
+                        list.map { it.url.toUri() },
+                        list.indexOf(holder.item<MsgItem>().image)
+                    )
+                )
             }
             R.id.audio_content -> {
-                val data = AdapterUtils.getHolder(v).item<MsgItem>().data
-                playAudio(data.content.jsonToAudio().url)
+                playAudio(AdapterUtils.getHolder(v).item<MsgItem>().data.content.jsonToAudio().url)
             }
             R.id.deposit_wechat -> {
                 Msg.toast("点击微信充值")
@@ -117,7 +124,7 @@ class ChatListPresenter(
                 val url = holder.item<MsgItem>().image.url
                 GlideApp.with(fragment)
                     .load(url.toUri())
-                    .placeholder(R.drawable.sister_default_img)
+                    .error(R.drawable.sister_default_img)
                     .into(view)
             }
         }
@@ -211,6 +218,13 @@ class ChatListPresenter(
             isAudioPlaying = true
         } catch (e: Exception) {
         }
+    }
+
+    private fun getImageUrls(): List<DbMessage.Image> {
+        return adapter.getAll()
+            .filterIsInstance<MsgItem>()
+            .filter { it is MsgItem.Image || it is MsgItem.Image2 }
+            .map { it.image }
     }
 
     override fun onDestroy() {

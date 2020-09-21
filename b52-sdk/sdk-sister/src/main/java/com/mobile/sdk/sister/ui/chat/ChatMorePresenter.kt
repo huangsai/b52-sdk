@@ -1,7 +1,6 @@
 package com.mobile.sdk.sister.ui.chat
 
 import android.app.Activity
-import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
