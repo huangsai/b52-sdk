@@ -16,13 +16,13 @@
 
     <ImageView
         android:id="@+id/image_content"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
+        android:layout_width="@dimen/size_172dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/size_10dp"
         android:scaleType="fitXY"
-        android:src="@drawable/sister_deposit_wechat_bg"
         app:layout_constraintRight_toLeftOf="@id/profile"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_height="@dimen/size_172dp" />
 
     <ImageView
         android:id="@+id/status_failed"
@@ -36,9 +36,9 @@
     <ProgressBar
         android:id="@+id/status_processing"
         style="@style/sister_MsgStatusProcessing"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/image_content"
         app:layout_constraintRight_toLeftOf="@id/image_content"
-        app:layout_constraintTop_toTopOf="@id/image_content" />
+        app:layout_constraintTop_toTopOf="@id/image_content"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
