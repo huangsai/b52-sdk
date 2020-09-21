@@ -127,3 +127,15 @@ fun Int.toAudioText(): String {
     }
     return audioContent.toString()
 }
+
+fun Int.toAudio2Text(): String {
+    val audioContent = StringBuilder()
+    val lengths = this / 6
+    for (len: Int in 1..lengths) {
+        if (len <= 10) {
+            audioContent.append("\u3000")
+        }
+    }
+    audioContent.append("$this''")
+    return audioContent.toString()
+}

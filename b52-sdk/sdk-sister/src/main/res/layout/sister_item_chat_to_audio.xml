@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profile"
@@ -14,38 +14,58 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/sister_CircleImageView" />
 
-    <TextView
-        android:id="@+id/audio_content"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/size_5dp"
         android:background="@drawable/sister_chat_pop_green"
-        android:drawableEnd="@drawable/sister_icon_chat_to_audio"
-        android:drawablePadding="@dimen/size_10dp"
-        android:gravity="center_vertical"
         android:maxWidth="200dp"
         android:minHeight="@dimen/size_40dp"
-        android:text="2''"
-        android:textColor="@color/sister_color_white"
-        android:textSize="@dimen/font_15sp"
         app:layout_constraintRight_toLeftOf="@id/profile"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/audio_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size_10dp"
+            android:gravity="center_vertical"
+            android:text="2''"
+            android:textColor="@color/sister_color_white"
+            android:textSize="@dimen/font_15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/audio_img"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/audio_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/sister_audio_play_to_anim"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <ImageView
         android:id="@+id/status_failed"
         style="@style/sister_MsgStatusFailed"
         android:src="@drawable/sister_icon_fail"
-        app:layout_constraintBottom_toBottomOf="@id/audio_content"
-        app:layout_constraintRight_toLeftOf="@id/audio_content"
-        app:layout_constraintTop_toTopOf="@id/audio_content"
+        app:layout_constraintBottom_toBottomOf="@id/layout_audio"
+        app:layout_constraintRight_toLeftOf="@id/layout_audio"
+        app:layout_constraintTop_toTopOf="@id/layout_audio"
         tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/status_processing"
         style="@style/sister_MsgStatusProcessing"
-        tools:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/audio_content"
-        app:layout_constraintRight_toLeftOf="@id/audio_content"
-        app:layout_constraintTop_toTopOf="@id/audio_content" />
+        app:layout_constraintBottom_toBottomOf="@id/layout_audio"
+        app:layout_constraintRight_toLeftOf="@id/layout_audio"
+        app:layout_constraintTop_toTopOf="@id/layout_audio"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

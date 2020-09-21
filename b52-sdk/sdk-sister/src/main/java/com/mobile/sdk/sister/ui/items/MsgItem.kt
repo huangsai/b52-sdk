@@ -1,5 +1,6 @@
 package com.mobile.sdk.sister.ui.items
 
+import android.graphics.drawable.AnimationDrawable
 import android.view.View
 import androidx.core.view.isVisible
 import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
@@ -23,7 +24,7 @@ internal fun AdapterViewHolder.imageHandle() {
 }
 
 internal fun AdapterViewHolder.audioClick() {
-    attachOnClickListener(R.id.audio_content)
+    attachOnClickListener(R.id.layout_audio)
 }
 
 internal fun AdapterViewHolder.depositClick() {
@@ -127,7 +128,6 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             val binding = holder.binding(SisterItemChatToImageBinding::bind)
             setStatus(binding.statusFailed, binding.statusProcessing)
             holder.attachOnClickListener(R.id.status_failed)
-
             holder.profileHandle()
             holder.imageHandle()
         }
@@ -141,10 +141,15 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToAudioBinding::bind)
-            binding.audioContent.text = (audio.duration / 1000).toInt().toAudioText()
+            binding.audioDuration.text = (audio.duration / 1000).toInt().toAudioText()
             setStatus(binding.statusFailed, binding.statusProcessing)
             holder.attachOnClickListener(R.id.status_failed)
-
+            val animationDrawable = binding.audioImg.drawable as AnimationDrawable
+            if (audio.isPlaying) {
+                animationDrawable.start()
+            } else {
+                animationDrawable.stop()
+            }
             holder.profileHandle()
             holder.audioClick()
         }
@@ -184,7 +189,13 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromAudioBinding::bind)
-            binding.audioContent.text = (audio.duration / 1000).toInt().toAudioText()
+            binding.audioDuration.text = (audio.duration / 1000).toInt().toAudio2Text()
+            val animationDrawable = binding.audioImg.drawable as AnimationDrawable
+            if (audio.isPlaying) {
+                animationDrawable.start()
+            } else {
+                animationDrawable.stop()
+            }
             holder.profileHandle()
             holder.audioClick()
         }
