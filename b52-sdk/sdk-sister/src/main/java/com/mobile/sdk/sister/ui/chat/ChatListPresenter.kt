@@ -7,8 +7,10 @@ import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
+import androidx.core.view.isInvisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mobile.ext.glide.GlideApp
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.mvvm.showDialogFragment
@@ -42,20 +44,47 @@ class ChatListPresenter(
     private var mMediaPlayer = MediaPlayer()
     private var isAudioPlaying = false
 
+    private val scrollListener: RecyclerView.OnScrollListener =
+        object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (adapter.itemCount == 0 || binding.txtNewest.isInvisible) {
+                    return
+                }
+                binding.chatRecycler.layoutManager?.let { layoutManager ->
+                    val linearLayoutManager = LinearLayoutManager::class.java.cast(layoutManager)!!
+                    val lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition()
+                    if (layoutManager.itemCount - lastVisibleItemPosition == 1) {
+                        binding.txtNewest.isInvisible = true
+                    }
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            }
+        }
+
     init {
+        binding.txtNewest.setOnClickListener(this)
         binding.chatRecycler.layoutManager = LinearLayoutManager(fragment.requireContext())
         binding.chatRecycler.addItemDecoration(
             LinearItemDecoration.builder(fragment.requireContext())
                 .color(android.R.color.transparent, R.dimen.size_10dp)
                 .build()
         )
+        binding.chatRecycler.addOnScrollListener(scrollListener)
         adapter.onClickListener = this
         adapter.imageLoader = this
         binding.chatRecycler.adapter = adapter
     }
 
     override fun onDestroyView() {
+        binding.chatRecycler.removeOnScrollListener(scrollListener)
         binding.chatRecycler.adapter = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mMediaPlayer.release()
     }
 
     override fun load() {
@@ -65,7 +94,7 @@ class ChatListPresenter(
             }
             withContext(Dispatchers.Main) {
                 adapter.addAll(items)
-                binding.chatRecycler.keepItemViewVisible(adapter.itemCount - 1, true)
+                binding.chatRecycler.keepItemViewVisible(items.size - 1, false)
             }
         }
     }
@@ -81,11 +110,19 @@ class ChatListPresenter(
     }
 
     fun onNewMessage(msgItem: MsgItem) {
-        adapter.add(msgItem)
+        if (binding.chatRecycler.canScrollVertically(1)) {
+            adapter.add(msgItem)
+            binding.txtNewest.isInvisible = false
+        } else {
+            addMsgItem(msgItem)
+        }
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
+            R.id.txt_newest -> {
+                binding.chatRecycler.scrollToPosition(adapter.itemCount - 1)
+            }
             R.id.profile -> {
                 Msg.toast("点击头像")
             }
@@ -225,10 +262,5 @@ class ChatListPresenter(
             .filterIsInstance<MsgItem>()
             .filter { it is MsgItem.Image || it is MsgItem.Image2 }
             .map { it.image }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mMediaPlayer.release()
     }
 }
