@@ -18,7 +18,8 @@ wire {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.github.skydoves:balloon:1.2.2"
+    implementation 'com.github.skydoves:balloon:1.2.2'
+    compile 'it.sephiroth.android.library.imagezoom:imagezoom:2.3.0'
 
-    api "com.squareup.wire:wire-runtime:3.2.2"
+    api 'com.squareup.wire:wire-runtime:3.2.2'
 }
