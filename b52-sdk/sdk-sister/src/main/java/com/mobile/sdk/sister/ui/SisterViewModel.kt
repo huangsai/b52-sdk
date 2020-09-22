@@ -44,7 +44,7 @@ class SisterViewModel @Inject constructor(
         val isExist = sisterRepository.messageCountById(dbMessage.id) > 0
         if (isExist) {
             dbMessage.status = STATUS_MSG_PROCESSING
-            Bus.offer(SisterX.BUS_MSG_CHANGED)
+            Bus.offer(SisterX.BUS_MSG_STATUS)
         } else {
             sisterRepository.insetMessage(dbMessage)
         }
@@ -58,7 +58,7 @@ class SisterViewModel @Inject constructor(
         val isExist = sisterRepository.messageCountById(dbMessage.id) > 0
         if (isExist) {
             dbMessage.status = STATUS_MSG_PROCESSING
-            Bus.offer(SisterX.BUS_MSG_CHANGED)
+            Bus.offer(SisterX.BUS_MSG_STATUS)
             if (image.url.startsWith("http", true)) {
                 SocketUtils.postMessage(dbMessage)
                 return
@@ -79,7 +79,7 @@ class SisterViewModel @Inject constructor(
         }
         when (dbMessage.status) {
             STATUS_MSG_PROCESSING -> SocketUtils.postMessage(dbMessage)
-            STATUS_MSG_FAILED -> Bus.offer(SisterX.BUS_MSG_CHANGED)
+            STATUS_MSG_FAILED -> Bus.offer(SisterX.BUS_MSG_STATUS)
             else -> throw IllegalStateException()
         }
     }
@@ -91,7 +91,7 @@ class SisterViewModel @Inject constructor(
         val isExist = sisterRepository.messageCountById(dbMessage.id) > 0
         if (isExist) {
             dbMessage.status = STATUS_MSG_PROCESSING
-            Bus.offer(SisterX.BUS_MSG_CHANGED)
+            Bus.offer(SisterX.BUS_MSG_STATUS)
             if (audio.url.startsWith("http", true)) {
                 SocketUtils.postMessage(dbMessage)
                 return
@@ -114,7 +114,7 @@ class SisterViewModel @Inject constructor(
         }
         when (dbMessage.status) {
             STATUS_MSG_PROCESSING -> SocketUtils.postMessage(dbMessage)
-            STATUS_MSG_FAILED -> Bus.offer(SisterX.BUS_MSG_CHANGED)
+            STATUS_MSG_FAILED -> Bus.offer(SisterX.BUS_MSG_STATUS)
             else -> throw IllegalStateException()
         }
     }

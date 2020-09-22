@@ -83,7 +83,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
     }
 
     override fun onBusEvent(event: Pair<Int, Any>) {
-        if (event.first == SisterX.BUS_MSG_CHANGED) {
+        if (event.first == SisterX.BUS_MSG_STATUS) {
             chatListPresenter.onMessageStatusChanged(event.second.cast())
             return
         }

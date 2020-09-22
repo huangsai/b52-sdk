@@ -2,9 +2,12 @@ package com.mobile.sdk.sister.ui.items
 
 import android.graphics.drawable.AnimationDrawable
 import android.view.View
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
+import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
+import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.data.http.*
@@ -12,25 +15,6 @@ import com.mobile.sdk.sister.databinding.*
 import com.mobile.sdk.sister.ui.*
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
-
-internal fun AdapterViewHolder.profileHandle() {
-    attachImageLoader(R.id.profile)
-    attachOnClickListener(R.id.profile)
-}
-
-internal fun AdapterViewHolder.imageHandle() {
-    attachImageLoader(R.id.image_content)
-    attachOnClickListener(R.id.image_content)
-}
-
-internal fun AdapterViewHolder.audioClick() {
-    attachOnClickListener(R.id.layout_audio)
-}
-
-internal fun AdapterViewHolder.depositClick() {
-    attachOnClickListener(R.id.deposit_wechat)
-    attachOnClickListener(R.id.deposit_alipay)
-}
 
 abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
@@ -55,40 +39,21 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     lateinit var upgrade: DbMessage.Upgrade
         private set
 
-    internal fun ofText(): MsgItem {
-        text = data.content.jsonToText()
-        return this
-    }
+    var isAudioPlaying: Boolean = false
 
-    internal fun ofImage(): MsgItem {
-        image = data.content.jsonToImage()
-        return this
-    }
+    internal fun ofText(): MsgItem = apply { text = data.content.jsonToText() }
 
-    internal fun ofAudio(): MsgItem {
-        audio = data.content.jsonToAudio()
-        return this
-    }
+    internal fun ofImage(): MsgItem = apply { image = data.content.jsonToImage() }
 
-    internal fun ofDeposit(): MsgItem {
-        deposit = data.content.jsonToDeposit()
-        return this
-    }
+    internal fun ofAudio(): MsgItem = apply { audio = data.content.jsonToAudio() }
 
-    internal fun ofTime(): MsgItem {
-        time = data.content.jsonToTime()
-        return this
-    }
+    internal fun ofDeposit(): MsgItem = apply { deposit = data.content.jsonToDeposit() }
 
-    internal fun ofSystem(): MsgItem {
-        system = data.content.jsonToSystem()
-        return this
-    }
+    internal fun ofTime(): MsgItem = apply { time = data.content.jsonToTime() }
 
-    internal fun ofUpgrade(): MsgItem {
-        upgrade = data.content.jsonToUpgrade()
-        return this
-    }
+    internal fun ofSystem(): MsgItem = apply { system = data.content.jsonToSystem() }
+
+    internal fun ofUpgrade(): MsgItem = apply { upgrade = data.content.jsonToUpgrade() }
 
     protected fun setStatus(statusFailed: View, statusProcessing: View) {
         when (data.status) {
@@ -107,6 +72,14 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    protected fun applyIsAudioPlay(view: ImageView) {
+        if (isAudioPlaying) {
+            view.drawable.cast<AnimationDrawable>().start()
+        } else {
+            view.drawable.cast<AnimationDrawable>().stop()
+        }
+    }
+
     class Text(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -114,11 +87,22 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             binding.textContent.text = text.msg
             setStatus(binding.statusFailed, binding.statusProcessing)
             holder.attachOnClickListener(R.id.status_failed)
-            holder.profileHandle()
+            holder.attachImageLoader(R.id.profile)
+            holder.attachOnClickListener(R.id.profile)
         }
 
         override fun getLayout(): Int {
             return R.layout.sister_item_chat_to_text
+        }
+
+        override fun bindPayloads(holder: AdapterViewHolder, payloads: List<Any>?) {
+            if (payloads.isNullOrEmpty()) return
+            val event = payloads[0] as Int
+
+            val binding: SisterItemChatToTextBinding = holder.binding()
+            if (event == SisterX.BUS_MSG_STATUS) {
+                setStatus(binding.statusFailed, binding.statusProcessing)
+            }
         }
     }
 
@@ -128,12 +112,24 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             val binding = holder.binding(SisterItemChatToImageBinding::bind)
             setStatus(binding.statusFailed, binding.statusProcessing)
             holder.attachOnClickListener(R.id.status_failed)
-            holder.profileHandle()
-            holder.imageHandle()
+            holder.attachImageLoader(R.id.profile)
+            holder.attachOnClickListener(R.id.profile)
+            holder.attachImageLoader(R.id.image_content)
+            holder.attachOnClickListener(R.id.image_content)
         }
 
         override fun getLayout(): Int {
             return R.layout.sister_item_chat_to_image
+        }
+
+        override fun bindPayloads(holder: AdapterViewHolder, payloads: List<Any>?) {
+            if (payloads.isNullOrEmpty()) return
+            val event = payloads[0] as Int
+
+            val binding: SisterItemChatToImageBinding = holder.binding()
+            if (event == SisterX.BUS_MSG_STATUS) {
+                setStatus(binding.statusFailed, binding.statusProcessing)
+            }
         }
     }
 
@@ -143,15 +139,33 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             val binding = holder.binding(SisterItemChatToAudioBinding::bind)
             binding.audioDuration.text = (audio.duration / 1000).toInt().toAudioText()
             setStatus(binding.statusFailed, binding.statusProcessing)
+            applyIsAudioPlay(binding.audioImg)
+
             holder.attachOnClickListener(R.id.status_failed)
-            val animationDrawable = binding.audioImg.drawable as AnimationDrawable
-            if (audio.isPlaying) {
-                animationDrawable.start()
-            } else {
-                animationDrawable.stop()
+            holder.attachImageLoader(R.id.profile)
+            holder.attachOnClickListener(R.id.profile)
+            holder.attachOnClickListener(R.id.layout_audio)
+        }
+
+        override fun bindPayloads(holder: AdapterViewHolder, payloads: List<Any>?) {
+            if (payloads.isNullOrEmpty()) return
+            val event = payloads[0] as Int
+
+            val binding: SisterItemChatToAudioBinding = holder.binding()
+            if (event == SisterX.BUS_MSG_STATUS) {
+                setStatus(binding.statusFailed, binding.statusProcessing)
+                return
             }
-            holder.profileHandle()
-            holder.audioClick()
+
+            if (event == SisterX.BUS_MSG_AUDIO_PLAYING) {
+                applyIsAudioPlay(binding.audioImg)
+                return
+            }
+        }
+
+        override fun unbind(holder: AdapterViewHolder) {
+            val binding: SisterItemChatToAudioBinding = holder.binding()
+            binding.audioImg.drawable.cast<AnimationDrawable>().stop()
         }
 
         override fun getLayout(): Int {
@@ -164,7 +178,8 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromTextBinding::bind)
             binding.textContent.text = text.msg
-            holder.profileHandle()
+            holder.attachImageLoader(R.id.profile)
+            holder.attachOnClickListener(R.id.profile)
         }
 
         override fun getLayout(): Int {
@@ -176,8 +191,10 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromImageBinding::bind)
-            holder.profileHandle()
-            holder.imageHandle()
+            holder.attachImageLoader(R.id.profile)
+            holder.attachOnClickListener(R.id.profile)
+            holder.attachImageLoader(R.id.image_content)
+            holder.attachOnClickListener(R.id.image_content)
         }
 
         override fun getLayout(): Int {
@@ -190,14 +207,26 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromAudioBinding::bind)
             binding.audioDuration.text = (audio.duration / 1000).toInt().toAudio2Text()
-            val animationDrawable = binding.audioImg.drawable as AnimationDrawable
-            if (audio.isPlaying) {
-                animationDrawable.start()
-            } else {
-                animationDrawable.stop()
+            applyIsAudioPlay(binding.audioImg)
+            holder.attachImageLoader(R.id.profile)
+            holder.attachOnClickListener(R.id.profile)
+            holder.attachOnClickListener(R.id.layout_audio)
+        }
+
+        override fun bindPayloads(holder: AdapterViewHolder, payloads: List<Any>?) {
+            if (payloads.isNullOrEmpty()) return
+            val event = payloads[0] as Int
+
+            val binding: SisterItemChatFromAudioBinding = holder.binding()
+            if (event == SisterX.BUS_MSG_AUDIO_PLAYING) {
+                applyIsAudioPlay(binding.audioImg)
+                return
             }
-            holder.profileHandle()
-            holder.audioClick()
+        }
+
+        override fun unbind(holder: AdapterViewHolder) {
+            val binding: SisterItemChatFromAudioBinding = holder.binding()
+            binding.audioImg.drawable.cast<AnimationDrawable>().stop()
         }
 
         override fun getLayout(): Int {
@@ -231,8 +260,10 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatDepositBinding::bind)
-            holder.profileHandle()
-            holder.depositClick()
+            holder.attachImageLoader(R.id.profile)
+            holder.attachOnClickListener(R.id.profile)
+            holder.attachOnClickListener(R.id.deposit_wechat)
+            holder.attachOnClickListener(R.id.deposit_alipay)
         }
 
         override fun getLayout(): Int {

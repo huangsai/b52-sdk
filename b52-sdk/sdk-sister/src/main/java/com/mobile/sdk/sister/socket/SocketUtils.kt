@@ -84,7 +84,7 @@ object SocketUtils {
                     dbMessage.status = STATUS_MSG_FAILED
                     SisterX.component.sisterRepository().updateMessage(dbMessage)
 
-                    Bus.offer(SisterX.BUS_MSG_CHANGED, dbMessage)
+                    Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
                 }
             }
     }
@@ -117,7 +117,7 @@ object SocketUtils {
             dbMessage.status = STATUS_MSG_SUCCESS
             sisterRepository.updateMessage(dbMessage)
 
-            Bus.offer(SisterX.BUS_MSG_CHANGED, dbMessage)
+            Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
         }
     }
 

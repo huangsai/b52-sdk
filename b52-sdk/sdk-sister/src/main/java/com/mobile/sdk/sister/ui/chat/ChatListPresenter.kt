@@ -17,6 +17,7 @@ import com.mobile.guava.android.mvvm.showDialogFragment
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.guava.android.ui.view.recyclerview.keepItemViewVisible
 import com.mobile.sdk.sister.R
+import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.http.TYPE_AUDIO
 import com.mobile.sdk.sister.data.http.TYPE_IMAGE
@@ -24,7 +25,6 @@ import com.mobile.sdk.sister.data.http.TYPE_TEXT
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.items.MsgItem
-import com.mobile.sdk.sister.ui.jsonToAudio
 import com.mobile.sdk.sister.ui.toJson
 import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
@@ -32,6 +32,7 @@ import com.pacific.adapter.RecyclerAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.File
 
 class ChatListPresenter(
@@ -43,8 +44,8 @@ class ChatListPresenter(
 
     private val adapter = RecyclerAdapter()
     private var mMediaPlayer = MediaPlayer()
-    private var currentPlayAudioDBMsg: DbMessage? = null
-    private var isAudioPlaying = false
+    private var isMediaPlaying = false
+    private var curPlayingPosition = -1
 
     private val scrollListener: RecyclerView.OnScrollListener =
         object : RecyclerView.OnScrollListener() {
@@ -146,8 +147,7 @@ class ChatListPresenter(
                 )
             }
             R.id.layout_audio -> {
-                val data = AdapterUtils.getHolder(v).item<MsgItem>().data
-                clickAudio(data)
+                clickAudio(AdapterUtils.getHolder(v))
             }
             R.id.deposit_wechat -> {
                 Msg.toast("点击微信充值")
@@ -243,55 +243,62 @@ class ChatListPresenter(
         }
     }
 
-    private fun onAudioStatusChanged() {
-        adapter.getAll()
-            .filterIsInstance<MsgItem>()
-            .filter {
-                it is MsgItem.Audio || it is MsgItem.Audio2
+    private fun clickAudio(holder: AdapterViewHolder) {
+        val position = holder.bindingAdapterPosition
+        val item = holder.item<MsgItem>()
+
+        item.isAudioPlaying = !item.isAudioPlaying
+        adapter.notifyItemChanged(position, SisterX.BUS_MSG_AUDIO_PLAYING)
+
+        if (curPlayingPosition != position) {
+            curMsgAudioItem()?.let {
+                it.isAudioPlaying = !it.isAudioPlaying
+                adapter.notifyItemChanged(curPlayingPosition, SisterX.BUS_MSG_AUDIO_PLAYING)
             }
-            .forEach {
-                if (it.data.id == currentPlayAudioDBMsg?.id) {
-                    it.audio.isPlaying = isAudioPlaying
-                } else {
-                    it.audio.isPlaying = false
-                }
-                adapter.notifyItemChanged(adapter.indexOf(it))
+            curPlayingPosition = position
+        }
+
+        isMediaPlaying = false
+        mMediaPlayer.reset()
+        if (item.isAudioPlaying) {
+            try {
+                mMediaPlayer.setDataSource(item.audio.url)
+                mMediaPlayer.prepareAsync()
+            } catch (e: Exception) {
+                Timber.d(e)
             }
+        } else {
+            curPlayingPosition = -1
+        }
     }
 
-    private fun clickAudio(data: DbMessage) {
-        if (isAudioPlaying) {
-            mMediaPlayer.reset()
-            if (currentPlayAudioDBMsg?.id == data.id) { //点击的语音是当前正在播放的语音
-                isAudioPlaying = false
-                onAudioStatusChanged()
-                return
-            }
+    private fun isNotAudioPlaying() {
+        curMsgAudioItem()?.let {
+            it.isAudioPlaying = false
+            adapter.notifyItemChanged(curPlayingPosition, SisterX.BUS_MSG_AUDIO_PLAYING)
+            curPlayingPosition = -1
         }
-        try {
-            currentPlayAudioDBMsg = data
-            mMediaPlayer.setDataSource(data.content.jsonToAudio().url)
-            mMediaPlayer.prepareAsync()
-        } catch (e: Exception) {
-        }
+    }
+
+    private fun curMsgAudioItem(): MsgItem? {
+        return if (curPlayingPosition == -1) null else adapter.get(curPlayingPosition)
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
-        isAudioPlaying = true
-        onAudioStatusChanged()
+        isMediaPlaying = true
         mp?.start()
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
-        isAudioPlaying = false
-        onAudioStatusChanged()
+        isMediaPlaying = false
+        isNotAudioPlaying()
         mp?.reset()
     }
 
     override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
         Msg.toast(R.string.sister_audio_play_error_toast)
-        isAudioPlaying = false
-        onAudioStatusChanged()
+        isMediaPlaying = false
+        isNotAudioPlaying()
         mp?.reset()
         return false
     }

@@ -31,9 +31,7 @@ data class DbMessage(
     data class Audio(
         @Json(name = "duration") val duration: Long,
         @Json(name = "msg") val url: String
-    ) {
-        var isPlaying: Boolean = false
-    }
+    )
 
     @JsonClass(generateAdapter = true)
     data class Image(@Json(name = "msg") val url: String)
