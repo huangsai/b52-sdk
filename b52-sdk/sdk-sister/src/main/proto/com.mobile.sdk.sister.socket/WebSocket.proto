@@ -45,7 +45,7 @@ message ResponseResult{
   required int32 result = 1;
   required int32 biz = 2;
   required string msg = 3;
-  required string  id = 4;
+  optional string  id = 4;
 }
 
 message CloseChatReq{

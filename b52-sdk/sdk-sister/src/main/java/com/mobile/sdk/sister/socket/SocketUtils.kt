@@ -99,7 +99,8 @@ object SocketUtils {
                 insertDbMessage(it.toDbMessage())
             }
             IM_BUZ_MSG -> ResponseResult.ADAPTER.decode(commonMessage.content).let {
-                setDbMessageSuccess(it.id)
+                setDbMessageSuccess(it.id!!)
+                Timber.tag("AppWebSocket").d("发送成功->%s", it.id)
             }
             else -> Timber.tag("AppWebSocket").d("未知socket业务消息")
         }

@@ -41,7 +41,14 @@ class SisterViewModel @Inject constructor(
     @WorkerThread
     fun postText(dbMessage: DbMessage) {
         ensureWorkThread()
-        return SocketUtils.postMessage(dbMessage)
+        val isExist = sisterRepository.messageCountById(dbMessage.id) > 0
+        if (isExist) {
+            dbMessage.status = STATUS_MSG_PROCESSING
+            Bus.offer(SisterX.BUS_MSG_CHANGED)
+        } else {
+            sisterRepository.insetMessage(dbMessage)
+        }
+        SocketUtils.postMessage(dbMessage)
     }
 
     @WorkerThread
