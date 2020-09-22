@@ -103,7 +103,7 @@ class SisterViewModel @Inject constructor(
             createAudioRequestBody(File(audio.url))
         )
         if (uploadedUrl.isNotEmpty()) {
-            dbMessage.content = DbMessage.Image(uploadedUrl).toJson()
+            dbMessage.content = DbMessage.Audio(audio.duration, uploadedUrl).toJson()
         } else {
             dbMessage.status = STATUS_MSG_FAILED
         }

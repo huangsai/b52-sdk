@@ -67,10 +67,15 @@ object SocketUtils {
     @WorkerThread
     fun postMessage(dbMessage: DbMessage) {
         ensureWorkThread()
+        val protoMessage = if (dbMessage.toUserId.isEmpty()) {
+            dbMessage.copy(toUserId = "0")
+        } else {
+            dbMessage
+        }
         CommonMessage.Builder()
             .bizId(IM_BUZ_MSG)
             .msgType(2)
-            .content(dbMessage.toChatRes().encodeByteString())
+            .content(protoMessage.toChatRes().encodeByteString())
             .build()
             .let {
                 if (true == AndroidX.isSocketConnected.value) {
