@@ -9,7 +9,6 @@ import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.PlatformPreferences
 import com.mobile.sdk.sister.data.http.ApiUser
 import com.mobile.sdk.sister.data.http.DataService
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import timber.log.Timber
 import javax.inject.Inject
@@ -58,27 +57,13 @@ class SisterRepository @Inject constructor(
         }
     }
 
-    fun getMessageById(id: String): DbMessage? {
-        return appDatabase.messageDao().getById(id)
-    }
+    fun updateMessage(dbMessage: DbMessage): Int = appDatabase.messageDao().update(dbMessage)
 
-    fun updateMessage(dbMessage: DbMessage): Int {
-        return try {
-            return appDatabase.messageDao().update(dbMessage)
-        } catch (e: Exception) {
-            Timber.d(e)
-            0
-        }
-    }
+    fun insetMessage(dbMessage: DbMessage): Long = appDatabase.messageDao().insert(dbMessage)
 
-    fun insetMessage(dbMessage: DbMessage): Long {
-        return try {
-            return appDatabase.messageDao().insert(dbMessage)
-        } catch (e: Exception) {
-            Timber.d(e)
-            0L
-        }
-    }
+    fun getMessageById(id: String): DbMessage? = appDatabase.messageDao().getById(id)
+
+    fun messageCountById(id: String): Int = appDatabase.messageDao().countById(id)
 
     fun uploadFile(body: RequestBody): String {
         return try {

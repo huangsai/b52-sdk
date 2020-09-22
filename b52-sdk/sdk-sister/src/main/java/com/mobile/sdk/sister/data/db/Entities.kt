@@ -2,12 +2,14 @@ package com.mobile.sdk.sister.data.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @Entity(
-    tableName = "sister_message"
+    tableName = "sister_message",
+    indices = [Index(value = ["id"], unique = true)]
 )
 data class DbMessage(
     @ColumnInfo(name = "_id") @PrimaryKey(autoGenerate = true) val _id: Long,
@@ -28,7 +30,7 @@ data class DbMessage(
     @JsonClass(generateAdapter = true)
     data class Audio(
         @Json(name = "duration") val duration: Long,
-        @Json(name = "msg") val url: String,
+        @Json(name = "msg") val url: String
     ) {
         var isPlaying: Boolean = false
     }

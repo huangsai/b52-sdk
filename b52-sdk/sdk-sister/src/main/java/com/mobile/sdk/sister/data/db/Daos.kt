@@ -10,6 +10,9 @@ interface MessageDao : SqlDao<DbMessage> {
     @Query("SELECT * FROM sister_message ORDER BY time DESC")
     fun get(): List<DbMessage>
 
+    @Query("SELECT COUNT(*) FROM sister_message WHERE id =:id")
+    fun countById(id: String): Int
+
     @Query("SELECT * FROM sister_message WHERE id =:id ORDER BY time ASC")
     fun getById(id: String): DbMessage?
 

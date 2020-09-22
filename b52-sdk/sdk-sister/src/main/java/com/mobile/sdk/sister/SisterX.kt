@@ -24,7 +24,7 @@ import timber.log.Timber
 
 object SisterX {
 
-    const val BUS_MSG_STATUS = 20049
+    const val BUS_MSG_CHANGED = 20049
     const val BUS_MSG_NEW = 20050
 
     var toUserId = ""

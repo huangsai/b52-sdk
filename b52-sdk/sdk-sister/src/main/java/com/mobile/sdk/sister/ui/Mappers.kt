@@ -3,6 +3,7 @@ package com.mobile.sdk.sister.ui
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
+import com.mobile.sdk.sister.data.http.STATUS_MSG_SUCCESS
 import com.mobile.sdk.sister.socket.ChatMsg
 import com.mobile.sdk.sister.socket.ChatReq
 
@@ -102,7 +103,7 @@ fun ChatMsg.toDbMessage(): DbMessage {
         fromUserName,
         fromUserId,
         fromUserType,
-        0
+        STATUS_MSG_SUCCESS
     )
 }
 

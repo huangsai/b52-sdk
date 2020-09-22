@@ -36,7 +36,11 @@ object AppWebSocket : LongLiveSocket() {
 
         override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
             log("---------onMessage---bytes------%${bytes.size}")
-            SocketUtils.onMessage(CommonMessage.ADAPTER.decode(SocketUtils.decrypt(bytes)))
+            try {
+                SocketUtils.onMessage(CommonMessage.ADAPTER.decode(SocketUtils.decrypt(bytes)))
+            } catch (e: Exception) {
+                log(e)
+            }
         }
 
         override fun onOpen(webSocket: WebSocket, response: Response) {

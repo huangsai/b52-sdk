@@ -10,6 +10,26 @@ message CommonMessage {
   required bytes content = 3;
 }
 
+message ChatMsg{
+  required string  id = 1 ;
+  required string sayContent = 2;
+  required int32 chatType = 3;
+  required int64 sayTime = 4;
+  required string fromImgUrl = 5;
+  required int32 fromUserType = 6;
+  required string fromUserName = 7;
+  required string fromUserId = 8;
+  required int32 msgType = 9;
+}
+
+message ChatReq{
+  required string  id = 1 ;
+  required string sayContent = 2;
+  required string toUserId = 3;
+  required int32 chatType = 4;
+  required int32 msgType = 5;
+}
+
 message LoginReq{
   required string  userName = 1;
   required string  token = 2;
@@ -18,33 +38,20 @@ message LoginReq{
   required string salt = 5 ;
 }
 
-message LoginRes{
+message LogoutReq{
+}
+
+message ResponseResult{
   required int32 result = 1;
-  required string msg = 2;
+  required int32 biz = 2;
+  required string msg = 3;
+  required string  id = 4;
 }
 
-message ChatReq{
-  required string  id=1 ;
-  required string sayContent=2;
-  required string toUserId= 3;
-  required int32 chatType=4;
-  required int32 msgType=5;
-
-}
-message ChatRes{
-  required int32 result=1;
-  required string msg=2;
-  required string  id=3 ;
+message CloseChatReq{
+  required string toUserId = 1;
 }
 
-message ChatMsg{
-  required string  id=1 ;
-  required string sayContent=2;
-  required int32 chatType=3;
-  required int64 sayTime =4;
-  required string fromImgUrl=5;
-  required int32 fromUserType=6;
-  required string fromUserName=7;
-  required string fromUserId=8;
-  required int32 msgType=9;
+message CloseChatMsg{
+  required string fromUserId = 1;
 }

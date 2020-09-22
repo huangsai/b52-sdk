@@ -111,8 +111,8 @@ class ChatListPresenter(
     fun onMessageStatusChanged(dbMessage: DbMessage) {
         adapter.getAll()
             .filterIsInstance<MsgItem>()
-            .first { it.data.id == dbMessage.id }
-            .let {
+            .filter { it.data.id == dbMessage.id }
+            .forEach {
                 it.data.status = dbMessage.status
                 adapter.notifyItemChanged(adapter.indexOf(it))
             }
@@ -155,7 +155,9 @@ class ChatListPresenter(
             R.id.deposit_alipay -> {
                 Msg.toast("点击支付宝充值")
             }
-            R.id.status_failed -> retryPostMsg(AdapterUtils.getHolder(v).item<MsgItem>().data)
+            R.id.status_failed -> {
+                retryPostMsg(AdapterUtils.getHolder(v).item<MsgItem>().data)
+            }
         }
     }
 

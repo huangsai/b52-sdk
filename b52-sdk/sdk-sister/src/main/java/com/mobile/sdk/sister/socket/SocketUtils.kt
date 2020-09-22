@@ -59,7 +59,7 @@ object SocketUtils {
             .msgType(2)
             .content(req.encodeByteString())
             .build()
-            .also {
+            .let {
                 AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
             }
     }
@@ -72,35 +72,33 @@ object SocketUtils {
             .msgType(2)
             .content(dbMessage.toChatRes().encodeByteString())
             .build()
-            .also {
+            .let {
                 if (true == AndroidX.isSocketConnected.value) {
                     AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
                 } else {
                     dbMessage.status = STATUS_MSG_FAILED
+                    SisterX.component.sisterRepository().updateMessage(dbMessage)
+
+                    Bus.offer(SisterX.BUS_MSG_CHANGED, dbMessage)
                 }
             }
-
-        if (SisterX.component.sisterRepository().insetMessage(dbMessage) > 0) {
-            if (dbMessage.status == STATUS_MSG_FAILED) {
-                Timber.tag("AppWebSocket").d("发送失败->${dbMessage.id}")
-                Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
-            }
-        }
     }
 
     fun onMessage(commonMessage: CommonMessage) {
         when (commonMessage.bizId) {
-            IM_BUZ_LOGIN -> LoginRes.ADAPTER.decode(commonMessage.content).let {
+            IM_BUZ_LOGIN -> ResponseResult.ADAPTER.decode(commonMessage.content).let {
                 Timber.tag("AppWebSocket").d(it.msg)
             }
             IM_BUZ_LOGOUT -> {
             }
-            IM_BUZ_CLOSE -> {
+            IM_BUZ_CLOSE_BY_MYSELF -> {
+            }
+            IM_BUZ_CLOSE_BY_SYSTEM -> {
             }
             IM_BUZ_NOTIFICATION -> ChatMsg.ADAPTER.decode(commonMessage.content).let {
-                saveDbMessage(it.toDbMessage())
+                insertDbMessage(it.toDbMessage())
             }
-            IM_BUZ_MSG -> ChatRes.ADAPTER.decode(commonMessage.content).let {
+            IM_BUZ_MSG -> ResponseResult.ADAPTER.decode(commonMessage.content).let {
                 setDbMessageSuccess(it.id)
             }
             else -> Timber.tag("AppWebSocket").d("未知socket业务消息")
@@ -108,18 +106,16 @@ object SocketUtils {
     }
 
     private fun setDbMessageSuccess(id: String) = GlobalScope.launch(Dispatchers.IO) {
-        SisterX.component.sisterRepository().let {
-            it.getMessageById(id)?.let { dbMessage ->
-                dbMessage.status = STATUS_MSG_SUCCESS
-                if (it.updateMessage(dbMessage) == 1) {
-                    Timber.tag("AppWebSocket").d("发送成功->$id")
-                    Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
-                }
-            }
+        val sisterRepository = SisterX.component.sisterRepository()
+        sisterRepository.getMessageById(id)?.let { dbMessage ->
+            dbMessage.status = STATUS_MSG_SUCCESS
+            sisterRepository.updateMessage(dbMessage)
+
+            Bus.offer(SisterX.BUS_MSG_CHANGED, dbMessage)
         }
     }
 
-    private fun saveDbMessage(dbMessage: DbMessage) = GlobalScope.launch(Dispatchers.IO) {
+    private fun insertDbMessage(dbMessage: DbMessage) = GlobalScope.launch(Dispatchers.IO) {
         SisterX.component.sisterRepository().let {
             it.insetMessage(dbMessage)
             Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))

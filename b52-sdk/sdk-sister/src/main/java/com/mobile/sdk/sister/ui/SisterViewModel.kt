@@ -28,6 +28,10 @@ class SisterViewModel @Inject constructor(
     private val sisterRepository: SisterRepository
 ) : ViewModel() {
 
+    fun loadSystemNotices(): List<ApiNotice> {
+        return emptyList()
+    }
+
     @WorkerThread
     fun loadMessages(): List<DbMessage> {
         ensureWorkThread()
@@ -44,12 +48,32 @@ class SisterViewModel @Inject constructor(
     fun postImage(dbMessage: DbMessage) {
         ensureWorkThread()
         val image = dbMessage.content.jsonToImage()
-        val uploadedUrl = sisterRepository.uploadFile(createRequestBody(image.url))
+        val isExist = sisterRepository.messageCountById(dbMessage.id) > 0
+        if (isExist) {
+            dbMessage.status = STATUS_MSG_PROCESSING
+            Bus.offer(SisterX.BUS_MSG_CHANGED)
+            if (image.url.startsWith("http", true)) {
+                SocketUtils.postMessage(dbMessage)
+                return
+            }
+        }
+
+        require(STATUS_MSG_PROCESSING == dbMessage.status)
+        val uploadedUrl = sisterRepository.uploadFile(createImageRequestBody(image.url))
         if (uploadedUrl.isNotEmpty()) {
             dbMessage.content = DbMessage.Image(uploadedUrl).toJson()
-            SocketUtils.postMessage(dbMessage)
         } else {
-            saveFailedDbMessage(dbMessage)
+            dbMessage.status = STATUS_MSG_FAILED
+        }
+        if (isExist) {
+            sisterRepository.updateMessage(dbMessage)
+        } else {
+            sisterRepository.insetMessage(dbMessage)
+        }
+        when (dbMessage.status) {
+            STATUS_MSG_PROCESSING -> SocketUtils.postMessage(dbMessage)
+            STATUS_MSG_FAILED -> Bus.offer(SisterX.BUS_MSG_CHANGED)
+            else -> throw IllegalStateException()
         }
     }
 
@@ -57,12 +81,34 @@ class SisterViewModel @Inject constructor(
     fun postAudio(dbMessage: DbMessage) {
         ensureWorkThread()
         val audio = dbMessage.content.jsonToAudio()
-        val uploadedUrl = sisterRepository.uploadFile(createAudioRequestBody(File(audio.url)))
+        val isExist = sisterRepository.messageCountById(dbMessage.id) > 0
+        if (isExist) {
+            dbMessage.status = STATUS_MSG_PROCESSING
+            Bus.offer(SisterX.BUS_MSG_CHANGED)
+            if (audio.url.startsWith("http", true)) {
+                SocketUtils.postMessage(dbMessage)
+                return
+            }
+        }
+
+        require(STATUS_MSG_PROCESSING == dbMessage.status)
+        val uploadedUrl = sisterRepository.uploadFile(
+            createAudioRequestBody(File(audio.url))
+        )
         if (uploadedUrl.isNotEmpty()) {
-            dbMessage.content = DbMessage.Audio(audio.duration, uploadedUrl).toJson()
-            SocketUtils.postMessage(dbMessage)
+            dbMessage.content = DbMessage.Image(uploadedUrl).toJson()
         } else {
-            saveFailedDbMessage(dbMessage)
+            dbMessage.status = STATUS_MSG_FAILED
+        }
+        if (isExist) {
+            sisterRepository.updateMessage(dbMessage)
+        } else {
+            sisterRepository.insetMessage(dbMessage)
+        }
+        when (dbMessage.status) {
+            STATUS_MSG_PROCESSING -> SocketUtils.postMessage(dbMessage)
+            STATUS_MSG_FAILED -> Bus.offer(SisterX.BUS_MSG_CHANGED)
+            else -> throw IllegalStateException()
         }
     }
 
@@ -84,18 +130,7 @@ class SisterViewModel @Inject constructor(
         )
     }
 
-    fun loadSystemNotices(): List<ApiNotice> {
-        return emptyList()
-    }
-
-    private fun saveFailedDbMessage(dbMessage: DbMessage) {
-        dbMessage.status = STATUS_MSG_FAILED
-        if (SisterX.component.sisterRepository().insetMessage(dbMessage) > 0) {
-            Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
-        }
-    }
-
-    private fun createRequestBody(url: String): RequestBody {
+    private fun createImageRequestBody(url: String): RequestBody {
         val uri = url.toUri()
         val doc = DocumentFile.fromSingleUri(AndroidX.myApp, uri)!!
         val contentPart = InputStreamRequestBody(
