@@ -1,6 +1,8 @@
 package com.mobile.sdk.sister.ui.chat
 
 import android.graphics.drawable.AnimationDrawable
+import android.media.AudioFormat
+import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Environment
 import android.view.View
@@ -112,10 +114,10 @@ class ChatVoicePresenter(
     }
 
     /**
-     * 这里判断录音权限，如果没有，则返回false，并请求获取权限
+     * 这里判断是否可以正常录音，false可以正常录音
      */
     override fun isIntercept(): Boolean {
-        return false
+        return !micAvailability()
     }
 
     /**
@@ -185,5 +187,33 @@ class ChatVoicePresenter(
     override fun onDestroy() {
         super.onDestroy()
         mMediaRecorder.release()
+    }
+
+    /**
+     *  检查麦克风是否被占用
+     *  返回true就是没有被占用。
+     *  返回false就是被占用。
+     */
+    private fun micAvailability(): Boolean {
+        var available = true
+        val recorder: AudioRecord? = AudioRecord(
+            MediaRecorder.AudioSource.MIC, 44100,
+            AudioFormat.CHANNEL_IN_MONO,
+            AudioFormat.ENCODING_DEFAULT, 44100
+        )
+        try {
+            if (recorder!!.recordingState != AudioRecord.RECORDSTATE_STOPPED) {
+                available = false
+            }
+            recorder.startRecording()
+            if (recorder.recordingState != AudioRecord.RECORDSTATE_RECORDING) {
+                recorder.stop()
+                available = false
+            }
+            recorder.stop()
+        } finally {
+            recorder!!.release()
+        }
+        return available
     }
 }

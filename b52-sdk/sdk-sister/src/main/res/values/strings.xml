@@ -16,4 +16,6 @@
     <string name="sister_popup_voice_duration_less">录制时间太短</string>
     <string name="sister_pls_request_permission">请申请权限</string>
     <string name="sister_chat_newest">查看新消息</string>
+    <string name="sister_msg_content_empty_toast">不能发送空消息</string>
+    <string name="sister_audio_play_error_toast">语音播放失败</string>
 </resources>

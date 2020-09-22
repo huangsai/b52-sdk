@@ -181,7 +181,7 @@ class ChatListPresenter(
 
     fun postText(text: String) {
         if (text.isNullOrEmpty()) {
-            Msg.toast("不能发送空消息")
+            Msg.toast(R.string.sister_msg_content_empty_toast)
             return
         }
         fragment.lifecycleScope.launch(Dispatchers.IO) {
@@ -289,6 +289,7 @@ class ChatListPresenter(
     }
 
     override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
+        Msg.toast(R.string.sister_audio_play_error_toast)
         isAudioPlaying = false
         onAudioStatusChanged()
         mp?.reset()
