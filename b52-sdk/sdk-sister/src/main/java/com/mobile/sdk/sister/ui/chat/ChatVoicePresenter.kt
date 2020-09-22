@@ -55,18 +55,18 @@ class ChatVoicePresenter(
         try {
             audioFile = File(
                 fragment.requireContext().getExternalFilesDir(Environment.DIRECTORY_MUSIC),
-                System.currentTimeMillis().toString() + ".arm"
+                System.currentTimeMillis().toString() + ".aac"
             )
             //创建录音文件
             audioFile?.createNewFile()
             //从麦克风采集
             mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
-            //最终的保存文件为arm格式
-            mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB)
+            //最终的保存文件为aac格式
+            mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS)
             //所有android系统都支持的适中采样的频率
             mMediaRecorder.setAudioSamplingRate(44100)
-            //通用的ARM编码格式
-            mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            //通用的AAC编码格式
+            mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             //设置音质频率
             mMediaRecorder.setAudioEncodingBitRate(1024 * 1024)
             //设置文件录音的位置
