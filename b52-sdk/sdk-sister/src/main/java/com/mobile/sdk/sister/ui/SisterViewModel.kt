@@ -6,17 +6,21 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.ViewModel
 import com.mobile.guava.android.ensureWorkThread
 import com.mobile.guava.android.mvvm.AndroidX
+import com.mobile.guava.jvm.coroutines.Bus
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.base.InputStreamRequestBody
 import com.mobile.sdk.sister.data.SisterRepository
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.data.http.ApiNotice
+import com.mobile.sdk.sister.data.http.STATUS_MSG_FAILED
 import com.mobile.sdk.sister.data.http.STATUS_MSG_PROCESSING
 import com.mobile.sdk.sister.socket.SocketUtils
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.util.*
 import javax.inject.Inject
 
@@ -44,6 +48,8 @@ class SisterViewModel @Inject constructor(
         if (uploadedUrl.isNotEmpty()) {
             dbMessage.content = DbMessage.Image(uploadedUrl).toJson()
             SocketUtils.postMessage(dbMessage)
+        } else {
+            saveFailedDbMessage(dbMessage)
         }
     }
 
@@ -51,10 +57,12 @@ class SisterViewModel @Inject constructor(
     fun postAudio(dbMessage: DbMessage) {
         ensureWorkThread()
         val audio = dbMessage.content.jsonToAudio()
-        val uploadedUrl = sisterRepository.uploadFile(createRequestBody(audio.url))
+        val uploadedUrl = sisterRepository.uploadFile(createAudioRequestBody(File(audio.url)))
         if (uploadedUrl.isNotEmpty()) {
             dbMessage.content = DbMessage.Audio(audio.duration, uploadedUrl).toJson()
             SocketUtils.postMessage(dbMessage)
+        } else {
+            saveFailedDbMessage(dbMessage)
         }
     }
 
@@ -80,17 +88,32 @@ class SisterViewModel @Inject constructor(
         return emptyList()
     }
 
+    private fun saveFailedDbMessage(dbMessage: DbMessage) {
+        dbMessage.status = STATUS_MSG_FAILED
+        if (SisterX.component.sisterRepository().insetMessage(dbMessage) > 0) {
+            Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
+        }
+    }
+
     private fun createRequestBody(url: String): RequestBody {
         val uri = url.toUri()
         val doc = DocumentFile.fromSingleUri(AndroidX.myApp, uri)!!
         val contentPart = InputStreamRequestBody(
-            (doc.type ?: "application/octet-stream").toMediaType(),
+            "image/*".toMediaType(),
             AndroidX.myApp.contentResolver,
             uri
         )
         return MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("file", doc.name, contentPart)
+            .build()
+    }
+
+    private fun createAudioRequestBody(file: File): RequestBody {
+        val contentPart = file.asRequestBody("audio/*".toMediaType())
+        return MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("file", file.name, contentPart)
             .build()
     }
 }
