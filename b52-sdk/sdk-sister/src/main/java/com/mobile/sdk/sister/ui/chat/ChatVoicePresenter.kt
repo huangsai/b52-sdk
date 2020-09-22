@@ -1,5 +1,6 @@
 package com.mobile.sdk.sister.ui.chat
 
+import android.graphics.drawable.AnimationDrawable
 import android.media.MediaRecorder
 import android.os.Environment
 import android.view.View
@@ -29,6 +30,7 @@ class ChatVoicePresenter(
     private val balloon: Balloon
     private val pressDuration: TextView
     private val pressStatus: TextView
+    private val pressAnimDrawable: AnimationDrawable
     private var disposable: Disposable? = null
     private var mMediaRecorder = MediaRecorder()
     private var duration: Long = 0
@@ -44,6 +46,8 @@ class ChatVoicePresenter(
         }
         pressDuration = balloon.getContentView().findViewById(R.id.press_duration)
         pressStatus = balloon.getContentView().findViewById(R.id.press_status)
+        pressAnimDrawable = balloon.getContentView()
+            .findViewById<ImageView>(R.id.press_audio_anim).drawable as AnimationDrawable
     }
 
     private fun showPopup() {
@@ -51,6 +55,7 @@ class ChatVoicePresenter(
     }
 
     private fun startRecord() {
+        pressAnimDrawable.start()
         countDuration()
         try {
             audioFile = File(
@@ -79,6 +84,7 @@ class ChatVoicePresenter(
     }
 
     private fun stopRecord() {
+        pressAnimDrawable.stop()
         mMediaRecorder.reset()
     }
 

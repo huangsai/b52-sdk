@@ -11,34 +11,44 @@
         android:id="@+id/press_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_10dp"
         android:textColor="@color/sister_color_E5D7B0"
         android:textSize="@dimen/font_15sp"
-        app:layout_constraintBottom_toTopOf="@id/press_voice_icon"
+        app:layout_constraintBottom_toTopOf="@id/layout_audio_img"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/press_voice_icon"
+    <LinearLayout
+        android:id="@+id/layout_audio_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_10dp"
-        android:src="@drawable/sister_icon_press_voice"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/press_duration" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/sister_icon_press_mic" />
+
+        <ImageView
+            android:id="@+id/press_audio_anim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/sister_audio_press_anim" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/press_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_10dp"
-        android:layout_marginBottom="@dimen/size_10dp"
         android:textColor="@color/sister_color_E5D7B0"
         android:textSize="@dimen/font_15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/press_voice_icon"
+        app:layout_constraintTop_toBottomOf="@id/layout_audio_img"
         tools:text="" />
 </androidx.constraintlayout.widget.ConstraintLayout>

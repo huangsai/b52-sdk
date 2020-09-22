@@ -17,14 +17,34 @@
         app:layout_constraintBottom_toTopOf="@id/layout_input"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chat_recycler"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            android:paddingTop="@dimen/size_10dp" />
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/chat_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingTop="@dimen/size_10dp" />
+
+            <TextView
+                android:id="@+id/txt_newest"
+                android:layout_width="@dimen/size_84dp"
+                android:layout_height="@dimen/size_32dp"
+                android:layout_marginBottom="@dimen/size_10dp"
+                android:background="@drawable/sister_chat_newest"
+                android:gravity="center"
+                android:text="@string/sister_chat_newest"
+                android:textColor="@android:color/white"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/chat_recycler"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:visibility="visible" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/help_recycler"
@@ -33,6 +53,7 @@
             android:layout_marginTop="@dimen/size_10dp"
             android:overScrollMode="never"
             android:scrollbars="none" />
+
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,20 +117,5 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/txt_newest"
-        android:layout_width="@dimen/size_84dp"
-        android:layout_height="@dimen/size_32dp"
-        android:layout_marginBottom="@dimen/size_44dp"
-        android:background="@drawable/sister_chat_newest"
-        android:gravity="center"
-        android:text="@string/sister_chat_newest"
-        android:textColor="@android:color/white"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/layout_recycler"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

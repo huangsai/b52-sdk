@@ -11,8 +11,8 @@
     <string name="sister_deposit_receive_text">收款</string>
     <string name="sister_chat_more_picture_text">照片</string>
     <string name="sister_chat_more_camera_text">拍摄</string>
-    <string name="sister_popup_voice_press_cancel_text">手指松开\n取消发送</string>
-    <string name="sister_popup_voice_press_send_text">手指松开\n立即发送</string>
+    <string name="sister_popup_voice_press_cancel_text">手指松开，取消发送</string>
+    <string name="sister_popup_voice_press_send_text">手指松开，立即发送</string>
     <string name="sister_popup_voice_duration_less">录制时间太短</string>
     <string name="sister_pls_request_permission">请申请权限</string>
     <string name="sister_chat_newest">查看新消息</string>

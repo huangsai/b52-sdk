@@ -234,28 +234,10 @@ class ChatListPresenter(
             when (dbMessage.type) {
                 TYPE_TEXT -> model.postText(dbMessage)
                 TYPE_IMAGE -> model.postImage(dbMessage)
-                TYPE_AUDIO -> model.postImage(dbMessage)
+                TYPE_AUDIO -> model.postAudio(dbMessage)
                 else -> {
                 }
             }
-        }
-    }
-
-    private fun clickAudio(data: DbMessage) {
-        if (isAudioPlaying) {
-            mMediaPlayer.reset()
-            if (currentPlayAudioDBMsg?.id == data.id) { //点击的语音是当前正在播放的语音
-                isAudioPlaying = false
-                onAudioStatusChanged()
-                return
-            }
-        }
-        try {
-            currentPlayAudioDBMsg = data
-            mMediaPlayer.setDataSource(data.content.jsonToAudio().url)
-            mMediaPlayer.prepare()
-            mMediaPlayer.start()
-        } catch (e: Exception) {
         }
     }
 
@@ -275,21 +257,39 @@ class ChatListPresenter(
             }
     }
 
+    private fun clickAudio(data: DbMessage) {
+        if (isAudioPlaying) {
+            mMediaPlayer.reset()
+            if (currentPlayAudioDBMsg?.id == data.id) { //点击的语音是当前正在播放的语音
+                isAudioPlaying = false
+                onAudioStatusChanged()
+                return
+            }
+        }
+        try {
+            currentPlayAudioDBMsg = data
+            mMediaPlayer.setDataSource(data.content.jsonToAudio().url)
+            mMediaPlayer.prepareAsync()
+        } catch (e: Exception) {
+        }
+    }
+
     override fun onPrepared(mp: MediaPlayer?) {
         isAudioPlaying = true
         onAudioStatusChanged()
+        mp?.start()
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
-        mp?.reset()
         isAudioPlaying = false
         onAudioStatusChanged()
+        mp?.reset()
     }
 
     override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
         isAudioPlaying = false
-        mMediaPlayer.reset()
         onAudioStatusChanged()
+        mp?.reset()
         return false
     }
 
