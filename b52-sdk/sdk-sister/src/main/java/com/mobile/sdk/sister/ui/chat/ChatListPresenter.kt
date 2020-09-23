@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.core.view.isInvisible
+import androidx.core.view.postDelayed
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,6 @@ import com.mobile.ext.glide.GlideApp
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.mvvm.showDialogFragment
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
-import com.mobile.guava.android.ui.view.recyclerview.keepItemViewVisible
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
@@ -103,7 +103,7 @@ class ChatListPresenter(
             }
             withContext(Dispatchers.Main) {
                 adapter.addAll(items)
-                binding.chatRecycler.keepItemViewVisible(items.size - 1, false)
+                binding.chatRecycler.scrollToPosition(adapter.itemCount - 1)
             }
         }
     }
@@ -227,7 +227,9 @@ class ChatListPresenter(
 
     private fun addMsgItem(item: MsgItem) {
         adapter.add(item)
-        binding.chatRecycler.keepItemViewVisible(adapter.itemCount - 1, true)
+        binding.chatRecycler.postDelayed(200) {
+            binding.chatRecycler.smoothScrollToPosition(adapter.itemCount - 1)
+        }
     }
 
     private fun retryPostMsg(dbMessage: DbMessage) {
@@ -246,20 +248,20 @@ class ChatListPresenter(
         val position = holder.bindingAdapterPosition
         val item = holder.item<MsgItem>()
 
-        //刷新点击的语音条目动画
+        // 刷新点击的语音条目动画
         item.isAudioPlaying = !item.isAudioPlaying
         adapter.notifyItemChanged(position, SisterX.BUS_MSG_AUDIO_PLAYING)
 
-        //如果当前正在播放的语音条目不是点击条目
+        // 如果当前正在播放的语音条目不是点击条目
         if (curPlayingPosition != position) {
             curMsgAudioItem()?.let {
-                //刷新当前正在播放的语音动画
+                // 刷新当前正在播放的语音动画
                 it.isAudioPlaying = !it.isAudioPlaying
                 adapter.notifyItemChanged(curPlayingPosition, SisterX.BUS_MSG_AUDIO_PLAYING)
             }
             curPlayingPosition = position
         }
-        //重置播放器
+        // 重置播放器
         mMediaPlayer.reset()
         if (item.isAudioPlaying) {
             try {
@@ -273,7 +275,7 @@ class ChatListPresenter(
         }
     }
 
-    //关闭语音播放动画
+    // 关闭语音播放动画
     private fun isNotAudioPlaying() {
         curMsgAudioItem()?.let {
             it.isAudioPlaying = false
