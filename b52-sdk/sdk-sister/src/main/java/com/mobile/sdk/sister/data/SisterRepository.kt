@@ -9,6 +9,8 @@ import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.PlatformPreferences
 import com.mobile.sdk.sister.data.http.ApiUser
 import com.mobile.sdk.sister.data.http.DataService
+import com.mobile.sdk.sister.data.http.STATUS_MSG_FAILED
+import com.mobile.sdk.sister.data.http.STATUS_MSG_PROCESSING
 import okhttp3.RequestBody
 import timber.log.Timber
 import javax.inject.Inject
@@ -51,6 +53,13 @@ class SisterRepository @Inject constructor(
     fun loadMessage(): List<DbMessage> {
         return try {
             appDatabase.messageDao().getByUserId(platformPreferences.userId)
+                .apply {
+                    forEach {
+                        if (it.status == STATUS_MSG_PROCESSING) {
+                            it.status = STATUS_MSG_FAILED
+                        }
+                    }
+                }
         } catch (e: Exception) {
             Timber.d(e)
             emptyList()

@@ -196,13 +196,13 @@ class ChatVoicePresenter(
      */
     private fun micAvailability(): Boolean {
         var available = true
-        val recorder: AudioRecord? = AudioRecord(
+        val recorder = AudioRecord(
             MediaRecorder.AudioSource.MIC, 44100,
             AudioFormat.CHANNEL_IN_MONO,
             AudioFormat.ENCODING_DEFAULT, 44100
         )
         try {
-            if (recorder!!.recordingState != AudioRecord.RECORDSTATE_STOPPED) {
+            if (recorder.recordingState != AudioRecord.RECORDSTATE_STOPPED) {
                 available = false
             }
             recorder.startRecording()
@@ -212,7 +212,7 @@ class ChatVoicePresenter(
             }
             recorder.stop()
         } finally {
-            recorder!!.release()
+            recorder.release()
         }
         return available
     }
