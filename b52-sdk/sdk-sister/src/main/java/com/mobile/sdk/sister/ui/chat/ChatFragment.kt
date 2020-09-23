@@ -11,6 +11,7 @@ import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
+import timber.log.Timber
 
 class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
 
@@ -83,6 +84,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
     }
 
     override fun onBusEvent(event: Pair<Int, Any>) {
+        Timber.tag(SisterX.TAG).d("onBusEvent----%s", event.first)
         if (event.first == SisterX.BUS_MSG_STATUS) {
             chatListPresenter.onMessageStatusChanged(event.second.cast())
             return
