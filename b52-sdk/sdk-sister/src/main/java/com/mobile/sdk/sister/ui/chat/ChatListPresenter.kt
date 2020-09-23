@@ -115,7 +115,7 @@ class ChatListPresenter(
             .filter { it.data.id == dbMessage.id }
             .forEach {
                 it.data.status = dbMessage.status
-                adapter.notifyItemChanged(adapter.indexOf(it))
+                adapter.notifyItemChanged(adapter.indexOf(it), SisterX.BUS_MSG_STATUS)
             }
     }
 

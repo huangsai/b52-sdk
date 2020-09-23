@@ -129,6 +129,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             val binding: SisterItemChatToImageBinding = holder.binding()
             if (event == SisterX.BUS_MSG_STATUS) {
                 setStatus(binding.statusFailed, binding.statusProcessing)
+                return
             }
         }
     }
