@@ -74,9 +74,26 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
     protected fun applyIsAudioPlay(view: ImageView) {
         if (isAudioPlaying) {
+            view.setImageResource(R.drawable.sister_audio_play_to_anim)
             view.drawable.cast<AnimationDrawable>().start()
         } else {
-            view.drawable.cast<AnimationDrawable>().stop()
+            if (view.drawable is AnimationDrawable) {
+                view.drawable.cast<AnimationDrawable>().stop()
+            }
+            view.setImageResource(R.drawable.sister_icon_chat_to_audio)
+        }
+    }
+
+    protected fun applyIsAudio2Play(view: ImageView) {
+        if (isAudioPlaying) {
+            view.setImageResource(R.drawable.sister_audio_play_from_anim)
+            view.drawable.cast<AnimationDrawable>().start()
+        } else {
+            if (view.drawable is AnimationDrawable) {
+                view.drawable.cast<AnimationDrawable>().stop()
+            }
+            view.setImageResource(R.drawable.sister_icon_chat_from_audio)
+
         }
     }
 
@@ -166,7 +183,8 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         override fun unbind(holder: AdapterViewHolder) {
             val binding: SisterItemChatToAudioBinding = holder.binding()
-            binding.audioImg.drawable.cast<AnimationDrawable>().stop()
+            if (binding.audioImg.drawable is AnimationDrawable)
+                binding.audioImg.drawable.cast<AnimationDrawable>().stop()
         }
 
         override fun getLayout(): Int {
@@ -208,7 +226,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromAudioBinding::bind)
             binding.audioDuration.text = (audio.duration / 1000).toInt().toAudio2Text()
-            applyIsAudioPlay(binding.audioImg)
+            applyIsAudio2Play(binding.audioImg)
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.layout_audio)
@@ -220,14 +238,15 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
             val binding: SisterItemChatFromAudioBinding = holder.binding()
             if (event == SisterX.BUS_MSG_AUDIO_PLAYING) {
-                applyIsAudioPlay(binding.audioImg)
+                applyIsAudio2Play(binding.audioImg)
                 return
             }
         }
 
         override fun unbind(holder: AdapterViewHolder) {
             val binding: SisterItemChatFromAudioBinding = holder.binding()
-            binding.audioImg.drawable.cast<AnimationDrawable>().stop()
+            if (binding.audioImg.drawable is AnimationDrawable)
+                binding.audioImg.drawable.cast<AnimationDrawable>().stop()
         }
 
         override fun getLayout(): Int {

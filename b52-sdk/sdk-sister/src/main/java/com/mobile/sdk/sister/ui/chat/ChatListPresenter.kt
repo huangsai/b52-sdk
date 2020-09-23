@@ -44,7 +44,6 @@ class ChatListPresenter(
 
     private val adapter = RecyclerAdapter()
     private var mMediaPlayer = MediaPlayer()
-    private var isMediaPlaying = false
     private var curPlayingPosition = -1
 
     private val scrollListener: RecyclerView.OnScrollListener =
@@ -247,18 +246,20 @@ class ChatListPresenter(
         val position = holder.bindingAdapterPosition
         val item = holder.item<MsgItem>()
 
+        //刷新点击的语音条目动画
         item.isAudioPlaying = !item.isAudioPlaying
         adapter.notifyItemChanged(position, SisterX.BUS_MSG_AUDIO_PLAYING)
 
+        //如果当前正在播放的语音条目不是点击条目
         if (curPlayingPosition != position) {
             curMsgAudioItem()?.let {
+                //刷新当前正在播放的语音动画
                 it.isAudioPlaying = !it.isAudioPlaying
                 adapter.notifyItemChanged(curPlayingPosition, SisterX.BUS_MSG_AUDIO_PLAYING)
             }
             curPlayingPosition = position
         }
-
-        isMediaPlaying = false
+        //重置播放器
         mMediaPlayer.reset()
         if (item.isAudioPlaying) {
             try {
@@ -272,6 +273,7 @@ class ChatListPresenter(
         }
     }
 
+    //关闭语音播放动画
     private fun isNotAudioPlaying() {
         curMsgAudioItem()?.let {
             it.isAudioPlaying = false
@@ -285,19 +287,16 @@ class ChatListPresenter(
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
-        isMediaPlaying = true
         mp?.start()
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
-        isMediaPlaying = false
         isNotAudioPlaying()
         mp?.reset()
     }
 
     override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
         Msg.toast(R.string.sister_audio_play_error_toast)
-        isMediaPlaying = false
         isNotAudioPlaying()
         mp?.reset()
         return false
