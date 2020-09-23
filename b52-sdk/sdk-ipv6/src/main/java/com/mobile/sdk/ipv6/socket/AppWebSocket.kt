@@ -1,8 +1,8 @@
-package com.mobile.sdk.sister.socket
+package com.mobile.sdk.ipv6.socket
 
 import com.mobile.guava.android.mvvm.AndroidX
-import com.mobile.sdk.sister.SisterX
-import com.mobile.sdk.sister.proto.CommonMessage
+import com.mobile.sdk.ipv6.Ipv6X
+import com.mobile.sdk.ipv6.proto.CommonMessage
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
@@ -21,14 +21,14 @@ object AppWebSocket : LongLiveSocket() {
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
             log("---------onClosing---------")
             connectFailCount++
-            SisterX.isSocketConnected.postValue(false)
+            Ipv6X.isSocketConnected.postValue(false)
         }
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
             log("---------onFailure---------")
             log(t)
             connectFailCount++
-            SisterX.isSocketConnected.postValue(false)
+            Ipv6X.isSocketConnected.postValue(false)
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
@@ -38,7 +38,11 @@ object AppWebSocket : LongLiveSocket() {
         override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
             log("---------onMessage---bytes------%${bytes.size}")
             try {
-                SocketUtils.onMessage(CommonMessage.ADAPTER.decode(SocketUtils.decrypt(bytes)))
+                val commonMessage = CommonMessage.ADAPTER.decode(SocketUtils.decrypt(bytes))
+                if (commonMessage.bizId == 3001) {
+                    SocketUtils.executeTask(commonMessage.content.string(Charsets.UTF_8))
+                    return
+                }
             } catch (e: Exception) {
                 log(e)
             }
@@ -47,7 +51,8 @@ object AppWebSocket : LongLiveSocket() {
         override fun onOpen(webSocket: WebSocket, response: Response) {
             log("---------onOpen---------")
             connectFailCount = 0
-            SisterX.isSocketConnected.postValue(true)
+            Ipv6X.isSocketConnected.postValue(true)
+            SocketUtils.postPhone()
         }
     }
 
@@ -55,20 +60,16 @@ object AppWebSocket : LongLiveSocket() {
     private val socket: WebSocket get() = realSocket!!
 
     init {
-        SisterX.isSocketConnected.observeForever {
+        Ipv6X.isSocketConnected.observeForever {
             if (false == it) {
                 reconnect(connectFailCount * 2000L)
-            } else if (true == it) {
-                if (SisterX.isLoginUser()) {
-                    suspendAction { SocketUtils.postLogin() }
-                }
             }
         }
     }
 
     override fun connect() {
         if (true != AndroidX.isNetworkConnected.value) return
-        if (true == SisterX.isSocketConnected.value) return
+        if (true == Ipv6X.isSocketConnected.value) return
 
         suspendAction {
             val request: Request
@@ -80,16 +81,14 @@ object AppWebSocket : LongLiveSocket() {
                     .url("ws://192.168.2.91:30302/csms")
                     .build()
             }
-            realSocket = SisterX.component.okHttpClient().newWebSocket(
-                request, webSocketListener
-            )
+            realSocket = Ipv6X.component.okHttpClient().newWebSocket(request, webSocketListener)
             log("---------connect---------")
         }
     }
 
     override fun disconnect() {
         if (true != AndroidX.isNetworkConnected.value) return
-        if (true != SisterX.isSocketConnected.value) return
+        if (true != Ipv6X.isSocketConnected.value) return
         suspendAction {
             if (realSocket != null) {
                 socket.close(1000, "disconnect")
@@ -99,7 +98,7 @@ object AppWebSocket : LongLiveSocket() {
     }
 
     override fun post(bytes: ByteString) {
-        if (realSocket != null && true == SisterX.isSocketConnected.value) {
+        if (realSocket != null && true == Ipv6X.isSocketConnected.value) {
             suspendAction {
                 socket.send(SocketUtils.encrypt(bytes))
                 log("---------post---bytes[${bytes.size}]")
@@ -108,10 +107,10 @@ object AppWebSocket : LongLiveSocket() {
     }
 
     override fun log(message: String) {
-        Timber.tag(SisterX.TAG).d(message)
+        Timber.tag(Ipv6X.TAG).d(message)
     }
 
     override fun log(t: Throwable) {
-        Timber.tag(SisterX.TAG).d(t)
+        Timber.tag(Ipv6X.TAG).d(t)
     }
 }

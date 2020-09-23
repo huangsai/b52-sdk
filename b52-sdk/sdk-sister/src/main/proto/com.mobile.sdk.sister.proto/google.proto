@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package com.mobile.sdk.sister.socket;
 
-option java_package = "com.mobile.sdk.sister.socket";
+option java_package = "com.mobile.sdk.sister.proto";
 
 message CommonMessage {
   required int32 bizId = 1;

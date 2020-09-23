@@ -2,12 +2,15 @@ package com.mobile.sdk.sister.socket
 
 import androidx.annotation.WorkerThread
 import com.mobile.guava.android.ensureWorkThread
-import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.jvm.coroutines.Bus
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.data.http.*
+import com.mobile.sdk.sister.proto.ChatMsg
+import com.mobile.sdk.sister.proto.CommonMessage
+import com.mobile.sdk.sister.proto.LoginReq
+import com.mobile.sdk.sister.proto.ResponseResult
 import com.mobile.sdk.sister.ui.items.MsgItem
 import com.mobile.sdk.sister.ui.toChatRes
 import com.mobile.sdk.sister.ui.toDbMessage
@@ -78,7 +81,7 @@ object SocketUtils {
             .content(protoMessage.toChatRes().encodeByteString())
             .build()
             .let {
-                if (true == AndroidX.isSocketConnected.value) {
+                if (true == SisterX.isSocketConnected.value) {
                     AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
                 } else {
                     dbMessage.status = STATUS_MSG_FAILED
@@ -92,7 +95,7 @@ object SocketUtils {
     fun onMessage(commonMessage: CommonMessage) {
         when (commonMessage.bizId) {
             IM_BUZ_LOGIN -> ResponseResult.ADAPTER.decode(commonMessage.content).let {
-                Timber.tag("AppWebSocket").d(it.msg)
+                Timber.tag(SisterX.TAG).d(it.msg)
             }
             IM_BUZ_LOGOUT -> {
             }
@@ -105,9 +108,9 @@ object SocketUtils {
             }
             IM_BUZ_MSG -> ResponseResult.ADAPTER.decode(commonMessage.content).let {
                 setDbMessageSuccess(it.id!!)
-                Timber.tag("AppWebSocket").d("发送成功->%s", it.id)
+                Timber.tag(SisterX.TAG).d("发送成功->%s", it.id)
             }
-            else -> Timber.tag("AppWebSocket").d("未知socket业务消息")
+            else -> Timber.tag(SisterX.TAG).d("未知socket业务消息")
         }
     }
 

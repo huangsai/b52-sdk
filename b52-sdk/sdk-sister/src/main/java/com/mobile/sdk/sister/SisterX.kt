@@ -3,13 +3,12 @@ package com.mobile.sdk.sister
 import android.app.Application
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.android.mvvm.AppContext
-import com.mobile.guava.android.mvvm.AppTimber
+import com.mobile.guava.android.mvvm.AppManager
 import com.mobile.guava.android.mvvm.showDialogFragment
-import com.mobile.guava.jvm.Guava
-import com.mobile.sdk.sister.base.AppManager
 import com.mobile.sdk.sister.dagger.DaggerSisterComponent
 import com.mobile.sdk.sister.dagger.SisterComponent
 import com.mobile.sdk.sister.data.db.RoomAppDatabase
@@ -20,9 +19,10 @@ import com.mobile.sdk.sister.ui.MainDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 object SisterX {
+
+    const val TAG = "SisterX"
 
     const val BUS_MSG_AUDIO_PLAYING = 20048
     const val BUS_MSG_STATUS = 20049
@@ -33,21 +33,18 @@ object SisterX {
     lateinit var component: SisterComponent
         private set
 
+    val isSocketConnected: MutableLiveData<Boolean> = MutableLiveData()
+
     fun setup(app: Application, isDebug: Boolean) {
-        AndroidX.setup(app)
-        Guava.isDebug = isDebug
-        Guava.timber = AppTimber()
+        AndroidX.setup(app, isDebug)
         component = DaggerSisterComponent.factory().create(
             app,
             AppContext(),
             createRoomDatabase(),
             AppPreferences
         )
-        if (isDebug) {
-            Timber.plant(Timber.DebugTree())
-        }
-
         AppPreferences.username = ""
+
         AppWebSocket.toString()
         AppManager.initialize()
     }
@@ -72,7 +69,7 @@ object SisterX {
     }
 
     private fun createRoomDatabase(): RoomAppDatabase {
-        return Room.databaseBuilder(AndroidX.myApp, RoomAppDatabase::class.java, AndroidX.SQL_DB3)
+        return Room.databaseBuilder(AndroidX.myApp, RoomAppDatabase::class.java, "sdk_sister.db3")
             .addCallback(RoomAppDatabase.DbCallback())
             .build()
     }

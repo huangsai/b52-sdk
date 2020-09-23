@@ -4,8 +4,8 @@ import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.data.http.STATUS_MSG_SUCCESS
-import com.mobile.sdk.sister.socket.ChatMsg
-import com.mobile.sdk.sister.socket.ChatReq
+import com.mobile.sdk.sister.proto.ChatMsg
+import com.mobile.sdk.sister.proto.ChatReq
 
 fun String.jsonToText(): DbMessage.Text {
     return SisterX.component.json()

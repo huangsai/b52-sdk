@@ -1,8 +1,8 @@
-package com.mobile.sdk.sister.socket
+package com.mobile.sdk.ipv6.socket
 
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.jvm.coroutines.SingleRunner
-import com.mobile.sdk.sister.SisterX
+import com.mobile.sdk.ipv6.Ipv6X
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -17,7 +17,7 @@ abstract class LongLiveSocket {
 
     init {
         AndroidX.isNetworkConnected.observeForever {
-            if (true == it) connect() else SisterX.isSocketConnected.value = false
+            if (true == it) connect() else Ipv6X.isSocketConnected.value = false
         }
     }
 

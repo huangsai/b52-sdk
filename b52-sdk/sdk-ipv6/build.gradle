@@ -1,0 +1,22 @@
+apply from: "../gradle/android_lib_module.gradle"
+apply plugin: 'com.squareup.wire'
+
+android {
+
+    sourceSets {
+        main.java.srcDirs += "${buildDir}/generated/source/wire"
+    }
+
+    resourcePrefix "ipv6_"
+}
+
+wire {
+    kotlin {
+        javaInterop true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api 'com.squareup.wire:wire-runtime:3.3.0'
+}
