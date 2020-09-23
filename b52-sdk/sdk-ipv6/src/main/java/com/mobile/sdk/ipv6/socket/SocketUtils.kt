@@ -36,7 +36,7 @@ object SocketUtils {
             AppUtils.appName(AndroidX.myApp),
             AppUtils.versionName(AndroidX.myApp)
         )
-        val json = Ipv6X.component.json().adapter<ApiPhone>(ApiPhone::class.java)
+        val json = Ipv6X.component.json().adapter(ApiPhone::class.java)
             .toJson(phone)
             .encodeUtf8()
 

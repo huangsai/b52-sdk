@@ -2,7 +2,10 @@ package com.mobile.sdk.ipv6.base;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 
 public class NetworkUtils {
@@ -53,15 +56,27 @@ public class NetworkUtils {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(
                 Context.CONNECTIVITY_SERVICE
         );
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-        if (networkInfo != null && networkInfo.isConnected()) {
-            int type = networkInfo.getType();
-
-            if (type == ConnectivityManager.TYPE_WIFI) {
-                networkType = NETWORK_WIFI;
-            } else if (type == ConnectivityManager.TYPE_MOBILE) {
-                networkType = getCellularClass(context);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Network nw = connectivityManager.getActiveNetwork();
+            if (nw != null) {
+                NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+                if (actNw != null) {
+                    if(actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)){
+                        networkType = NETWORK_WIFI;
+                    }else if(actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)){
+                        networkType = getCellularClass(context);
+                    }
+                }
+            }
+        } else {
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                int type = networkInfo.getType();
+                if (type == ConnectivityManager.TYPE_WIFI) {
+                    networkType = NETWORK_WIFI;
+                } else if (type == ConnectivityManager.TYPE_MOBILE) {
+                    networkType = getCellularClass(context);
+                }
             }
         }
 
