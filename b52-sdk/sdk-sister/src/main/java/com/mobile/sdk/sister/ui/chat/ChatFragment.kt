@@ -24,6 +24,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
     private lateinit var chatHelpPresenter: ChatHelpPresenter
     private lateinit var chatMorePresenter: ChatMorePresenter
     private lateinit var chatVoicePresenter: ChatVoicePresenter
+    private lateinit var chatEmojiPresenter: ChatEmojiPresenter
 
     companion object {
         @JvmStatic
@@ -40,7 +41,9 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
         chatHelpPresenter = ChatHelpPresenter(this, binding, fParent.model)
         chatMorePresenter = ChatMorePresenter(this, binding, fParent.model)
         chatVoicePresenter = ChatVoicePresenter(this, binding, fParent.model)
+        chatEmojiPresenter = ChatEmojiPresenter(this, binding, fParent.model)
         binding.chatAdd.setOnClickListener(this)
+        binding.chatEmoji.setOnClickListener(this)
         binding.chatEt.addTextChangedListener(this)
         return binding.root
     }
@@ -60,6 +63,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
         super.onDestroyView()
         chatHelpPresenter.onDestroyView()
         chatListPresenter.onDestroyView()
+        chatEmojiPresenter.onDestroyView()
         _binding = null
     }
 
@@ -69,6 +73,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
         chatHelpPresenter.onDestroy()
         chatMorePresenter.onDestroy()
         chatVoicePresenter.onDestroy()
+        chatEmojiPresenter.onDestroy()
     }
 
     override fun onClick(v: View?) {
@@ -77,9 +82,10 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
                 if (binding.chatAdd.isSelected) {
                     chatListPresenter.postText(binding.chatEt.text.toString().trim())
                 } else {
-                    chatMorePresenter.createPop()
+                    chatMorePresenter.showPop()
                 }
             }
+            R.id.chat_emoji -> chatEmojiPresenter.showPop()
         }
     }
 

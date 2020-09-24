@@ -47,9 +47,13 @@ class ChatMorePresenter(
         }
     }
 
-    private lateinit var balloon: Balloon
+    private var balloon: Balloon? = null
 
-    fun createPop() {
+    fun showPop() {
+        if (balloon != null) {
+            balloon!!.showAlignTop(binding.layoutInput, 0, 10)
+            return
+        }
         val popWidth = binding.layoutInput.width
         balloon = createBalloon(fragment.requireContext()) {
             setLayout(R.layout.sister_popup_chat_more)
@@ -58,9 +62,9 @@ class ChatMorePresenter(
             width = popWidth
             setBackgroundColorResource(R.color.sister_color_black_transparent)
         }
-        balloon.showAlignTop(binding.layoutInput, 0, 10)
-        balloon.getContentView().findViewById<ImageView>(R.id.iv_picture).setOnClickListener(this)
-        balloon.getContentView().findViewById<ImageView>(R.id.iv_camera).setOnClickListener(this)
+        balloon!!.showAlignTop(binding.layoutInput, 0, 10)
+        balloon!!.getContentView().findViewById<ImageView>(R.id.iv_picture).setOnClickListener(this)
+        balloon!!.getContentView().findViewById<ImageView>(R.id.iv_camera).setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -72,7 +76,7 @@ class ChatMorePresenter(
                 requestImage.launch(requestCameraIntent())
             }
         }
-        balloon.dismiss()
+        balloon!!.dismiss()
     }
 
     private fun requestGalleryIntent(): Intent {
