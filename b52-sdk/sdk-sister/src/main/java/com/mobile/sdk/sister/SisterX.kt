@@ -49,12 +49,10 @@ object SisterX {
         AppManager.initialize()
     }
 
-    fun setUsername(username: String) {
-        GlobalScope.launch(Dispatchers.IO) {
-            component.sisterRepository().user(username).let {
-                AndroidX.notifyLogin()
-                SocketUtils.postLogin()
-            }
+    fun setUsername(username: String) = GlobalScope.launch(Dispatchers.IO) {
+        component.sisterRepository().user(username).let {
+            AndroidX.notifyLogin()
+            SocketUtils.postLogin()
         }
     }
 
