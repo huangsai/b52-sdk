@@ -73,6 +73,6 @@ class VoiceRecordButton @JvmOverloads constructor(
         /**
          * 最短录音时间
          */
-        private const val MIN_INTERVAL_TIME = 900
+        private const val MIN_INTERVAL_TIME = 1000L
     }
 }

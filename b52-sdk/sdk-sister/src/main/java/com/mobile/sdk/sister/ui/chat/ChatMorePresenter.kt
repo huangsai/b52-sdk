@@ -61,6 +61,7 @@ class ChatMorePresenter(
             arrowVisible = false
             width = popWidth
             setBackgroundColorResource(R.color.sister_color_black_transparent)
+            setElevation(0)
         }
         balloon!!.showAlignTop(binding.layoutInput, 0, 10)
         balloon!!.getContentView().findViewById<ImageView>(R.id.iv_picture).setOnClickListener(this)

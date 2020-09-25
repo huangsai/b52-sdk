@@ -179,7 +179,8 @@ class ChatListPresenter(
         }
     }
 
-    fun postText(text: String) {
+    fun postText() {
+        val text = fragment.textContent
         if (text.isNullOrEmpty()) {
             Msg.toast(R.string.sister_msg_content_empty_toast)
             return

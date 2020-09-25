@@ -11,6 +11,7 @@ class EmojiItem(val data: EmojiHandle.EmojiInfo) : SimpleRecyclerItem() {
     override fun bind(holder: AdapterViewHolder) {
         val binding = holder.binding(SisterItemEmojiBinding::bind)
         binding.imageEmoji.setImageResource(data.drawableId)
+        holder.attachOnClickListener(R.id.image_emoji)
     }
 
     override fun getLayout(): Int {
