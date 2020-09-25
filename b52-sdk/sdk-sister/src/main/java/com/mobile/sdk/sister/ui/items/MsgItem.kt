@@ -292,10 +292,11 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     }
 
     class Time(data: DbMessage) : MsgItem(data) {
+        private val nanoStr: String by lazy { time.nano.yyyy_mm_dd_hh_mm_ss() }
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatTimeBinding::bind)
-            binding.time.text = time.nano.yyyy_mm_dd_hh_mm_ss()
+            binding.time.text = nanoStr
         }
 
         override fun getLayout(): Int {

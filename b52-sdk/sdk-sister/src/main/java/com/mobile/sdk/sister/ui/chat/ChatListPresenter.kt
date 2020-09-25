@@ -24,6 +24,7 @@ import com.mobile.sdk.sister.data.http.TYPE_IMAGE
 import com.mobile.sdk.sister.data.http.TYPE_TEXT
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
+import com.mobile.sdk.sister.ui.crossTime
 import com.mobile.sdk.sister.ui.items.MsgItem
 import com.mobile.sdk.sister.ui.toJson
 import com.pacific.adapter.AdapterUtils
@@ -98,11 +99,11 @@ class ChatListPresenter(
 
     override fun load() {
         fragment.lifecycleScope.launch(Dispatchers.IO) {
-            val items = model.loadMessages().map {
+            val sourceItems = model.loadMessages().map {
                 MsgItem.create(it)
             }
             withContext(Dispatchers.Main) {
-                adapter.addAll(items)
+                adapter.addAll(sourceItems)
                 binding.chatRecycler.scrollToPosition(adapter.itemCount - 1)
             }
         }
@@ -226,6 +227,12 @@ class ChatListPresenter(
     }
 
     private fun addMsgItem(item: MsgItem) {
+        if (!adapter.isEmpty()) {
+            val lastItem = adapter.get<MsgItem>(adapter.itemCount - 1)
+            if (item.data.time - lastItem.data.time >= 10 * 60 * 1000) {
+                adapter.add(MsgItem.create(lastItem.data.crossTime()))
+            }
+        }
         adapter.add(item)
         binding.chatRecycler.postDelayed(200) {
             binding.chatRecycler.smoothScrollToPosition(adapter.itemCount - 1)

@@ -4,6 +4,7 @@ import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.data.http.STATUS_MSG_SUCCESS
+import com.mobile.sdk.sister.data.http.TYPE_TIME
 import com.mobile.sdk.sister.proto.ChatMsg
 import com.mobile.sdk.sister.proto.ChatReq
 
@@ -115,6 +116,13 @@ fun DbMessage.toChatRes(): ChatReq {
         .chatType(1)
         .toUserId(toUserId.toString())
         .build()
+}
+
+fun DbMessage.crossTime(): DbMessage {
+    return copy(
+        type = TYPE_TIME,
+        content = DbMessage.Time(time).toJson()
+    )
 }
 
 fun Int.toAudioText(): String {
