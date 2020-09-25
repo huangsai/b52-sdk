@@ -21,6 +21,9 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
     lateinit var chatListPresenter: ChatListPresenter
         private set
 
+    val textContent: String
+        get() = binding.chatEt.text.toString().trim()
+
     private lateinit var chatHelpPresenter: ChatHelpPresenter
     private lateinit var chatMorePresenter: ChatMorePresenter
     private lateinit var chatVoicePresenter: ChatVoicePresenter
@@ -80,7 +83,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
         when (v!!.id) {
             R.id.chat_add -> {
                 if (binding.chatAdd.isSelected) {
-                    chatListPresenter.postText(binding.chatEt.text.toString().trim())
+                    chatListPresenter.postText()
                 } else {
                     chatMorePresenter.showPop()
                 }
@@ -108,6 +111,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
     }
 
     override fun afterTextChanged(s: Editable?) {
-        binding.chatAdd.isSelected = binding.chatEt.text.toString().trim().isNotEmpty()
+        binding.chatAdd.isSelected = textContent.isNotEmpty()
+        chatEmojiPresenter.updateButtonStatus()
     }
 }

@@ -7,7 +7,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
-import com.mobile.sdk.sister.ui.EmojiHandle
+import com.mobile.sdk.sister.ui.EmojiHandle.splitEmojiInfos
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.items.ViewerEmojiItem
 import com.pacific.adapter.AdapterViewHolder
@@ -23,6 +23,8 @@ class ChatEmojiPresenter(
 
     private var balloon: Balloon? = null
     private lateinit var viewPager: ViewPager2
+    private var emojiDelete: ImageView? = null
+    private var emojiSend: ImageView? = null
 
     private val adapter = RecyclerAdapter()
 
@@ -38,8 +40,14 @@ class ChatEmojiPresenter(
             arrowVisible = false
             width = popWidth - 15
             setBackgroundColorResource(R.color.sister_color_black_transparent)
+            setElevation(0)
         }
         balloon!!.showAlignTop(binding.layoutInput)
+        emojiDelete = balloon!!.getContentView().findViewById(R.id.emoji_delete)
+        emojiSend = balloon!!.getContentView().findViewById(R.id.emoji_send)
+        emojiDelete!!.setOnClickListener(this)
+        emojiSend!!.setOnClickListener(this)
+        updateButtonStatus()
         viewPager = balloon!!.getContentView().findViewById(R.id.view_pager)
         val tabLayout = balloon!!.getContentView().findViewById<TabLayout>(R.id.tab_layout)
         viewPager.adapter = adapter
@@ -48,19 +56,32 @@ class ChatEmojiPresenter(
     }
 
     override fun load() {
-        val items = listOf(
-            ViewerEmojiItem(EmojiHandle.emojiInfos.subList(0, 26)),
-            ViewerEmojiItem(EmojiHandle.emojiInfos.subList(0, 26)),
-            ViewerEmojiItem(EmojiHandle.emojiInfos.subList(0, 26))
-        )
+        val data = splitEmojiInfos()
+        val items = data.map {
+            ViewerEmojiItem(it, binding)
+        }
         adapter.addAll(items)
     }
 
+    fun updateButtonStatus() {
+        val isSelected = fragment.textContent.isNotEmpty()
+        emojiSend?.isSelected = isSelected
+        emojiDelete?.isSelected = isSelected
+    }
+
     override fun onClick(v: View?) {
+        when (v!!.id) {
+            R.id.emoji_delete -> {
+                if (!v.isSelected) return
+            }
+            R.id.emoji_send -> {
+                if (!v.isSelected) return
+                fragment.chatListPresenter.postText()
+            }
+        }
     }
 
     override fun load(view: ImageView, holder: AdapterViewHolder) {
-        TODO("Not yet implemented")
     }
 
     override fun onDestroyView() {
