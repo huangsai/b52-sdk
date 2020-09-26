@@ -76,6 +76,7 @@
             android:paddingLeft="@dimen/size_10dp"
             android:paddingRight="@dimen/size_10dp"
             android:singleLine="true"
+            android:inputType="textEmailAddress"
             android:textColor="@color/sister_color_black"
             android:textColorHint="@color/sister_color_gray"
             android:textSize="@dimen/font_16sp"
