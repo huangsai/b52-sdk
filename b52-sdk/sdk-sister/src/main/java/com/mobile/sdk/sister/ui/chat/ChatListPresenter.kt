@@ -24,6 +24,7 @@ import com.mobile.sdk.sister.data.http.TYPE_AUDIO
 import com.mobile.sdk.sister.data.http.TYPE_IMAGE
 import com.mobile.sdk.sister.data.http.TYPE_TEXT
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
+import com.mobile.sdk.sister.ui.MSG_TIME_DIFF
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.crossTime
 import com.mobile.sdk.sister.ui.items.MsgItem
@@ -234,8 +235,8 @@ class ChatListPresenter(
             adapter.add(MsgItem.create(item.data.crossTime()))
         } else {
             val lastItem = adapter.get<MsgItem>(adapter.itemCount - 1)
-            if (item.data.time - lastItem.data.time >= 10 * 60 * 1000) {
-                adapter.add(MsgItem.create(lastItem.data.crossTime()))
+            if (item.data.time - lastItem.data.time >= MSG_TIME_DIFF) {
+                adapter.add(MsgItem.create(item.data.crossTime()))
             }
         }
         adapter.add(item)

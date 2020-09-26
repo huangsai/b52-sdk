@@ -9,6 +9,8 @@ import com.mobile.sdk.sister.data.http.TYPE_TIME
 import com.mobile.sdk.sister.proto.ChatMsg
 import com.mobile.sdk.sister.proto.ChatReq
 
+const val MSG_TIME_DIFF = 10 * 60 * 1000L //消息显示时间差
+
 fun String.jsonToText(): DbMessage.Text {
     return SisterX.component.json()
         .adapter(DbMessage.Text::class.java)

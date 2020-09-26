@@ -7,9 +7,12 @@ import com.mobile.guava.jvm.domain.Source
 import com.mobile.sdk.sister.data.db.AppDatabase
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.PlatformPreferences
-import com.mobile.sdk.sister.data.http.*
+import com.mobile.sdk.sister.data.http.ApiUser
+import com.mobile.sdk.sister.data.http.DataService
+import com.mobile.sdk.sister.data.http.STATUS_MSG_FAILED
+import com.mobile.sdk.sister.data.http.STATUS_MSG_PROCESSING
+import com.mobile.sdk.sister.ui.MSG_TIME_DIFF
 import com.mobile.sdk.sister.ui.crossTime
-import com.mobile.sdk.sister.ui.toJson
 import okhttp3.RequestBody
 import timber.log.Timber
 import javax.inject.Inject
@@ -51,7 +54,6 @@ class SisterRepository @Inject constructor(
 
     fun loadMessage(): List<DbMessage> {
         try {
-            val tenMinutes = 10 * 60 * 1000
             val list = appDatabase.messageDao()
                 .getByUserId(platformPreferences.userId)
                 .apply {
@@ -65,7 +67,7 @@ class SisterRepository @Inject constructor(
 
             if (list.size > 2) {
                 for (i in 1 until list.size) {
-                    if (list[i].time - list[i - 1].time >= tenMinutes) {
+                    if (list[i].time - list[i - 1].time >= MSG_TIME_DIFF) {
                         list.add(i, list[i].crossTime())
                     }
                 }

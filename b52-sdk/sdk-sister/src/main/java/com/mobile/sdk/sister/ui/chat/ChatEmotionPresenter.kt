@@ -80,6 +80,7 @@ class ChatEmotionPresenter(
             R.id.emotion_send -> {
                 if (!v.isSelected) return
                 fragment.chatListPresenter.postText()
+                balloon?.dismiss()
             }
         }
     }
