@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/image_emoji"
+        android:id="@+id/image_emotion"
         android:layout_width="@dimen/size_26dp"
         android:layout_height="@dimen/size_26dp"
         android:layout_marginTop="@dimen/size_8dp"

@@ -7,24 +7,24 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
-import com.mobile.sdk.sister.ui.EmojiHandle.splitEmojiInfos
 import com.mobile.sdk.sister.ui.SisterViewModel
-import com.mobile.sdk.sister.ui.items.ViewerEmojiItem
+import com.mobile.sdk.sister.ui.chat.EmotionHandle.splitEmotionInfo
+import com.mobile.sdk.sister.ui.items.ViewerEmotionItem
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
 
-class ChatEmojiPresenter(
+class ChatEmotionPresenter(
     fragment: ChatFragment,
     binding: SisterFragmentChatBinding,
     model: SisterViewModel,
 ) : BaseChatPresenter(fragment, binding, model) {
 
     private var balloon: Balloon? = null
-    private lateinit var viewPager: ViewPager2
-    private var emojiDelete: ImageView? = null
-    private var emojiSend: ImageView? = null
+    private var viewPager: ViewPager2? = null
+    private var emotionDelete: ImageView? = null
+    private var emotionSend: ImageView? = null
 
     private val adapter = RecyclerAdapter()
 
@@ -35,7 +35,7 @@ class ChatEmojiPresenter(
         }
         val popWidth = binding.layoutInput.width
         balloon = createBalloon(fragment.requireContext()) {
-            setLayout(R.layout.sister_popup_chat_emoji)
+            setLayout(R.layout.sister_popup_chat_emotion)
             cornerRadius = 10f
             arrowVisible = false
             width = popWidth - 15
@@ -43,38 +43,39 @@ class ChatEmojiPresenter(
             setElevation(0)
         }
         balloon!!.showAlignTop(binding.layoutInput)
-        emojiDelete = balloon!!.getContentView().findViewById(R.id.emoji_delete)
-        emojiSend = balloon!!.getContentView().findViewById(R.id.emoji_send)
-        emojiDelete!!.setOnClickListener(this)
-        emojiSend!!.setOnClickListener(this)
+        emotionDelete = balloon!!.getContentView().findViewById(R.id.emotion_delete)
+        emotionSend = balloon!!.getContentView().findViewById(R.id.emotion_send)
+        emotionDelete!!.setOnClickListener(this)
+        emotionSend!!.setOnClickListener(this)
         updateButtonStatus()
         viewPager = balloon!!.getContentView().findViewById(R.id.view_pager)
         val tabLayout = balloon!!.getContentView().findViewById<TabLayout>(R.id.tab_layout)
-        viewPager.adapter = adapter
-        TabLayoutMediator(tabLayout, viewPager) { _, _ -> }.attach()
+        viewPager!!.adapter = adapter
+        TabLayoutMediator(tabLayout, viewPager!!) { _, _ -> }.attach()
         load()
     }
 
     override fun load() {
-        val data = splitEmojiInfos()
+        val data = splitEmotionInfo()
         val items = data.map {
-            ViewerEmojiItem(it, binding)
+            ViewerEmotionItem(it, binding)
         }
         adapter.addAll(items)
     }
 
     fun updateButtonStatus() {
         val isSelected = fragment.textContent.isNotEmpty()
-        emojiSend?.isSelected = isSelected
-        emojiDelete?.isSelected = isSelected
+        emotionSend?.isSelected = isSelected
+        emotionDelete?.isSelected = isSelected
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.emoji_delete -> {
+            R.id.emotion_delete -> {
                 if (!v.isSelected) return
+                EmotionHandle.deleteEmotionText(binding.chatEt)
             }
-            R.id.emoji_send -> {
+            R.id.emotion_send -> {
                 if (!v.isSelected) return
                 fragment.chatListPresenter.postText()
             }
@@ -85,7 +86,7 @@ class ChatEmojiPresenter(
     }
 
     override fun onDestroyView() {
-        viewPager.adapter = null
+        viewPager?.adapter = null
     }
 
     override fun onDestroy() {

@@ -1,16 +1,19 @@
 package com.mobile.sdk.sister.ui.chat
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
+import com.mobile.sdk.sister.ui.views.MyKeyboardHelper
 import timber.log.Timber
 
 class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
@@ -27,11 +30,42 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
     private lateinit var chatHelpPresenter: ChatHelpPresenter
     private lateinit var chatMorePresenter: ChatMorePresenter
     private lateinit var chatVoicePresenter: ChatVoicePresenter
-    private lateinit var chatEmojiPresenter: ChatEmojiPresenter
+    private lateinit var chatEmotionPresenter: ChatEmotionPresenter
 
     companion object {
         @JvmStatic
         fun newInstance(): ChatFragment = ChatFragment()
+    }
+
+    private val globalLayoutListener = object : ViewTreeObserver.OnGlobalLayoutListener {
+        private var mWindowHeight = 0
+        private var mSoftKeyboardHeight = 0
+        private var mIsKeyboardVisible = false
+
+        override fun onGlobalLayout() {
+            val outRect = Rect()
+            fParent.dialog!!.window!!.decorView.getWindowVisibleDisplayFrame(outRect)
+            val height: Int = outRect.height()
+            if (mWindowHeight == 0) {
+                mWindowHeight = height
+            } else {
+                if (mWindowHeight != height) {
+                    mSoftKeyboardHeight = mWindowHeight - height
+                }
+                if (mIsKeyboardVisible != MyKeyboardHelper.isKeyboardVisible(fParent.dialog!!)) {
+                    mIsKeyboardVisible = !mIsKeyboardVisible
+                    onKeyboardVisibility(mIsKeyboardVisible, mSoftKeyboardHeight)
+                }
+            }
+        }
+    }
+
+    private fun onKeyboardVisibility(isKeyboardVisible: Boolean, mSoftKeyboardHeight: Int) {
+        if (isKeyboardVisible) {
+            binding.root.setPadding(0, 0, 0, mSoftKeyboardHeight)
+        } else {
+            binding.root.setPadding(0, 0, 0, 0)
+        }
     }
 
     override fun onCreateView(
@@ -44,10 +78,13 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
         chatHelpPresenter = ChatHelpPresenter(this, binding, fParent.model)
         chatMorePresenter = ChatMorePresenter(this, binding, fParent.model)
         chatVoicePresenter = ChatVoicePresenter(this, binding, fParent.model)
-        chatEmojiPresenter = ChatEmojiPresenter(this, binding, fParent.model)
+        chatEmotionPresenter = ChatEmotionPresenter(this, binding, fParent.model)
         binding.chatAdd.setOnClickListener(this)
-        binding.chatEmoji.setOnClickListener(this)
+        binding.chatEmotion.setOnClickListener(this)
         binding.chatEt.addTextChangedListener(this)
+        fParent.dialog?.window?.decorView?.viewTreeObserver?.addOnGlobalLayoutListener(
+            globalLayoutListener
+        )
         return binding.root
     }
 
@@ -66,7 +103,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
         super.onDestroyView()
         chatHelpPresenter.onDestroyView()
         chatListPresenter.onDestroyView()
-        chatEmojiPresenter.onDestroyView()
+        chatEmotionPresenter.onDestroyView()
         _binding = null
     }
 
@@ -76,7 +113,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
         chatHelpPresenter.onDestroy()
         chatMorePresenter.onDestroy()
         chatVoicePresenter.onDestroy()
-        chatEmojiPresenter.onDestroy()
+        chatEmotionPresenter.onDestroy()
     }
 
     override fun onClick(v: View?) {
@@ -88,7 +125,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
                     chatMorePresenter.showPop()
                 }
             }
-            R.id.chat_emoji -> chatEmojiPresenter.showPop()
+            R.id.chat_emotion -> chatEmotionPresenter.showPop()
         }
     }
 
@@ -112,6 +149,6 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
 
     override fun afterTextChanged(s: Editable?) {
         binding.chatAdd.isSelected = textContent.isNotEmpty()
-        chatEmojiPresenter.updateButtonStatus()
+        chatEmotionPresenter.updateButtonStatus()
     }
 }

@@ -4,15 +4,16 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
-import com.mobile.sdk.sister.databinding.SisterItemViewerEmojiBinding
-import com.mobile.sdk.sister.ui.EmojiHandle
+import com.mobile.sdk.sister.databinding.SisterItemViewerEmotionBinding
+import com.mobile.sdk.sister.ui.chat.EmotionHandle
 import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
 import com.pacific.adapter.SimpleRecyclerItem
 
-class ViewerEmojiItem(
-    val data: List<EmojiHandle.EmojiInfo>,
+
+class ViewerEmotionItem(
+    val data: List<EmotionHandle.EmotionInfo>,
     val binding: SisterFragmentChatBinding
 ) :
     SimpleRecyclerItem(), View.OnClickListener {
@@ -20,31 +21,31 @@ class ViewerEmojiItem(
     private val adapter = RecyclerAdapter()
 
     override fun bind(holder: AdapterViewHolder) {
-        val binding = holder.binding(SisterItemViewerEmojiBinding::bind)
-        val layoutManager = GridLayoutManager(holder.activity(), EmojiHandle.ROW_COUNT)
+        val binding = holder.binding(SisterItemViewerEmotionBinding::bind)
+        val layoutManager = GridLayoutManager(holder.activity(), EmotionHandle.ROW_COUNT)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
-        val items = data.map { EmojiItem(it) }
+        val items = data.map { EmotionItem(it) }
         adapter.replaceAll(items)
         adapter.onClickListener = this
     }
 
     override fun getLayout(): Int {
-        return R.layout.sister_item_viewer_emoji
+        return R.layout.sister_item_viewer_emotion
     }
 
     override fun unbind(holder: AdapterViewHolder) {
         super.unbind(holder)
-        val binding: SisterItemViewerEmojiBinding = holder.binding()
+        val binding: SisterItemViewerEmotionBinding = holder.binding()
         binding.recyclerView.layoutManager = null
         binding.recyclerView.adapter = null
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.image_emoji -> {
-                val data = AdapterUtils.getHolder(v).item<EmojiItem>().data
-                binding.chatEt.append(data.textContent)
+            R.id.image_emotion -> {
+                val data = AdapterUtils.getHolder(v).item<EmotionItem>().data
+                EmotionHandle.showEmotionText(binding.chatEt, data.textContent)
             }
         }
     }
