@@ -100,9 +100,17 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
     class Text(data: DbMessage) : MsgItem(data) {
 
+        private lateinit var binding: SisterItemChatToTextBinding
+        private val spannable by lazy {
+            EmotionHandle.buildEmotionSpannable(
+                text.msg,
+                binding.textContent.textSize.toInt()
+            )
+        }
+
         override fun bind(holder: AdapterViewHolder) {
-            val binding = holder.binding(SisterItemChatToTextBinding::bind)
-            EmotionHandle.showEmotionText(binding.textContent, text.msg)
+            binding = holder.binding(SisterItemChatToTextBinding::bind)
+            binding.textContent.text = spannable
             setStatus(binding.statusFailed, binding.statusProcessing)
             holder.attachOnClickListener(R.id.status_failed)
             holder.attachImageLoader(R.id.profile)
@@ -195,9 +203,17 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
     class Text2(data: DbMessage) : MsgItem(data) {
 
+        private lateinit var binding: SisterItemChatFromTextBinding
+        private val spannable by lazy {
+            EmotionHandle.buildEmotionSpannable(
+                text.msg,
+                binding.textContent.textSize.toInt()
+            )
+        }
+
         override fun bind(holder: AdapterViewHolder) {
-            val binding = holder.binding(SisterItemChatFromTextBinding::bind)
-            EmotionHandle.showEmotionText(binding.textContent, text.msg)
+            binding = holder.binding(SisterItemChatFromTextBinding::bind)
+            binding.textContent.text = spannable
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
         }

@@ -45,7 +45,13 @@ class ViewerEmotionItem(
         when (v!!.id) {
             R.id.image_emotion -> {
                 val data = AdapterUtils.getHolder(v).item<EmotionItem>().data
-                EmotionHandle.showEmotionText(binding.chatEt, data.textContent)
+                val spannable = EmotionHandle.buildEmotionSpannable(
+                    data.textContent,
+                    binding.chatEt.textSize.toInt()
+                )
+                val start = binding.chatEt.selectionStart
+                val editable = binding.chatEt.editableText
+                editable?.insert(start, spannable)
             }
         }
     }
