@@ -13,6 +13,7 @@ import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.databinding.*
 import com.mobile.sdk.sister.ui.*
+import com.mobile.sdk.sister.ui.chat.EmotionHandle
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
 
@@ -101,7 +102,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatToTextBinding::bind)
-            binding.textContent.text = text.msg
+            EmotionHandle.showEmotionText(binding.textContent, text.msg)
             setStatus(binding.statusFailed, binding.statusProcessing)
             holder.attachOnClickListener(R.id.status_failed)
             holder.attachImageLoader(R.id.profile)
@@ -196,7 +197,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatFromTextBinding::bind)
-            binding.textContent.text = text.msg
+            EmotionHandle.showEmotionText(binding.textContent, text.msg)
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
         }
