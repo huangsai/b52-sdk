@@ -130,7 +130,6 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
     }
 
     override fun onBusEvent(event: Pair<Int, Any>) {
-        Timber.tag(SisterX.TAG).d("onBusEvent----%s", event.first)
         if (event.first == SisterX.BUS_MSG_STATUS) {
             chatListPresenter.onMessageStatusChanged(event.second.cast())
             return
