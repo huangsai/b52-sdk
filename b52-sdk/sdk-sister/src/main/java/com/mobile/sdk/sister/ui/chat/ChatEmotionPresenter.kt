@@ -38,7 +38,9 @@ class ChatEmotionPresenter(
             setLayout(R.layout.sister_popup_chat_emotion)
             cornerRadius = 10f
             arrowVisible = false
-            width = popWidth - 15
+            width = popWidth
+            marginLeft = 8
+            marginRight = 8
             setBackgroundColorResource(R.color.sister_color_black_transparent)
             setElevation(0)
         }

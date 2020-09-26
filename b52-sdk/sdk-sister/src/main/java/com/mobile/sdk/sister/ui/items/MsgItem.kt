@@ -9,6 +9,7 @@ import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
+import com.mobile.sdk.sister.data.db.USER
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.databinding.*
 import com.mobile.sdk.sister.ui.*
@@ -336,9 +337,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         @JvmStatic
         fun create(data: DbMessage): MsgItem {
             return when (data.type) {
-                TYPE_TEXT -> (if (data.isSister == 0) Text(data) else Text2(data)).ofText()
-                TYPE_IMAGE -> (if (data.isSister == 0) Image(data) else Image2(data)).ofImage()
-                TYPE_AUDIO -> (if (data.isSister == 0) Audio(data) else Audio2(data)).ofAudio()
+                TYPE_TEXT -> (if (data.isSister == USER) Text(data) else Text2(data)).ofText()
+                TYPE_IMAGE -> (if (data.isSister == USER) Image(data) else Image2(data)).ofImage()
+                TYPE_AUDIO -> (if (data.isSister == USER) Audio(data) else Audio2(data)).ofAudio()
                 TYPE_TIME -> Time(data).ofTime()
                 TYPE_SYSTEM -> System(data).ofSystem()
                 TYPE_DEPOSIT -> Deposit(data).ofDeposit()

@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.ext.glide.GlideApp
+import com.mobile.guava.android.context.hideSoftInput
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.mvvm.showDialogFragment
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
@@ -185,6 +186,7 @@ class ChatListPresenter(
             Msg.toast(R.string.sister_msg_content_empty_toast)
             return
         }
+        fragment.hideSoftInput()
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             val dbMessage = model.createDbMessage(
                 TYPE_TEXT,

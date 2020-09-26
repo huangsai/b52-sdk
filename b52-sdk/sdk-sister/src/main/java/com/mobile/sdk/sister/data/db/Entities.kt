@@ -7,6 +7,9 @@ import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+const val SISTER = 1
+const val USER = 0
+
 @Entity(
     tableName = "sister_message",
     indices = [Index(value = ["id"], unique = true)]
