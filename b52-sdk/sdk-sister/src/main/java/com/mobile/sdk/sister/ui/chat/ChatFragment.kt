@@ -77,7 +77,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
         chatEmotionPresenter = ChatEmotionPresenter(this, binding, fParent.model)
         binding.chatAdd.setOnClickListener(this)
         binding.chatEmotion.setOnClickListener(this)
-        // EmotionHandle.disableEmotion(binding.chatEt)
+        EmotionHandle.disableEmotion(binding.chatEt)
         binding.chatEt.addTextChangedListener(this)
         binding.chatEt.setOnKeyListener(this)
         fParent.dialog?.window?.decorView?.viewTreeObserver?.addOnGlobalLayoutListener(

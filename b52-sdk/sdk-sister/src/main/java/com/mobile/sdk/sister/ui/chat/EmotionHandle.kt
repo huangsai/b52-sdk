@@ -17,6 +17,7 @@ import timber.log.Timber
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
+
 object EmotionHandle {
 
     private const val PAGE_COUNT = 24
@@ -196,13 +197,15 @@ object EmotionHandle {
     fun disableEmotion(editText: EditText) {
         val emotionFilter =
             InputFilter { source, start, end, _, _, _ ->
-                for (index in start until end - 1) {
-                    val type = Character.getType(source[index])
-                    if (type == Character.SURROGATE.toInt()) {
-                        return@InputFilter ""
-                    }
+                val emoji = Pattern.compile(
+                    "[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]",
+                    Pattern.UNICODE_CASE or Pattern.CASE_INSENSITIVE
+                )
+                val emojiMatcher = emoji.matcher(source)
+                if (emojiMatcher.find()) {
+                    return@InputFilter ""
                 }
-                null
+                return@InputFilter null
             }
         editText.filters = arrayOf(emotionFilter)
     }
