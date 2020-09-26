@@ -18,6 +18,7 @@ import com.mobile.guava.android.mvvm.showDialogFragment
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
+import com.mobile.sdk.sister.base.EmojiUtils
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.http.TYPE_AUDIO
 import com.mobile.sdk.sister.data.http.TYPE_IMAGE
@@ -85,6 +86,7 @@ class ChatListPresenter(
         mMediaPlayer.setAudioAttributes(
             AudioAttributes.Builder().setContentType(CONTENT_TYPE_MUSIC).build()
         )
+        // EmojiUtils.disableEmoji(binding.chatEt)
     }
 
     override fun onDestroyView() {
