@@ -228,7 +228,9 @@ class ChatListPresenter(
     }
 
     private fun addMsgItem(item: MsgItem) {
-        if (!adapter.isEmpty()) {
+        if (adapter.isEmpty()) {
+            adapter.add(MsgItem.create(item.data.crossTime()))
+        } else {
             val lastItem = adapter.get<MsgItem>(adapter.itemCount - 1)
             if (item.data.time - lastItem.data.time >= 10 * 60 * 1000) {
                 adapter.add(MsgItem.create(lastItem.data.crossTime()))
