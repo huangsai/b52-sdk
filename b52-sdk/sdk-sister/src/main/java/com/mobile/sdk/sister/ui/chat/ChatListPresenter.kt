@@ -86,7 +86,7 @@ class ChatListPresenter(
         mMediaPlayer.setAudioAttributes(
             AudioAttributes.Builder().setContentType(CONTENT_TYPE_MUSIC).build()
         )
-        // EmojiUtils.disableEmoji(binding.chatEt)
+        EmojiUtils.disableEmoji(binding.chatEt)
     }
 
     override fun onDestroyView() {
