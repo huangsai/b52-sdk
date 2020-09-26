@@ -133,7 +133,8 @@ class SisterViewModel @Inject constructor(
             AppPreferences.userImage,
             AppPreferences.userId,
             2,
-            STATUS_MSG_PROCESSING
+            STATUS_MSG_PROCESSING,
+            0
         )
     }
 

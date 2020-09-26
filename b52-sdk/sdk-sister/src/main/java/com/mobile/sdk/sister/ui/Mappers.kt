@@ -104,7 +104,8 @@ fun ChatMsg.toDbMessage(): DbMessage {
         fromUserName,
         fromUserId,
         fromUserType,
-        STATUS_MSG_SUCCESS
+        STATUS_MSG_SUCCESS,
+        1
     )
 }
 

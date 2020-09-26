@@ -22,7 +22,8 @@ data class DbMessage(
     @ColumnInfo(name = "fromUsername") val fromUsername: String,
     @ColumnInfo(name = "fromUserId") val fromUserId: String,
     @ColumnInfo(name = "fromUserType") val fromUserType: Int,
-    @ColumnInfo(name = "status") var status: Int
+    @ColumnInfo(name = "status") var status: Int,
+    @ColumnInfo(name = "isSister") var isSister: Int
 ) {
     @JsonClass(generateAdapter = true)
     data class Text(@Json(name = "msg") val msg: String)
