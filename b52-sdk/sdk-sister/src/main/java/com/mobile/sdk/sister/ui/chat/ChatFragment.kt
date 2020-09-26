@@ -4,19 +4,15 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.*
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
 import com.mobile.sdk.sister.ui.views.MyKeyboardHelper
-import timber.log.Timber
 
-class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
+class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.OnKeyListener {
 
     private var _binding: SisterFragmentChatBinding? = null
     private val binding: SisterFragmentChatBinding get() = _binding!!
@@ -81,7 +77,9 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
         chatEmotionPresenter = ChatEmotionPresenter(this, binding, fParent.model)
         binding.chatAdd.setOnClickListener(this)
         binding.chatEmotion.setOnClickListener(this)
+        EmotionHandle.disableEmotion(binding.chatEt)
         binding.chatEt.addTextChangedListener(this)
+        binding.chatEt.setOnKeyListener(this)
         fParent.dialog?.window?.decorView?.viewTreeObserver?.addOnGlobalLayoutListener(
             globalLayoutListener
         )
@@ -101,6 +99,8 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.chatEt.setOnKeyListener(null)
+        binding.chatEt.removeTextChangedListener(this)
         chatHelpPresenter.onDestroyView()
         chatListPresenter.onDestroyView()
         chatEmotionPresenter.onDestroyView()
@@ -149,5 +149,13 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher {
     override fun afterTextChanged(s: Editable?) {
         binding.chatAdd.isSelected = textContent.isNotEmpty()
         chatEmotionPresenter.updateButtonStatus()
+    }
+
+    override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_DEL && event.action == KeyEvent.ACTION_UP) {
+            EmotionHandle.deleteEmotionText(binding.chatEt)
+            return false
+        }
+        return true
     }
 }

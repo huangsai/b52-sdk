@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.text.InputFilter
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ImageSpan
@@ -11,6 +12,8 @@ import android.widget.EditText
 import android.widget.TextView
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.sdk.sister.R
+import com.mobile.sdk.sister.SisterX
+import timber.log.Timber
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -132,20 +135,19 @@ object EmotionHandle {
     }
 
     fun deleteEmotionText(view: EditText) {
+        Timber.tag(SisterX.TAG).d("deleteEmotionText")
         val selectionStart: Int = view.selectionStart // 获取光标的位置
         val editableText = view.editableText
         val body = view.text
-        if (selectionStart > 0) {
-            if (body.isNotEmpty()) {
-                val tempStr = body.substring(0, selectionStart)
-                val startIndex = tempStr.lastIndexOf("[") // 获取最后一个表情开始的位置
-                val endIndex = tempStr.lastIndexOf("]") // 获取最后一个表情结束的位置
-                if (endIndex != -1 && selectionStart == endIndex + 1) { //最后一个字符是表情
-                    editableText.delete(startIndex, selectionStart)
-                    return
-                }
-                editableText.delete(selectionStart - 1, selectionStart)
+        if (selectionStart > 0 && body.isNotEmpty()) {
+            val tempStr = body.substring(0, selectionStart)
+            val startIndex = tempStr.lastIndexOf("[") // 获取最后一个表情开始的位置
+            val endIndex = tempStr.lastIndexOf("]") // 获取最后一个表情结束的位置
+            if (endIndex != -1 && selectionStart == endIndex + 1) { //最后一个字符是表情
+                editableText.delete(startIndex, selectionStart)
+                return
             }
+            editableText.delete(selectionStart - 1, selectionStart)
         }
     }
 
@@ -186,5 +188,22 @@ object EmotionHandle {
             }
         }
         return -1
+    }
+
+    /**
+     * 禁掉系统自带表情
+     */
+    fun disableEmotion(editText: EditText) {
+        val emotionFilter =
+            InputFilter { source, start, end, _, _, _ ->
+                for (index in start until end - 1) {
+                    val type = Character.getType(source[index])
+                    if (type == Character.SURROGATE.toInt()) {
+                        return@InputFilter ""
+                    }
+                }
+                null
+            }
+        editText.filters = arrayOf(emotionFilter)
     }
 }
