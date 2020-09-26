@@ -12,8 +12,6 @@ import android.widget.EditText
 import android.widget.TextView
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.sdk.sister.R
-import com.mobile.sdk.sister.SisterX
-import timber.log.Timber
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -22,12 +20,11 @@ object EmotionHandle {
 
     private const val PAGE_COUNT = 24
     const val ROW_COUNT = 9
-    private val sPatternEmotion: Pattern =
-        Pattern.compile("\\[([\u4e00-\u9fa5\\w])+\\]|[\\ud83c\\udc00-\\ud83c\\udfff]|[\\ud83d\\udc00-\\ud83d\\udfff]|[\\u2600-\\u27ff]")
+    private val sPatternEmotion: Pattern = Pattern.compile("\\[([\u4e00-\u9fa5\\w])+\\]")
 
     data class EmotionInfo(val textContent: String, val drawableId: Int)
 
-    private var emotionInfo: List<EmotionInfo> = listOf(
+    private val emotionInfo: List<EmotionInfo> = listOf(
         EmotionInfo("[emoji_01]", R.drawable.emoji_01),
         EmotionInfo("[emoji_02]", R.drawable.emoji_02),
         EmotionInfo("[emoji_03]", R.drawable.emoji_03),
@@ -136,7 +133,6 @@ object EmotionHandle {
     }
 
     fun deleteEmotionText(view: EditText) {
-        Timber.tag(SisterX.TAG).d("deleteEmotionText")
         val selectionStart: Int = view.selectionStart // 获取光标的位置
         val editableText = view.editableText
         val body = view.text
@@ -157,7 +153,7 @@ object EmotionHandle {
         val spannableString = SpannableString(text)
         while (matcherEmotion.find()) {
             val key: String = matcherEmotion.group()
-            val imgRes: Int = EmotionHandle.getImageByName(key)
+            val imgRes: Int = getImageByName(key)
             if (imgRes != -1) {
                 val start: Int = matcherEmotion.start()
                 val span = createImageSpanByRes(imgRes, AndroidX.myApp, textSize)
@@ -198,7 +194,7 @@ object EmotionHandle {
         val emotionFilter =
             InputFilter { source, start, end, _, _, _ ->
                 val emoji = Pattern.compile(
-                    "[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]",
+                    "[\\ud83c\\udc00-\\ud83c\\udfff]|[\\ud83d\\udc00-\\ud83d\\udfff]|[\\u2600-\\u27ff]",
                     Pattern.UNICODE_CASE or Pattern.CASE_INSENSITIVE
                 )
                 val emojiMatcher = emoji.matcher(source)
