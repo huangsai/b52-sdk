@@ -34,7 +34,10 @@ class VoiceRecordButton @JvmOverloads constructor(
             if (mCallback?.isIntercept()!!) {
                 return super.dispatchTouchEvent(event)
             }
-            mCallback?.onStartAudio()
+            mCallback?.let {
+                it.onStartAudio()
+                it.onRestoreNormalTouchArea()
+            }
             return true
         } else if (action == MotionEvent.ACTION_MOVE) {
             rawX = event.rawX
