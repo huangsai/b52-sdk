@@ -2,7 +2,7 @@ package com.mobile.sdk.sister.data.db
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.mobile.guava.https.SqlDao
+import com.mobile.guava.data.SqlDao
 
 @Dao
 interface MessageDao : SqlDao<DbMessage> {

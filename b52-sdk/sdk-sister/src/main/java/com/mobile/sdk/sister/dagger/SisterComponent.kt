@@ -2,8 +2,8 @@ package com.mobile.sdk.sister.dagger
 
 import android.app.Application
 import com.mobile.guava.android.mvvm.dagger.ViewModelFactoryComponent
-import com.mobile.guava.https.HttpsComponent
-import com.mobile.guava.https.PlatformContext
+import com.mobile.guava.data.DataComponent
+import com.mobile.guava.data.PlatformContext
 import com.mobile.sdk.sister.data.SisterRepository
 import com.mobile.sdk.sister.data.db.AppDatabase
 import com.mobile.sdk.sister.data.file.PlatformPreferences
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Component(modules = [SisterModule::class])
 @Singleton
-interface SisterComponent : HttpsComponent, ViewModelFactoryComponent {
+interface SisterComponent : DataComponent, ViewModelFactoryComponent {
 
     fun sisterRepository(): SisterRepository
 

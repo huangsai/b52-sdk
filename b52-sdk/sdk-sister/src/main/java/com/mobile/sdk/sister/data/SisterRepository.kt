@@ -1,7 +1,7 @@
 package com.mobile.sdk.sister.data
 
-import com.mobile.guava.https.PlatformContext
-import com.mobile.guava.https.toSource
+import com.mobile.guava.data.PlatformContext
+import com.mobile.guava.data.toSource
 import com.mobile.guava.jvm.Guava
 import com.mobile.guava.jvm.domain.Source
 import com.mobile.sdk.sister.data.db.AppDatabase

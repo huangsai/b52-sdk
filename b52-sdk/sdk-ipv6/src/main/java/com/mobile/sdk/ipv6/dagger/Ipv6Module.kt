@@ -1,11 +1,10 @@
 package com.mobile.sdk.ipv6.dagger
 
-import com.mobile.guava.android.mvvm.dagger.SingletonScopeViewModelFactoryBinder
-import com.mobile.guava.https.HttpsModule
-import com.mobile.guava.https.SimpleHttpsModule
+import com.mobile.guava.data.DataModule
+import com.mobile.guava.data.SimpleDataModule
 import com.mobile.sdk.ipv6.data.ApiConverterFactory
-import com.mobile.sdk.ipv6.data.HostSelectionInterceptor
 import com.mobile.sdk.ipv6.data.DataService
+import com.mobile.sdk.ipv6.data.HostSelectionInterceptor
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -20,9 +19,9 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 
 @Module
-class Ipv6Module : HttpsModule {
+class Ipv6Module : DataModule {
 
-    private val delegate = SimpleHttpsModule()
+    private val delegate = SimpleDataModule()
 
     @Provides
     @Singleton

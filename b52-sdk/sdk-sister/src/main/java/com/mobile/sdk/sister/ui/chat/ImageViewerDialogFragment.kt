@@ -10,7 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.viewpager2.widget.ViewPager2
 import com.mobile.ext.glide.GlideApp
 import com.mobile.guava.android.mvvm.BaseAppCompatDialogFragment
-import com.mobile.guava.https.Values
+import com.mobile.guava.data.Values
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentImageViewerDialogBinding
 import com.mobile.sdk.sister.ui.items.ViewerImageItem

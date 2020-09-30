@@ -2,7 +2,7 @@ package com.mobile.sdk.ipv6.db
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.mobile.guava.https.SqlDao
+import com.mobile.guava.data.SqlDao
 
 @Dao
 interface IpDao : SqlDao<DbIp> {

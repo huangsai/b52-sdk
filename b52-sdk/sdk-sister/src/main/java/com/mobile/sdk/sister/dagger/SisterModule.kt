@@ -1,8 +1,8 @@
 package com.mobile.sdk.sister.dagger
 
 import com.mobile.guava.android.mvvm.dagger.SingletonScopeViewModelFactoryBinder
-import com.mobile.guava.https.HttpsModule
-import com.mobile.guava.https.SimpleHttpsModule
+import com.mobile.guava.data.DataModule
+import com.mobile.guava.data.SimpleDataModule
 import com.mobile.sdk.sister.data.http.ApiConverterFactory
 import com.mobile.sdk.sister.data.http.DataService
 import com.mobile.sdk.sister.data.http.HostSelectionInterceptor
@@ -20,9 +20,9 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 
 @Module(includes = [SisterBinder::class, SingletonScopeViewModelFactoryBinder::class])
-class SisterModule : HttpsModule {
+class SisterModule : DataModule {
 
-    private val delegate = SimpleHttpsModule()
+    private val delegate = SimpleDataModule()
 
     @Provides
     @Singleton
