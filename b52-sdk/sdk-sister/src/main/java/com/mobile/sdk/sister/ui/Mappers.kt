@@ -14,91 +14,105 @@ const val MSG_TIME_DIFF = 10 * 60 * 1000L // 消息显示时间差
 fun String.jsonToText(): DbMessage.Text {
     return SisterX.component.json()
         .adapter(DbMessage.Text::class.java)
+        .lenient()
         .fromJson(this)!!
 }
 
 fun String.jsonToImage(): DbMessage.Image {
     return SisterX.component.json()
         .adapter(DbMessage.Image::class.java)
+        .lenient()
         .fromJson(this)!!
 }
 
 fun String.jsonToAudio(): DbMessage.Audio {
     return SisterX.component.json()
         .adapter(DbMessage.Audio::class.java)
+        .lenient()
         .fromJson(this)!!
 }
 
 fun String.jsonToDeposit(): DbMessage.Deposit {
     return SisterX.component.json()
         .adapter(DbMessage.Deposit::class.java)
+        .lenient()
         .fromJson(this)!!
 }
 
 fun String.jsonToTime(): DbMessage.Time {
     return SisterX.component.json()
         .adapter(DbMessage.Time::class.java)
+        .lenient()
         .fromJson(this)!!
 }
 
 fun String.jsonToSystem(): DbMessage.System {
     return SisterX.component.json()
         .adapter(DbMessage.System::class.java)
+        .lenient()
         .fromJson(this)!!
 }
 
 fun String.jsonToUpgrade(): DbMessage.Upgrade {
     return SisterX.component.json()
         .adapter(DbMessage.Upgrade::class.java)
+        .lenient()
         .fromJson(this)!!
 }
 
 fun DbMessage.Text.toJson(): String {
     return SisterX.component.json()
         .adapter(DbMessage.Text::class.java)
+        .lenient()
         .toJson(this)
 }
 
 fun DbMessage.Image.toJson(): String {
     return SisterX.component.json()
         .adapter(DbMessage.Image::class.java)
+        .lenient()
         .toJson(this)
 }
 
 fun DbMessage.Audio.toJson(): String {
     return SisterX.component.json()
         .adapter(DbMessage.Audio::class.java)
+        .lenient()
         .toJson(this)
 }
 
 fun DbMessage.Deposit.toJson(): String {
     return SisterX.component.json()
         .adapter(DbMessage.Deposit::class.java)
+        .lenient()
         .toJson(this)
 }
 
 fun DbMessage.Time.toJson(): String {
     return SisterX.component.json()
         .adapter(DbMessage.Time::class.java)
+        .lenient()
         .toJson(this)
 }
 
 fun DbMessage.System.toJson(): String {
     return SisterX.component.json()
         .adapter(DbMessage.System::class.java)
+        .lenient()
         .toJson(this)
 }
 
 fun DbMessage.Upgrade.toJson(): String {
     return SisterX.component.json()
         .adapter(DbMessage.Upgrade::class.java)
+        .lenient()
         .toJson(this)
 }
-
 
 fun DbMessage.toJson(): String {
     return SisterX.component.json()
         .adapter(DbMessage::class.java)
+        .lenient()
         .toJson(this)
 }
 

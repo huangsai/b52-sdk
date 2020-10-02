@@ -336,14 +336,18 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         @JvmStatic
         fun create(data: DbMessage): MsgItem {
-            return when (data.type) {
-                TYPE_TEXT -> (if (data.isSister == USER) Text(data) else Text2(data)).ofText()
-                TYPE_IMAGE -> (if (data.isSister == USER) Image(data) else Image2(data)).ofImage()
-                TYPE_AUDIO -> (if (data.isSister == USER) Audio(data) else Audio2(data)).ofAudio()
-                TYPE_TIME -> Time(data).ofTime()
-                TYPE_SYSTEM -> System(data).ofSystem()
-                TYPE_DEPOSIT -> Deposit(data).ofDeposit()
-                else -> Upgrade(data).ofUpgrade()
+            return try {
+                when (data.type) {
+                    TYPE_TEXT -> (if (data.isSister == USER) Text(data) else Text2(data)).ofText()
+                    TYPE_IMAGE -> (if (data.isSister == USER) Image(data) else Image2(data)).ofImage()
+                    TYPE_AUDIO -> (if (data.isSister == USER) Audio(data) else Audio2(data)).ofAudio()
+                    TYPE_TIME -> Time(data).ofTime()
+                    TYPE_SYSTEM -> System(data).ofSystem()
+                    TYPE_DEPOSIT -> Deposit(data).ofDeposit()
+                    else -> Upgrade(data).ofUpgrade()
+                }
+            } catch (e: Exception) {
+                Upgrade(data).ofUpgrade()
             }
         }
     }
