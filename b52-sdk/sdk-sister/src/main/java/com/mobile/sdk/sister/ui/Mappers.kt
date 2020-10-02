@@ -9,7 +9,7 @@ import com.mobile.sdk.sister.data.http.TYPE_TIME
 import com.mobile.sdk.sister.proto.ChatMsg
 import com.mobile.sdk.sister.proto.ChatReq
 
-const val MSG_TIME_DIFF = 10 * 60 * 1000L //消息显示时间差
+const val MSG_TIME_DIFF = 10 * 60 * 1000L // 消息显示时间差
 
 fun String.jsonToText(): DbMessage.Text {
     return SisterX.component.json()
@@ -95,6 +95,13 @@ fun DbMessage.Upgrade.toJson(): String {
         .toJson(this)
 }
 
+
+fun DbMessage.toJson(): String {
+    return SisterX.component.json()
+        .adapter(DbMessage::class.java)
+        .toJson(this)
+}
+
 fun ChatMsg.toDbMessage(): DbMessage {
     return DbMessage(
         0L,
@@ -118,7 +125,8 @@ fun DbMessage.toChatRes(): ChatReq {
         .msgType(type)
         .sayContent(content)
         .chatType(1)
-        .toUserId(toUserId.toString())
+        .toUserId(toUserId)
+        .chatId(AppPreferences.chatId)
         .build()
 }
 

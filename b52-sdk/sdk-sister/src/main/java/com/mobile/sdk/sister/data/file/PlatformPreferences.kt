@@ -13,4 +13,8 @@ interface PlatformPreferences {
     var token: String
 
     var salt: String
+
+    var deviceId: String
+
+    var chatId: Long
 }

@@ -1,7 +1,9 @@
 package com.mobile.sdk.sister.data.file
 
+import com.mobile.guava.android.log.uniqueId
 import com.mobile.guava.android.mvvm.AndroidX
 import com.tencent.mmkv.MMKV
+import java.util.*
 
 object AppPreferences : PlatformPreferences {
 
@@ -44,5 +46,28 @@ object AppPreferences : PlatformPreferences {
         get() = prefs.decodeString("salt", "")
         set(value) {
             prefs.encode("salt", value)
+        }
+
+    override var deviceId: String
+        get() {
+            var value = prefs.decodeString("deviceId", "")
+            if (value.isNullOrEmpty()) {
+                value = try {
+                    uniqueId(AndroidX.myApp)
+                } catch (e: Exception) {
+                    UUID.randomUUID().toString()
+                }
+            }
+            prefs.encode("deviceId", value)
+            return value
+        }
+        set(value) {
+            prefs.encode("deviceId", value)
+        }
+
+    override var chatId: Long
+        get() = prefs.decodeLong("chatId", 0L)
+        set(value) {
+            prefs.encode("chatId", value)
         }
 }

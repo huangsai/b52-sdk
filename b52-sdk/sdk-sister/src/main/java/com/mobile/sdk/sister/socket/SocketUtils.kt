@@ -14,6 +14,7 @@ import com.mobile.sdk.sister.proto.ResponseResult
 import com.mobile.sdk.sister.ui.items.MsgItem
 import com.mobile.sdk.sister.ui.toChatRes
 import com.mobile.sdk.sister.ui.toDbMessage
+import com.mobile.sdk.sister.ui.toJson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -53,6 +54,7 @@ object SocketUtils {
             .userName(AppPreferences.username)
             .token(AppPreferences.token)
             .salt(AppPreferences.salt)
+            .device(AppPreferences.deviceId)
             .chatType(1)
             .userType(2)
             .build()
@@ -70,7 +72,7 @@ object SocketUtils {
     @WorkerThread
     fun postMessage(dbMessage: DbMessage) {
         ensureWorkThread()
-        val protoMessage = if (dbMessage.toUserId.isEmpty()) {
+        val nextMessage = if (dbMessage.toUserId.isEmpty()) {
             dbMessage.copy(toUserId = "0")
         } else {
             dbMessage
@@ -78,10 +80,11 @@ object SocketUtils {
         CommonMessage.Builder()
             .bizId(IM_BUZ_MSG)
             .msgType(2)
-            .content(protoMessage.toChatRes().encodeByteString())
+            .content(nextMessage.toChatRes().encodeByteString())
             .build()
             .let {
                 if (true == SisterX.isSocketConnected.value) {
+                    Timber.tag(SisterX.TAG).d("发送->%s", nextMessage.toJson())
                     AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
                 } else {
                     dbMessage.status = STATUS_MSG_FAILED
@@ -104,6 +107,7 @@ object SocketUtils {
             IM_BUZ_CLOSE_BY_SYSTEM -> {
             }
             IM_BUZ_NOTIFICATION -> ChatMsg.ADAPTER.decode(commonMessage.content).let {
+                SisterX.toUserId = it.fromUserId
                 insertDbMessage(it.toDbMessage())
             }
             IM_BUZ_MSG -> ResponseResult.ADAPTER.decode(commonMessage.content).let {
