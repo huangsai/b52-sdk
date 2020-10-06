@@ -22,12 +22,6 @@ const val STATUS_MSG_SUCCESS = 2
 const val STATUS_MSG_FAILED = 3
 
 @JsonClass(generateAdapter = true)
-data class ApiHelp(
-    @Json(name = "type") val type: Int,
-    @Json(name = "content") val content: String
-)
-
-@JsonClass(generateAdapter = true)
 data class ApiNotice(
     @Json(name = "id") val id: Long,
     @Json(name = "content") val content: String
@@ -52,3 +46,16 @@ data class ApiUser(
 
 @JsonClass(generateAdapter = true)
 data class ApiFile(@Json(name = "url") val url: String)
+
+@JsonClass(generateAdapter = true)
+data class ApiSysReply(
+    @Json(name = "flag") val flag: Int,
+    @Json(name = "words") val words: String,
+    @Json(name = "content") val content: String,
+    @Json(name = "validStatus") val validStatus: Int
+) {
+    @JsonClass(generateAdapter = true)
+    data class Req(
+        @Json(name = "flag") val flag: Int
+    )
+}

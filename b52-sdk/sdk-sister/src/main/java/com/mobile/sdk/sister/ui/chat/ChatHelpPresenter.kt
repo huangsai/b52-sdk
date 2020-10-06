@@ -6,8 +6,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
+import com.mobile.guava.jvm.domain.Source
 import com.mobile.sdk.sister.R
-import com.mobile.sdk.sister.data.http.ApiHelp
+import com.mobile.sdk.sister.data.http.ApiSysReply
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.items.HelpItem
@@ -44,16 +45,19 @@ class ChatHelpPresenter(
 
     override fun load() {
         fragment.lifecycleScope.launch(Dispatchers.IO) {
-            val items = listOf(
-                ApiHelp(1, "充值方式"),
-                ApiHelp(2, "游戏准入"),
-                ApiHelp(3, "代理模式"),
-                ApiHelp(4, "分享返利"),
-            ).map {
-                HelpItem(it)
-            }
-            withContext(Dispatchers.IO) {
-                adapter.addAll(items)
+            val source = model.getSysReply()
+            withContext(Dispatchers.Main) {
+                when (source) {
+                    is Source.Success -> {
+                        val items = source.requireData().map {
+                            HelpItem(it)
+                        }
+                        adapter.addAll(items)
+                    }
+                    is Source.Error -> {
+                        Msg.toast(source.requireError().message!!)
+                    }
+                }
             }
         }
     }
@@ -71,8 +75,8 @@ class ChatHelpPresenter(
         binding.helpRecycler.adapter = null
     }
 
-    private fun sendMsg(data: ApiHelp) {
-        Msg.toast("发送快捷功能消息-->" + data.content)
+    private fun sendMsg(data: ApiSysReply) {
+        fragment.chatListPresenter.postText(data.words)
     }
 
     override fun load(view: ImageView, holder: AdapterViewHolder) {

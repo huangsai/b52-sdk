@@ -31,6 +31,7 @@ class HostSelectionInterceptor : Interceptor {
         return when {
             original.contains("member/getToken") -> true
             original.contains("oss/uploadFiles") -> true
+            original.contains("sysReply/listSysReply") -> true
             else -> false
         }
     }

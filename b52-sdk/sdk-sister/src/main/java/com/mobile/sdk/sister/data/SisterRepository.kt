@@ -7,10 +7,7 @@ import com.mobile.guava.jvm.domain.Source
 import com.mobile.sdk.sister.data.db.AppDatabase
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.PlatformPreferences
-import com.mobile.sdk.sister.data.http.ApiUser
-import com.mobile.sdk.sister.data.http.DataService
-import com.mobile.sdk.sister.data.http.STATUS_MSG_FAILED
-import com.mobile.sdk.sister.data.http.STATUS_MSG_PROCESSING
+import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.ui.MSG_TIME_DIFF
 import com.mobile.sdk.sister.ui.crossTime
 import okhttp3.RequestBody
@@ -95,6 +92,14 @@ class SisterRepository @Inject constructor(
             dataService.uploadFile(body).execute()?.body()?.url ?: ""
         } catch (e: Exception) {
             ""
+        }
+    }
+
+    suspend fun sysReply(): Source<List<ApiSysReply>> {
+        return try {
+            dataService.sysReply(1).execute().toSource()
+        } catch (e: Exception) {
+            errorSource(e)
         }
     }
 

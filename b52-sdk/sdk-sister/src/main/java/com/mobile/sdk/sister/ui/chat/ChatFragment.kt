@@ -120,7 +120,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
         when (v!!.id) {
             R.id.chat_add -> {
                 if (binding.chatAdd.isSelected) {
-                    chatListPresenter.postText()
+                    chatListPresenter.postText(textContent)
                 } else {
                     chatMorePresenter.showPop()
                 }
