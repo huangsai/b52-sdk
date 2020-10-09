@@ -17,4 +17,7 @@ interface DataService {
 
     @POST("/oss/uploadFiles")
     fun uploadFile(@Body body: RequestBody): Call<ApiFile>
+
+    @GET("/sysReply/listSysReply")
+    fun sysReply(@Query("flag") flag: Int): Call<List<ApiSysReply>>
 }
