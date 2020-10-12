@@ -62,5 +62,5 @@ message CloseChatMsg{
 }
 
 message ChatTimeOutMsg{
-  required int64 chatId = 2;
+  required int64 chatId = 1;
 }
