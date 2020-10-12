@@ -60,3 +60,7 @@ message CloseChatMsg{
   required string fromUserId = 1;
   required int64 chatId = 2;
 }
+
+message ChatTimeOutMsg{
+  required int64 chatId = 2;
+}

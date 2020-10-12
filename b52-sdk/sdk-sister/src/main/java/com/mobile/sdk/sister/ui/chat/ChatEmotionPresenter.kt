@@ -94,5 +94,4 @@ class ChatEmotionPresenter(
 
     override fun onDestroy() {
     }
-
 }
