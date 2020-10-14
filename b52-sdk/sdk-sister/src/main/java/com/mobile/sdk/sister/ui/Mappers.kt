@@ -2,7 +2,6 @@ package com.mobile.sdk.sister.ui
 
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
-import com.mobile.sdk.sister.data.db.SISTER
 import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.data.http.STATUS_MSG_SUCCESS
 import com.mobile.sdk.sister.data.http.TYPE_TIME
@@ -124,12 +123,11 @@ fun ChatMsg.toDbMessage(): DbMessage {
         AppPreferences.userId,
         sayContent,
         sayTime,
-        fromImgUrl,
-        fromUserName,
-        fromUserId,
-        fromUserType,
-        STATUS_MSG_SUCCESS,
-        SISTER
+        fromImgUrl.orEmpty(),
+        fromUserName.orEmpty(),
+        fromUserId.orEmpty(),
+        1,
+        STATUS_MSG_SUCCESS
     )
 }
 
@@ -138,7 +136,7 @@ fun DbMessage.toChatRes(): ChatReq {
         .id(id)
         .msgType(type)
         .sayContent(content)
-        .chatType(1)
+        .chatType(0)
         .toUserId(toUserId)
         .chatId(AppPreferences.chatId)
         .build()

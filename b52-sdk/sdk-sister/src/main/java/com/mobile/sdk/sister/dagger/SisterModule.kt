@@ -73,7 +73,7 @@ class SisterModule : DataModule {
             .connectTimeout(5, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
-            .pingInterval(180 * 1000, TimeUnit.MILLISECONDS)
+            .pingInterval(55 * 1000, TimeUnit.MILLISECONDS)
             .build()
     }
 

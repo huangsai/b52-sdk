@@ -13,14 +13,14 @@ message CommonMessage {
 message ChatMsg{
   required string  id = 1 ;
   required string sayContent = 2;
-  required int32 chatType = 3;
+  optional int32 chatType = 3;// 0是普通；1是充值
   required int64 sayTime = 4;
-  required string fromImgUrl = 5;
-  required int32 fromUserType = 6;
-  required string fromUserName = 7;
-  required string fromUserId = 8;
+  optional string fromImgUrl = 5;
+  required int32 fromUserType = 6;// 0会员；1客服
+  optional string fromUserName = 7;
+  optional string fromUserId = 8;
   required int32 msgType = 9;
-  required int64 chatId = 10;
+  optional int64 chatId = 10;
 }
 
 message ChatReq{

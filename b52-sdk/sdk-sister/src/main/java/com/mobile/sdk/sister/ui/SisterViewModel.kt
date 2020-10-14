@@ -12,7 +12,6 @@ import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.base.InputStreamRequestBody
 import com.mobile.sdk.sister.data.SisterRepository
 import com.mobile.sdk.sister.data.db.DbMessage
-import com.mobile.sdk.sister.data.db.USER
 import com.mobile.sdk.sister.data.file.AppPreferences
 import com.mobile.sdk.sister.data.http.ApiNotice
 import com.mobile.sdk.sister.data.http.ApiSysReply
@@ -142,9 +141,8 @@ class SisterViewModel @Inject constructor(
             AppPreferences.userImage,
             AppPreferences.username,
             AppPreferences.userId,
-            2,
+            0,
             STATUS_MSG_PROCESSING,
-            USER
         )
     }
 

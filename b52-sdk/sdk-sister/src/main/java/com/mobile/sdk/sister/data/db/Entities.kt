@@ -7,9 +7,6 @@ import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-const val SISTER = 1
-const val USER = 0
-
 @Entity(
     tableName = "sister_message",
     indices = [Index(value = ["id"], unique = true)]
@@ -25,9 +22,11 @@ data class DbMessage(
     @ColumnInfo(name = "fromUsername") val fromUsername: String,
     @ColumnInfo(name = "fromUserId") val fromUserId: String,
     @ColumnInfo(name = "fromUserType") val fromUserType: Int,
-    @ColumnInfo(name = "status") var status: Int,
-    @ColumnInfo(name = "isSister") var isSister: Int
+    @ColumnInfo(name = "status") var status: Int
 ) {
+
+    fun isSister():Boolean = fromUserType == 1
+
     @JsonClass(generateAdapter = true)
     data class Text(@Json(name = "msg") val msg: String)
 
