@@ -77,7 +77,7 @@ object AppWebSocket : LongLiveSocket() {
                 socket.close(1000, "reconnect")
             } else {
                 request = Request.Builder()
-                    .url("ws://192.168.2.91:30302/csms")
+                    .url(SisterX.socketServer)
                     .build()
             }
             realSocket = SisterX.component.okHttpClient().newWebSocket(

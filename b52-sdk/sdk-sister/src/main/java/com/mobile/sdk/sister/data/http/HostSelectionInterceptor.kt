@@ -1,5 +1,6 @@
 package com.mobile.sdk.sister.data.http
 
+import com.mobile.sdk.sister.SisterX
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
@@ -24,7 +25,7 @@ class HostSelectionInterceptor : Interceptor {
     }
 
     private fun createHttpUrl(original: String): HttpUrl {
-        return "http://192.168.2.91:30301/".toHttpUrl()
+        return SisterX.httpServer.toHttpUrl()
     }
 
     private fun isHttpApi(original: String): Boolean {

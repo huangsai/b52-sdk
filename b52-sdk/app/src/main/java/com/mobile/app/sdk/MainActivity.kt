@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.mobile.app.sdk.databinding.ActivityMainBinding
 import com.mobile.sdk.sister.SisterX
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

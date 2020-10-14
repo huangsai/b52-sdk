@@ -50,10 +50,16 @@ data class ApiFile(@Json(name = "url") val url: String)
 
 @JsonClass(generateAdapter = true)
 data class ApiSysReply(
+    @Json(name = "id") val id: Long,
+    @Json(name = "delFlag") val delFlag: Int,
     @Json(name = "flag") val flag: Int,
     @Json(name = "words") val words: String,
     @Json(name = "content") val content: String,
-    @Json(name = "validStatus") val validStatus: Int
+    @Json(name = "createBy") val createBy: String,
+    @Json(name = "updateBy") val updateBy: String,
+    @Json(name = "createTime") val createTime: String,
+    @Json(name = "updateTime") val updateTime: String,
+    @Json(name = "version") val version: Int
 ) {
     @JsonClass(generateAdapter = true)
     data class Req(

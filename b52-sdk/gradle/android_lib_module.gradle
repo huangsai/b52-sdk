@@ -3,6 +3,9 @@ apply from: "../gradle/android_module.gradle"
 apply plugin: 'com.vanniktech.maven.publish'
 
 android {
+    libraryVariants.all {
+        it.generateBuildConfig.enabled = false
+    }
 }
 
 Properties properties = new Properties()

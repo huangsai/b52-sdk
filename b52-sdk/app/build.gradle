@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
+
 apply from: '../gradle/android_module.gradle'
 
 android {
+
     defaultConfig {
         applicationId "com.mobile.app.sdk"
     }
 
     signingConfigs {
-
         debug {
             storeFile file(RELEASE_STORE_FILE)
             storePassword RELEASE_STORE_PASSWORD
