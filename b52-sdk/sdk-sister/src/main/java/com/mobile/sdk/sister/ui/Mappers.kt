@@ -123,9 +123,9 @@ fun ChatMsg.toDbMessage(): DbMessage {
         AppPreferences.userId,
         sayContent,
         sayTime,
-        fromImgUrl.orEmpty(),
-        fromUserName.orEmpty(),
-        fromUserId.orEmpty(),
+        fromImgUrl,
+        fromUserName,
+        fromUserId,
         1,
         STATUS_MSG_SUCCESS
     )

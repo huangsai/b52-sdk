@@ -54,7 +54,7 @@ object SocketUtils {
             .userName(AppPreferences.username)
             .token(AppPreferences.token)
             .salt(AppPreferences.salt)
-            .device(AppPreferences.deviceId)
+            .deviceId(AppPreferences.deviceId)
             .chatType(0)
             .userType(0)
             .build()

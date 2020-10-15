@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package com.facebook.sdk.ip.api;
+
+option java_package = "com.mobile.sdk.ipv6.proto";
+
+// 通用pb协议
+message CommonMessage{
+  int32 bizId = 1;
+  // 消息类型1心跳2业务消息
+  int32 msgType = 2;
+  // 数据
+  bytes content = 3;
+}

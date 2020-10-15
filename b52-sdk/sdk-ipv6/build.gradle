@@ -18,5 +18,5 @@ wire {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api 'com.squareup.wire:wire-runtime:3.3.0'
+    api 'com.squareup.wire:wire-runtime:3.4.0'
 }
