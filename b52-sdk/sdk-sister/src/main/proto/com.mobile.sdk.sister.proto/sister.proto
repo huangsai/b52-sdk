@@ -16,48 +16,48 @@ message CommonMessage{
 // 发送聊天消息30001
 message ChatReq{
   // 消息id
-  string  id=1 ;
+  string id = 1 ;
   // 聊天内容
-  string sayContent=2;
-  string toUserId= 3;
+  string sayContent = 2;
+  string toUserId = 3;
   // 0普通1充值
-  int32 chatType=4;
+  int32 chatType = 4;
   // 消息类型1文本2图片3语音4充值5系统回复6留言
-  int32 msgType=5;
+  int32 msgType = 5;
   // 会话id
   int64 chatId = 6;
 }
 
 // 消息通知30002
 message ChatMsg{
-  string  id=1 ;
+  string id = 1 ;
   // 内容
-  string sayContent=2;
+  string sayContent = 2;
   // 0普通1充值
-  int32 chatType=3;
+  int32 chatType = 3;
   // 发言时间
-  int64 sayTime =4;
-  string fromImgUrl=5;
+  int64 sayTime = 4;
+  string fromImgUrl = 5;
   // 0会员1客服
-  int32 fromUserType=6;
-  string fromUserName=7;
-  string fromUserId=8;
+  int32 fromUserType = 6;
+  string fromUserName = 7;
+  string fromUserId = 8;
   // 消息类型1文本2图片3语音4充值5系统回复
-  int32 msgType=9;
+  int32 msgType = 9;
   // 会话id
   int64 chatId = 10;
 }
 
 // 关闭当前聊天30003
 message CloseChatReq{
-  string toUserId= 1;
+  string toUserId = 1;
   // 会话id
   int64 chatId = 2;
 }
 
 // 关闭会话通知30004
 message CloseChatMsg{
-  string fromUserId=1;
+  string fromUserId = 1;
   // 会话id
   int64 chatId = 2;
 }
@@ -71,17 +71,17 @@ message ChatTimeOutMsg{
 // 登录20001
 message LoginReq{
   // 用户名
-  string  userName=1;
+  string userName = 1;
   // token
-  string  token=2;
+  string token = 2;
   // 0会员1客服
-  int32  userType=3;
+  int32 userType = 3;
   // 0普通1充值
-  int32 chatType=4;
+  int32 chatType = 4;
   // token验证盐
-  string salt=5 ;
+  string salt = 5 ;
   // 设备ID
-  string deviceId =6 ;
+  string deviceId = 6 ;
 }
 // 登出20002
 message LogoutReq{
@@ -89,9 +89,9 @@ message LogoutReq{
 
 message ResponseResult{
   // 1成功0失败
-  int32 result=1;
+  int32 result = 1;
   // 对应 协议号
-  int32 biz=2;
-  string msg=3;
-  string  id=4;
+  int32 biz = 2;
+  string msg = 3;
+  string id = 4;
 }

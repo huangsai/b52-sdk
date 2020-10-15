@@ -113,8 +113,10 @@ object SocketUtils {
                 insertDbMessage(it.toDbMessage())
             }
             IM_BUZ_MSG -> ResponseResult.ADAPTER.decode(commonMessage.content).let {
-                setDbMessageSuccess(it.id!!)
-                Timber.tag(SisterX.TAG).d("发送成功->%s", it.id)
+                if (!it.id.isNullOrEmpty()) {
+                    setDbMessageSuccess(it.id)
+                    Timber.tag(SisterX.TAG).d("发送成功->%s", it.id)
+                }
             }
             else -> Timber.tag(SisterX.TAG).d("未知socket业务消息")
         }
