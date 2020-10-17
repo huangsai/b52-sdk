@@ -59,13 +59,14 @@ buildscript {
                 'flexbox'          : '2.0.1',
                 'fabric'           : '1.4.8',
                 'store'            : '4.0.0-beta01',
-                'theGuava'         : '0.2.1',
-                'theExt'           : '0.0.3',
-                'theSdk'           : '0.0.3',
+                'theGuava'         : '0.2.2',
+                'theExt'           : '0.0.4',
+                'theSdk'           : '0.0.4',
                 'pacificAdapter'   : '3.0.3',
                 'exoplayer'        : '2.12.0',
 
                 'androidX'         : [
+                        'compose'                   : '1.0.0-alpha05',
                         'activity'                  : '1.2.0-beta01',
                         'annotation'                : '1.2.0-alpha01',
                         'annotationExperimental'    : '1.0.0',
@@ -257,10 +258,16 @@ buildscript {
                         'guavaMvvm'     : "com.mobile.guava:guava-android-mvvm:${versions.theGuava}",
                         'extGlide'      : "com.mobile.ext:ext-glide:${versions.theExt}",
                         'extRxjava3'    : "com.mobile.ext:ext-rxjava3:${versions.theExt}",
+                        'extExo'    : "com.mobile.ext:ext-exo:${versions.theExt}",
                         'sdkIpv6'       : "com.mobile.sdk:sdk-ipv6:${versions.theSdk}",
                         'sdkSister'       : "com.mobile.sdk:sdk-sister:${versions.theSdk}"
                 ],
                 'androidX'         : [
+                        'compose'            : [
+                                'ui'       : "androidx.compose.ui:ui:${versions.androidX.compose}",
+                                'material' : "androidx.compose.material:material:${versions.androidX.compose}",
+                                'uiTooling': "androidx.ui:ui-tooling:${versions.androidX.compose}",
+                        ],
                         'activity'           : [
                                 'activity': "androidx.activity:activity:${versions.androidX.activity}",
                                 'ktx'     : "androidx.activity:activity-ktx:${versions.androidX.activity}",

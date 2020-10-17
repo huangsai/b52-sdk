@@ -18,9 +18,17 @@ wire {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.github.skydoves:balloon:1.2.2'
+
+    implementation dep.company.guavaJvm
+    implementation dep.company.guavaAndroid
+    implementation dep.company.guavaMvvm
+    implementation dep.company.guavaAndroidUi
+    implementation dep.company.guavaData
+
     implementation dep.company.extGlide
     implementation dep.company.extRxjava3
+
+    implementation 'com.github.skydoves:balloon:1.2.2'
     implementation 'it.sephiroth.android.library.imagezoom:imagezoom:2.3.0'
 
     api 'com.squareup.wire:wire-runtime:3.4.0'

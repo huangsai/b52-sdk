@@ -109,7 +109,7 @@ object SocketUtils {
             IM_BUZ_CHAT_TIMEOUT -> {
             }
             IM_BUZ_NOTIFICATION -> ChatMsg.ADAPTER.decode(commonMessage.content).let {
-                SisterX.toUserId = it.fromUserId.orEmpty()
+                SisterX.toUserId = it.fromUserId
                 insertDbMessage(it.toDbMessage())
             }
             IM_BUZ_MSG -> ResponseResult.ADAPTER.decode(commonMessage.content).let {

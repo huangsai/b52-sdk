@@ -18,5 +18,10 @@ wire {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation dep.company.guavaJvm
+    implementation dep.company.guavaAndroid
+    implementation dep.company.guavaMvvm
+    implementation dep.company.guavaData
+
     api 'com.squareup.wire:wire-runtime:3.4.0'
 }
