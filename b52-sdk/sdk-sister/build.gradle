@@ -24,9 +24,10 @@ dependencies {
     implementation dep.company.guavaMvvm
     implementation dep.company.guavaAndroidUi
     implementation dep.company.guavaData
-
     implementation dep.company.extGlide
     implementation dep.company.extRxjava3
+
+    implementation dep.pacificAdapter
 
     implementation 'com.github.skydoves:balloon:1.2.2'
     implementation 'it.sephiroth.android.library.imagezoom:imagezoom:2.3.0'
