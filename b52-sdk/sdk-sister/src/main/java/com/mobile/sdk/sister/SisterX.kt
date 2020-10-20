@@ -29,8 +29,8 @@ object SisterX {
     const val BUS_MSG_NEW = 20050
 
     var toUserId = ""
-    var socketServer = "ws://af5af0942fbdb40dfab56d25605e5048-666678590.ap-southeast-1.elb.amazonaws.com:80/csms"
-    var httpServer = "http://a513325c2d9294999a3bbe5c165c485d-561866791.ap-southeast-1.elb.amazonaws.com/"
+    var socketServer = "ws://172.31.50.152:30302/csms"
+    var httpServer = "http://172.31.50.152:30301/"
 
     lateinit var component: SisterComponent
         private set
