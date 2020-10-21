@@ -14,7 +14,6 @@ buildscript {
         kotlin_version = '1.4.10'
     }
 
-
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
     }
@@ -31,7 +30,7 @@ allprojects { project ->
 依赖sister-sdk库
 
 ```
-implementation com.mobile.sdk:sdk-sister:${current_version}
+implementation 'com.mobile.sdk:sdk-sister:0.0.4'
 ```
 
 使用sister-sdk库
