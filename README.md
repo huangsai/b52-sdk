@@ -5,7 +5,7 @@
 
 ## 客服sdk
 
-配置工程支持kotlin语言、增加内部maven地址 
+配置kotlin语言、增加内部maven地址 
 
 ```
 buildscript {
@@ -36,7 +36,7 @@ implementation com.mobile.sdk:sdk-sister:${current_version}
 
 使用sister-sdk库
 ```
-// in your App init 
+// init sister-sdk in your app
 class MyApp : MultiDexApplication() {
 
     override fun onCreate() {
