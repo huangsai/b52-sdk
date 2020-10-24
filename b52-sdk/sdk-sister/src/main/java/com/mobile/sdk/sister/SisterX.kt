@@ -30,7 +30,7 @@ object SisterX {
 
     var toUserId = ""
     var socketServer = "ws://172.31.50.152:30302/csms"
-    var httpServer = "http://172.31.50.152:30301"
+    var httpServer = "http://172.31.50.152:30301/"
 
     lateinit var component: SisterComponent
         private set

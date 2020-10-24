@@ -8,7 +8,6 @@ import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.guava.jvm.domain.Source
 import com.mobile.sdk.sister.R
-import com.mobile.sdk.sister.data.http.ApiSysReply
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.items.HelpItem
@@ -66,17 +65,13 @@ class ChatHelpPresenter(
         when (v!!.id) {
             R.id.item_help_tag -> {
                 val data = AdapterUtils.getHolder(v).item<HelpItem>().data
-                sendMsg(data)
+                fragment.chatListPresenter.postText(data.words)
             }
         }
     }
 
     override fun onDestroyView() {
         binding.helpRecycler.adapter = null
-    }
-
-    private fun sendMsg(data: ApiSysReply) {
-        fragment.chatListPresenter.postText(data.words)
     }
 
     override fun load(view: ImageView, holder: AdapterViewHolder) {
