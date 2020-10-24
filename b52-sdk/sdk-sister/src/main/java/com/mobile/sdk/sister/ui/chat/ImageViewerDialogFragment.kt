@@ -31,8 +31,8 @@ class ImageViewerDialogFragment : BaseAppCompatDialogFragment(), AdapterImageLoa
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.sister_FullScreenDialog)
-        list = Values.take("ImageViewerDialogFragment")!!
-        position = Values.take("ImageViewerDialogFragment_position")!!
+        list = Values.take("ImageViewerDialogFragment")
+        position = Values.take("ImageViewerDialogFragment_position")
         adapter.imageLoader = this
     }
 

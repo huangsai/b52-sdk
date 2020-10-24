@@ -3,8 +3,13 @@ package com.mobile.app.sdk
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.mobile.app.sdk.databinding.ActivityMainBinding
 import com.mobile.sdk.sister.SisterX
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,9 +30,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        SisterX.setUsername("barry123")
+
         binding.csmsOpen.setOnClickListener {
-            SisterX.show(this, false)
+            SisterX.setUsername(binding.editUsername.text.toString())
+            lifecycleScope.launch(Dispatchers.Default) {
+                delay(3000)
+                withContext(Dispatchers.Main) {
+                    binding.editUsername.setText("")
+                    SisterX.show(this@MainActivity, false)
+                }
+            }
         }
     }
 }
