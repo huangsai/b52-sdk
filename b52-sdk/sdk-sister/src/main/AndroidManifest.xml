@@ -19,7 +19,7 @@
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:name="${applicationId}"
                 android:resource="@xml/sister_file_provider_paths"/>
         </provider>
     </application>
