@@ -1,5 +1,6 @@
 package com.mobile.sdk.sister.ui.chat
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -47,6 +48,40 @@ class ChatMorePresenter(
         }
     }
 
+    private val requestGalleryPermission =
+        fragment.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            var hasNeededPermission = true
+            for ((key, value) in it.entries) {
+                if (!value) {
+                    when (key) {
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE -> {
+                            hasNeededPermission = false
+                        }
+                    }
+                }
+            }
+            if (hasNeededPermission) {
+                requestImage.launch(requestGalleryIntent())
+            }
+        }
+
+    private val requestCameraPermission =
+        fragment.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            var hasNeededPermission = true
+            for ((key, value) in it.entries) {
+                if (!value) {
+                    when (key) {
+                        Manifest.permission.CAMERA -> {
+                            hasNeededPermission = false
+                        }
+                    }
+                }
+            }
+            if (hasNeededPermission) {
+                requestImage.launch(requestCameraIntent())
+            }
+        }
+
     private var balloon: Balloon? = null
 
     fun showPop() {
@@ -71,10 +106,10 @@ class ChatMorePresenter(
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.iv_picture -> {
-                requestImage.launch(requestGalleryIntent())
+                requestGalleryPermission.launch(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE))
             }
             R.id.iv_camera -> {
-                requestImage.launch(requestCameraIntent())
+                requestCameraPermission.launch(arrayOf(Manifest.permission.CAMERA))
             }
         }
         balloon!!.dismiss()
