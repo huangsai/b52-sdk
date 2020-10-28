@@ -6,6 +6,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
+import kotlin.jvm.Throws
 
 class HostSelectionInterceptor : Interceptor {
 

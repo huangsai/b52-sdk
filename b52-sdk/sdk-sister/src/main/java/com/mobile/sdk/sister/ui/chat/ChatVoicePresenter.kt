@@ -1,5 +1,7 @@
 package com.mobile.sdk.sister.ui.chat
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.drawable.AnimationDrawable
 import android.media.AudioFormat
 import android.media.AudioRecord
@@ -8,6 +10,8 @@ import android.os.Environment
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
@@ -37,6 +41,9 @@ class ChatVoicePresenter(
     private var mMediaRecorder = MediaRecorder()
     private var duration: Long = 0
     private var audioFile: File? = null
+
+    private val requestRecordPermission =
+        fragment.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {}
 
     init {
         binding.pressVoice.setButtonTouchCallback(this)
@@ -211,6 +218,16 @@ class ChatVoicePresenter(
                 available = false
             }
             recorder.stop()
+        } catch (e: Exception) {
+            available = false
+            if (PackageManager.PERMISSION_GRANTED !=
+                ActivityCompat.checkSelfPermission(
+                    fragment.requireContext(),
+                    Manifest.permission.RECORD_AUDIO
+                )
+            ) {
+                requestRecordPermission.launch(arrayOf(Manifest.permission.RECORD_AUDIO))
+            }
         } finally {
             recorder.release()
         }
