@@ -17,6 +17,7 @@ import com.mobile.guava.android.context.hideSoftInput
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.mvvm.showDialogFragment
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
+import com.mobile.guava.android.ui.view.recyclerview.keepItemViewVisible
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
@@ -106,7 +107,9 @@ class ChatListPresenter(
             }
             withContext(Dispatchers.Main) {
                 adapter.replaceAll(sourceItems)
-                binding.chatRecycler.scrollToPosition(adapter.itemCount - 1)
+                binding.chatRecycler.postDelayed({
+                    binding.chatRecycler.keepItemViewVisible(adapter.itemCount - 1, false)
+                }, 300)
             }
         }
     }

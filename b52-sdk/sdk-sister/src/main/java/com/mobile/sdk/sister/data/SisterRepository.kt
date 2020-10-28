@@ -31,21 +31,21 @@ class SisterRepository @Inject constructor(
                 platformPrefs.token = it.token
                 platformPrefs.salt = it.salt
                 platformPrefs.userImage = it.userImage
-                platformPrefs.nickname = if (it.nickname.isEmpty()) {
-                    it.username
-                } else {
-                    it.nickname
-                }
+                platformPrefs.nickname = it.nickname.ifEmpty { it.username }
                 return@toSource it
             }
         } catch (e: Exception) {
-            platformPrefs.userId = ""
-            platformPrefs.loginName = username
-            platformPrefs.token = ""
-            platformPrefs.salt = ""
-            platformPrefs.userImage = ""
-            platformPrefs.nickname = "游客"
-            errorSource(e)
+            if (username.isEmpty()) {
+                platformPrefs.userId = ""
+                platformPrefs.loginName = username
+                platformPrefs.token = ""
+                platformPrefs.salt = ""
+                platformPrefs.userImage = ""
+                platformPrefs.nickname = "游客"
+                errorSource(e)
+            } else {
+                user("")
+            }
         }
     }
 
