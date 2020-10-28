@@ -12,7 +12,7 @@ import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.base.InputStreamRequestBody
 import com.mobile.sdk.sister.data.SisterRepository
 import com.mobile.sdk.sister.data.db.DbMessage
-import com.mobile.sdk.sister.data.file.AppPreferences
+import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.data.http.ApiNotice
 import com.mobile.sdk.sister.data.http.ApiSysReply
 import com.mobile.sdk.sister.data.http.STATUS_MSG_FAILED
@@ -135,13 +135,14 @@ class SisterViewModel @Inject constructor(
             0,
             UUID.randomUUID().toString(),
             type,
-            SisterX.toUserId,
+            SisterX.sisterUserId,
             jsonContent,
             System.currentTimeMillis(),
-            AppPreferences.userImage,
-            AppPreferences.username,
-            AppPreferences.userId,
+            AppPrefs.userImage,
+            AppPrefs.loginName,
+            AppPrefs.userId,
             0,
+            SisterX.chatId,
             STATUS_MSG_PROCESSING,
         )
     }

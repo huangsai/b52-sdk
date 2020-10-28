@@ -5,7 +5,7 @@ import com.mobile.guava.android.ensureWorkThread
 import com.mobile.guava.jvm.coroutines.Bus
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
-import com.mobile.sdk.sister.data.file.AppPreferences
+import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.proto.ChatMsg
 import com.mobile.sdk.sister.proto.CommonMessage
@@ -51,10 +51,10 @@ object SocketUtils {
     fun postLogin() {
         ensureWorkThread()
         val req = LoginReq.Builder()
-            .userName(AppPreferences.username)
-            .token(AppPreferences.token)
-            .salt(AppPreferences.salt)
-            .deviceId(AppPreferences.deviceId)
+            .userName(AppPrefs.loginName)
+            .token(AppPrefs.token)
+            .salt(AppPrefs.salt)
+            .deviceId(AppPrefs.deviceId)
             .chatType(0)
             .userType(0)
             .build()
@@ -72,19 +72,14 @@ object SocketUtils {
     @WorkerThread
     fun postMessage(dbMessage: DbMessage) {
         ensureWorkThread()
-        val nextMessage = if (dbMessage.toUserId.isEmpty()) {
-            dbMessage.copy(toUserId = "0")
-        } else {
-            dbMessage
-        }
         CommonMessage.Builder()
             .bizId(IM_BUZ_MSG)
             .msgType(2)
-            .content(nextMessage.toChatRes().encodeByteString())
+            .content(dbMessage.toChatRes().encodeByteString())
             .build()
             .let {
                 if (true == SisterX.isSocketConnected.value) {
-                    Timber.tag(SisterX.TAG).d("发送->%s", nextMessage.toJson())
+                    Timber.tag(SisterX.TAG).d("发送->%s", dbMessage.toJson())
                     AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
                 } else {
                     dbMessage.status = STATUS_MSG_FAILED
@@ -103,13 +98,21 @@ object SocketUtils {
             IM_BUZ_LOGOUT -> {
             }
             IM_BUZ_CLOSE_BY_MYSELF -> {
+                SisterX.sisterUserId = "0"
+                SisterX.chatId = 0L
             }
             IM_BUZ_CLOSE_BY_SYSTEM -> {
+                SisterX.sisterUserId = "0"
+                SisterX.chatId = 0L
             }
             IM_BUZ_CHAT_TIMEOUT -> {
+                SisterX.sisterUserId = "0"
+                SisterX.chatId = 0L
             }
             IM_BUZ_NOTIFICATION -> ChatMsg.ADAPTER.decode(commonMessage.content).let {
-                SisterX.toUserId = it.fromUserId
+                SisterX.sisterUserId = it.fromUserId.ifEmpty { "0" }
+                SisterX.chatId = it.chatId
+
                 insertDbMessage(it.toDbMessage())
             }
             IM_BUZ_MSG -> ResponseResult.ADAPTER.decode(commonMessage.content).let {

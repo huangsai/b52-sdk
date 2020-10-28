@@ -12,7 +12,7 @@ import com.mobile.guava.android.mvvm.showDialogFragment
 import com.mobile.sdk.sister.dagger.DaggerSisterComponent
 import com.mobile.sdk.sister.dagger.SisterComponent
 import com.mobile.sdk.sister.data.db.RoomAppDatabase
-import com.mobile.sdk.sister.data.file.AppPreferences
+import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.socket.AppWebSocket
 import com.mobile.sdk.sister.socket.SocketUtils
 import com.mobile.sdk.sister.ui.MainDialogFragment
@@ -28,7 +28,9 @@ object SisterX {
     const val BUS_MSG_STATUS = 20049
     const val BUS_MSG_NEW = 20050
 
-    var toUserId = ""
+    var sisterUserId = "0"
+    var chatId = 0L
+
     var socketServer = "ws://172.31.50.152:30302/csms"
     var httpServer = "http://172.31.50.152:30301/"
 
@@ -43,9 +45,9 @@ object SisterX {
             app,
             AppContext(),
             createRoomDatabase(),
-            AppPreferences
+            AppPrefs
         )
-        AppPreferences.username = ""
+        AppPrefs.loginName = ""
 
         AppWebSocket.toString()
         AppManager.initialize()
@@ -59,7 +61,7 @@ object SisterX {
     }
 
     fun isLoginUser(): Boolean {
-        return AppPreferences.username.isNotEmpty() && AppPreferences.token.isNotEmpty()
+        return AppPrefs.loginName.isNotEmpty() && AppPrefs.token.isNotEmpty()
     }
 
     fun show(activity: FragmentActivity, cancelable: Boolean): DialogFragment {

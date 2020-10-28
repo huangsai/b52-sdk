@@ -22,6 +22,7 @@ data class DbMessage(
     @ColumnInfo(name = "fromUsername") val fromUsername: String,
     @ColumnInfo(name = "fromUserId") val fromUserId: String,
     @ColumnInfo(name = "fromUserType") val fromUserType: Int,
+    @ColumnInfo(name = "chatId") val chatId: Long,
     @ColumnInfo(name = "status") var status: Int
 ) {
 
