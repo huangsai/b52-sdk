@@ -6,7 +6,7 @@ import com.mobile.guava.data.DataComponent
 import com.mobile.guava.data.PlatformContext
 import com.mobile.sdk.sister.data.SisterRepository
 import com.mobile.sdk.sister.data.db.AppDatabase
-import com.mobile.sdk.sister.data.file.PlatformPreferences
+import com.mobile.sdk.sister.data.file.PlatformPrefs
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -23,7 +23,7 @@ interface SisterComponent : DataComponent, ViewModelFactoryComponent {
             @BindsInstance app: Application,
             @BindsInstance platformContext: PlatformContext,
             @BindsInstance appDatabase: AppDatabase,
-            @BindsInstance platformPreferences: PlatformPreferences
+            @BindsInstance platformPrefs: PlatformPrefs
         ): SisterComponent
     }
 }

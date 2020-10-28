@@ -5,7 +5,7 @@ import com.mobile.guava.android.ensureWorkThread
 import com.mobile.guava.jvm.coroutines.Bus
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
-import com.mobile.sdk.sister.data.file.AppPreferences
+import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.proto.ChatMsg
 import com.mobile.sdk.sister.proto.CommonMessage
@@ -51,10 +51,10 @@ object SocketUtils {
     fun postLogin() {
         ensureWorkThread()
         val req = LoginReq.Builder()
-            .userName(AppPreferences.username)
-            .token(AppPreferences.token)
-            .salt(AppPreferences.salt)
-            .deviceId(AppPreferences.deviceId)
+            .userName(AppPrefs.username)
+            .token(AppPrefs.token)
+            .salt(AppPrefs.salt)
+            .deviceId(AppPrefs.deviceId)
             .chatType(0)
             .userType(0)
             .build()

@@ -12,7 +12,7 @@ import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.base.InputStreamRequestBody
 import com.mobile.sdk.sister.data.SisterRepository
 import com.mobile.sdk.sister.data.db.DbMessage
-import com.mobile.sdk.sister.data.file.AppPreferences
+import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.data.http.ApiNotice
 import com.mobile.sdk.sister.data.http.ApiSysReply
 import com.mobile.sdk.sister.data.http.STATUS_MSG_FAILED
@@ -138,9 +138,9 @@ class SisterViewModel @Inject constructor(
             SisterX.toUserId,
             jsonContent,
             System.currentTimeMillis(),
-            AppPreferences.userImage,
-            AppPreferences.username,
-            AppPreferences.userId,
+            AppPrefs.userImage,
+            AppPrefs.username,
+            AppPrefs.userId,
             0,
             STATUS_MSG_PROCESSING,
         )

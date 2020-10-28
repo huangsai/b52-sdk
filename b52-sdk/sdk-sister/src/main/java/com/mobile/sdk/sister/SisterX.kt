@@ -12,7 +12,7 @@ import com.mobile.guava.android.mvvm.showDialogFragment
 import com.mobile.sdk.sister.dagger.DaggerSisterComponent
 import com.mobile.sdk.sister.dagger.SisterComponent
 import com.mobile.sdk.sister.data.db.RoomAppDatabase
-import com.mobile.sdk.sister.data.file.AppPreferences
+import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.socket.AppWebSocket
 import com.mobile.sdk.sister.socket.SocketUtils
 import com.mobile.sdk.sister.ui.MainDialogFragment
@@ -43,9 +43,9 @@ object SisterX {
             app,
             AppContext(),
             createRoomDatabase(),
-            AppPreferences
+            AppPrefs
         )
-        AppPreferences.username = ""
+        AppPrefs.username = ""
 
         AppWebSocket.toString()
         AppManager.initialize()
@@ -59,7 +59,7 @@ object SisterX {
     }
 
     fun isLoginUser(): Boolean {
-        return AppPreferences.username.isNotEmpty() && AppPreferences.token.isNotEmpty()
+        return AppPrefs.username.isNotEmpty() && AppPrefs.token.isNotEmpty()
     }
 
     fun show(activity: FragmentActivity, cancelable: Boolean): DialogFragment {
