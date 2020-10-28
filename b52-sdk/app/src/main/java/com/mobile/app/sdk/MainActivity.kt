@@ -3,13 +3,9 @@ package com.mobile.app.sdk
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import com.mobile.app.sdk.databinding.ActivityMainBinding
 import com.mobile.sdk.sister.SisterX
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,13 +29,13 @@ class MainActivity : AppCompatActivity() {
 
         binding.csmsOpen.setOnClickListener {
             SisterX.setUsername(binding.editUsername.text.toString())
-            lifecycleScope.launch(Dispatchers.Default) {
-                delay(3000)
-                withContext(Dispatchers.Main) {
-                    binding.editUsername.setText("")
-                    SisterX.show(this@MainActivity, false)
-                }
-            }
         }
+
+        SisterX.isChatLogin.observe(this, Observer { isLogin ->
+            if (isLogin) {
+                binding.editUsername.setText("")
+                SisterX.show(this@MainActivity, false)
+            }
+        })
     }
 }

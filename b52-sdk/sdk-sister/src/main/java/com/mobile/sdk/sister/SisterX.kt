@@ -19,6 +19,7 @@ import com.mobile.sdk.sister.ui.MainDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 object SisterX {
 
@@ -39,6 +40,8 @@ object SisterX {
 
     val isSocketConnected: MutableLiveData<Boolean> = MutableLiveData()
 
+    val isChatLogin: MutableLiveData<Boolean> = MutableLiveData()
+
     fun setup(app: Application, isDebug: Boolean) {
         AndroidX.setup(app, isDebug)
         component = DaggerSisterComponent.factory().create(
@@ -47,16 +50,22 @@ object SisterX {
             createRoomDatabase(),
             AppPrefs
         )
-        AppPrefs.loginName = ""
 
         AppWebSocket.toString()
         AppManager.initialize()
     }
 
-    fun setUsername(username: String) = GlobalScope.launch(Dispatchers.IO) {
-        component.sisterRepository().user(username).let {
-            AndroidX.notifyLogin()
-            SocketUtils.postLogin()
+    fun setUsername(username: String) {
+        isChatLogin.value = false
+
+        GlobalScope.launch(Dispatchers.IO) {
+            AppPrefs.userId = ""
+            AppPrefs.loginName = ""
+            component.sisterRepository().user(username).let {
+                AndroidX.notifyLogin()
+                SocketUtils.postLogin()
+            }
+            isChatLogin.postValue(true)
         }
     }
 

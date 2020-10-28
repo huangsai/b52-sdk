@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import androidx.lifecycle.Observer
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
@@ -93,8 +94,14 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        chatListPresenter.load()
         chatHelpPresenter.load()
+        SisterX.isChatLogin.observe(viewLifecycleOwner, Observer { isLogin ->
+            if (isLogin) {
+                chatListPresenter.load()
+            } else {
+                chatListPresenter.cleanMessages()
+            }
+        })
     }
 
     override fun onDestroyView() {

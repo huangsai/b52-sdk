@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
@@ -25,7 +26,7 @@ class ChatMorePresenter(
     model: SisterViewModel,
 ) : BaseChatPresenter(fragment, binding, model) {
 
-    private val authorities = "com.mobile.sdk.sister.provider"
+    private val authorities: String = AndroidX.myApp.packageName
     private var cameraImageFile: File? = null
     private val requestImage = fragment.registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()

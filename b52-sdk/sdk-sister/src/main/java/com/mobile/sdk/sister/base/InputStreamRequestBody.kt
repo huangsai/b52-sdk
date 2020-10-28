@@ -7,6 +7,7 @@ import okhttp3.RequestBody
 import okio.BufferedSink
 import okio.IOException
 import okio.source
+import kotlin.jvm.Throws
 
 class InputStreamRequestBody(
     private val contentType: MediaType,

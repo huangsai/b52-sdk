@@ -11,6 +11,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'com.mobile.sdk:sdk-sister:0.0.4'
     implementation project(':sdk-ipv6')
+    implementation project(':sdk-sister')
 }

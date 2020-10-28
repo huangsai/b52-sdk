@@ -105,10 +105,14 @@ class ChatListPresenter(
                 MsgItem.create(it)
             }
             withContext(Dispatchers.Main) {
-                adapter.addAll(sourceItems)
+                adapter.replaceAll(sourceItems)
                 binding.chatRecycler.scrollToPosition(adapter.itemCount - 1)
             }
         }
+    }
+
+    fun cleanMessages() {
+        adapter.clear()
     }
 
     fun onMessageStatusChanged(dbMessage: DbMessage) {
