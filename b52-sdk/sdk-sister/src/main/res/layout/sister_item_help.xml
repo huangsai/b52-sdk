@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/sister_help_tag_bg"
     android:gravity="center"
+    android:minWidth="@dimen/size_60dp"
     android:paddingLeft="@dimen/size_6dp"
     android:paddingTop="@dimen/size_3dp"
     android:paddingRight="@dimen/size_6dp"
