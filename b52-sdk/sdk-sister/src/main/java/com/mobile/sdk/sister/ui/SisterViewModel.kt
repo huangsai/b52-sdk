@@ -13,10 +13,7 @@ import com.mobile.sdk.sister.base.InputStreamRequestBody
 import com.mobile.sdk.sister.data.SisterRepository
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPrefs
-import com.mobile.sdk.sister.data.http.ApiNotice
-import com.mobile.sdk.sister.data.http.ApiSysReply
-import com.mobile.sdk.sister.data.http.STATUS_MSG_FAILED
-import com.mobile.sdk.sister.data.http.STATUS_MSG_PROCESSING
+import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.socket.SocketUtils
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -44,7 +41,11 @@ class SisterViewModel @Inject constructor(
     @WorkerThread
     fun loadMessages(): List<DbMessage> {
         ensureWorkThread()
-        return sisterRepository.loadMessage()
+        return sisterRepository.loadMessage().also { list ->
+            postOfflineMessages(list.filter {
+                it.status == STATUS_MSG_PROCESSING || it.status == STATUS_MSG_FAILED
+            })
+        }
     }
 
     @WorkerThread
@@ -167,5 +168,15 @@ class SisterViewModel @Inject constructor(
             .setType(MultipartBody.FORM)
             .addFormDataPart("file", file.name, contentPart)
             .build()
+    }
+
+    private fun postOfflineMessages(list: List<DbMessage>) {
+        list.forEach {
+            when (it.type) {
+                TYPE_TEXT -> postText(it)
+                TYPE_IMAGE -> postImage(it)
+                TYPE_AUDIO -> postAudio(it)
+            }
+        }
     }
 }

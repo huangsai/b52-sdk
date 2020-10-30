@@ -6,6 +6,7 @@ import com.mobile.guava.android.context.dp2px
 import kotlin.math.roundToInt
 
 object MyKeyboardHelper {
+    
     fun isKeyboardVisible(dialog: Dialog): Boolean {
         val r = Rect()
         val activityRoot = dialog.window!!.decorView
