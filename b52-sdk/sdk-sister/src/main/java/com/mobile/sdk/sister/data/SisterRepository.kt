@@ -103,6 +103,14 @@ class SisterRepository @Inject constructor(
         }
     }
 
+    suspend fun sysAutoReply(): Source<List<ApiSysReply>> {
+        return try {
+            dataService.sysReply(2).execute().toSource()
+        } catch (e: Exception) {
+            errorSource(e)
+        }
+    }
+
     private fun <T> errorSource(e: Throwable): Source<T> {
         Guava.timber.d(e)
         return Source.Error(e)

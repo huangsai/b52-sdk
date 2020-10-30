@@ -3,14 +3,13 @@ package com.mobile.sdk.sister.socket
 import androidx.annotation.WorkerThread
 import com.mobile.guava.android.ensureWorkThread
 import com.mobile.guava.jvm.coroutines.Bus
+import com.mobile.guava.jvm.domain.Source
+import com.mobile.guava.jvm.extension.exhaustive
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.data.http.*
-import com.mobile.sdk.sister.proto.ChatMsg
-import com.mobile.sdk.sister.proto.CommonMessage
-import com.mobile.sdk.sister.proto.LoginReq
-import com.mobile.sdk.sister.proto.ResponseResult
+import com.mobile.sdk.sister.proto.*
 import com.mobile.sdk.sister.ui.items.MsgItem
 import com.mobile.sdk.sister.ui.toChatRes
 import com.mobile.sdk.sister.ui.toDbMessage
@@ -50,6 +49,7 @@ object SocketUtils {
     @WorkerThread
     fun postLogin() {
         ensureWorkThread()
+        resetChat()
         val req = LoginReq.Builder()
             .userName(AppPrefs.loginName)
             .token(AppPrefs.token)
@@ -63,6 +63,17 @@ object SocketUtils {
             .bizId(IM_BUZ_LOGIN)
             .msgType(2)
             .content(req.encodeByteString())
+            .build()
+            .let {
+                AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
+            }
+    }
+
+    fun leaveMessage(msg: String) = GlobalScope.launch(Dispatchers.IO) {
+        CommonMessage.Builder()
+            .bizId(IM_BUZ_LEAVE_MSG)
+            .msgType(2)
+            .content(LeaveMsgReq.Builder().msg(msg).build().encodeByteString())
             .build()
             .let {
                 AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
@@ -92,41 +103,57 @@ object SocketUtils {
 
     fun onMessage(commonMessage: CommonMessage) {
         when (commonMessage.bizId) {
-            IM_BUZ_LOGIN -> ResponseResult.ADAPTER.decode(commonMessage.content).let {
-                Timber.tag(SisterX.TAG).d(it.msg)
+            IM_BUZ_LOGIN -> {
+                ResponseResult.ADAPTER.decode(commonMessage.content).let {
+                    requestSister()
+                    Timber.tag(SisterX.TAG).d(it.msg)
+                }
             }
             IM_BUZ_LOGOUT -> {
+                resetChat()
+                Timber.tag(SisterX.TAG).d("登出")
             }
             IM_BUZ_CLOSE_BY_MYSELF -> {
-                SisterX.sisterUserId = "0"
-                SisterX.chatId = 0L
+                resetChat()
+                Timber.tag(SisterX.TAG).d("我关闭当前")
             }
             IM_BUZ_CLOSE_BY_SYSTEM -> {
-                SisterX.sisterUserId = "0"
-                SisterX.chatId = 0L
+                resetChat()
+                Timber.tag(SisterX.TAG).d("客服关闭会话")
             }
             IM_BUZ_CHAT_TIMEOUT -> {
-                SisterX.sisterUserId = "0"
-                SisterX.chatId = 0L
+                resetChat()
+                Timber.tag(SisterX.TAG).d("会话超时")
             }
-            IM_BUZ_QUEUE_TIMEOUT -> {
+            IM_BUZ_REQUEST_SISTER_ERROR -> {
+                QueueTimeOutMsg.ADAPTER.decode(commonMessage.content).let {
+                    resetChat()
+                    Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(it.toDbMessage()))
+                    Timber.tag(SisterX.TAG).d(it.timeOutMsg.ifEmpty { "客服匹配失败" })
+                    onRequestSisterError()
+                }
             }
-            IM_BUZ_REQUEST_SISTER -> {
+            IM_BUZ_REQUEST_SISTER_SUCCESS -> {
+                MathCsMsg.ADAPTER.decode(commonMessage.content).let {
+                    SisterX.chatId = it.chatId
+                    SisterX.sisterUserId = it.toUserId.ifEmpty { "0" }
+                    Timber.tag(SisterX.TAG).d("客服匹配成功")
+                }
             }
-            IM_BUZ_RESPOND_SISTER -> {
+            IM_BUZ_NOTIFICATION -> {
+                ChatMsg.ADAPTER.decode(commonMessage.content).let {
+                    if (!it.id.isNullOrEmpty()) {
+                        insertDbMessage(it.toDbMessage())
+                        Timber.tag(SisterX.TAG).d("发送成功->%s", it.id)
+                    }
+                }
             }
-            IM_BUZ_LEAVE_MSG -> {
-            }
-            IM_BUZ_NOTIFICATION -> ChatMsg.ADAPTER.decode(commonMessage.content).let {
-                SisterX.sisterUserId = it.fromUserId.ifEmpty { "0" }
-                SisterX.chatId = it.chatId
-
-                insertDbMessage(it.toDbMessage())
-            }
-            IM_BUZ_MSG -> ResponseResult.ADAPTER.decode(commonMessage.content).let {
-                if (!it.id.isNullOrEmpty()) {
-                    setDbMessageSuccess(it.id)
-                    Timber.tag(SisterX.TAG).d("发送成功->%s", it.id)
+            IM_BUZ_MSG -> {
+                ResponseResult.ADAPTER.decode(commonMessage.content).let {
+                    if (!it.id.isNullOrEmpty()) {
+                        setDbMessageSuccess(it.id)
+                        Timber.tag(SisterX.TAG).d("发送成功->%s", it.id)
+                    }
                 }
             }
             else -> Timber.tag(SisterX.TAG).d("未知socket业务消息")
@@ -148,5 +175,36 @@ object SocketUtils {
             it.insetMessage(dbMessage)
             Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))
         }
+    }
+
+    private fun requestSister() = GlobalScope.launch(Dispatchers.IO) {
+        CommonMessage.Builder()
+            .bizId(IM_BUZ_REQUEST_SISTER)
+            .msgType(2)
+            .content(MathCsReq.Builder().chatType(0).build().encodeByteString())
+            .build()
+            .let {
+                AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
+            }
+    }
+
+    private fun onRequestSisterError() = GlobalScope.launch(Dispatchers.IO) {
+        try {
+            val source = SisterX.component.sisterRepository().sysAutoReply()
+            when (source) {
+                is Source.Success -> {
+                }
+                is Source.Error -> {
+                    Timber.tag(SisterX.TAG).d(source.requireError())
+                }
+            }.exhaustive
+        } catch (e: Exception) {
+            Timber.tag(SisterX.TAG).d(e)
+        }
+    }
+
+    private fun resetChat() {
+        SisterX.sisterUserId = "0"
+        SisterX.chatId = 0L
     }
 }

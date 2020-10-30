@@ -27,8 +27,12 @@ class SisterViewModel @Inject constructor(
     private val sisterRepository: SisterRepository
 ) : ViewModel() {
 
-    fun loadSystemNotices(): List<ApiNotice> {
+    fun loadSystemNotices(): List<ApiNotice1> {
         return emptyList()
+    }
+
+    fun leaveMessage(msg: String) {
+        SocketUtils.leaveMessage(msg)
     }
 
     @WorkerThread
@@ -36,7 +40,6 @@ class SisterViewModel @Inject constructor(
         ensureWorkThread()
         return sisterRepository.sysReply()
     }
-
 
     @WorkerThread
     fun loadMessages(): List<DbMessage> {

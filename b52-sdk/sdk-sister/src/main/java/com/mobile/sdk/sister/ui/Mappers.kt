@@ -3,10 +3,10 @@ package com.mobile.sdk.sister.ui
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPrefs
-import com.mobile.sdk.sister.data.http.STATUS_MSG_SUCCESS
-import com.mobile.sdk.sister.data.http.TYPE_TIME
+import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.proto.ChatMsg
 import com.mobile.sdk.sister.proto.ChatReq
+import com.mobile.sdk.sister.proto.QueueTimeOutMsg
 
 const val MSG_TIME_DIFF = 10 * 60 * 1000L // 消息显示时间差
 
@@ -128,6 +128,23 @@ fun ChatMsg.toDbMessage(): DbMessage {
         fromUserId,
         1,
         chatId,
+        STATUS_MSG_SUCCESS
+    )
+}
+
+fun QueueTimeOutMsg.toDbMessage(): DbMessage {
+    return DbMessage(
+        0L,
+        "",
+        TYPE_TEXT,
+        AppPrefs.userId,
+        DbMessage.Text(timeOutMsg).toJson(),
+        System.currentTimeMillis(),
+        "",
+        "",
+        "0",
+        1,
+        0,
         STATUS_MSG_SUCCESS
     )
 }
