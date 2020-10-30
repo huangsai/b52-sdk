@@ -59,9 +59,9 @@ buildscript {
                 'flexbox'          : '2.0.1',
                 'fabric'           : '1.4.8',
                 'store'            : '4.0.0-beta01',
-                'theGuava'         : '0.2.6',
-                'theExt'           : '0.0.5',
-                'theSdk'           : '0.0.5',
+                'theGuava'         : '0.2.8',
+                'theExt'           : '0.0.6',
+                'theSdk'           : '0.0.6',
                 'pacificAdapter'   : '3.0.3',
                 'exoplayer'        : '2.12.0',
 
@@ -251,6 +251,7 @@ buildscript {
                         'okhttp'         : "com.google.android.exoplayer:extension-okhttp:${versions.exoplayer}"
                 ],
                 'company'          : [
+                        'guavaAll'      : "com.mobile.guava:guava-all:${versions.theGuava}",
                         'guavaJvm'      : "com.mobile.guava:guava-jvm:${versions.theGuava}",
                         'guavaAndroid'  : "com.mobile.guava:guava-android:${versions.theGuava}",
                         'guavaAndroidUi': "com.mobile.guava:guava-android-ui:${versions.theGuava}",

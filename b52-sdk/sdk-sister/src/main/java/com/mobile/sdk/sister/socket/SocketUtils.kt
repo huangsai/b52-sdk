@@ -109,6 +109,14 @@ object SocketUtils {
                 SisterX.sisterUserId = "0"
                 SisterX.chatId = 0L
             }
+            IM_BUZ_QUEUE_TIMEOUT -> {
+            }
+            IM_BUZ_REQUEST_SISTER -> {
+            }
+            IM_BUZ_RESPOND_SISTER -> {
+            }
+            IM_BUZ_LEAVE_MSG -> {
+            }
             IM_BUZ_NOTIFICATION -> ChatMsg.ADAPTER.decode(commonMessage.content).let {
                 SisterX.sisterUserId = it.fromUserId.ifEmpty { "0" }
                 SisterX.chatId = it.chatId

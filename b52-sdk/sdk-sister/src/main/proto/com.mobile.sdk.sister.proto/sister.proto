@@ -4,94 +4,112 @@ package com.mobile.sdk.sister.socket;
 
 option java_package = "com.mobile.sdk.sister.proto";
 
-// 通用pb协议
+//通用pb协议
 message CommonMessage{
   int32 bizId = 1;
-  // 消息类型1心跳2业务消息
+  //消息类型1心跳2业务消息
   int32 msgType = 2;
-  // 数据
+  //数据
   bytes content = 3;
 }
 
-// 发送聊天消息30001
+//发送聊天消息30001
 message ChatReq{
-  // 消息id
-  string id = 1 ;
-  // 聊天内容
+  //消息id
+  string  id = 1 ;
+  //聊天内容
   string sayContent = 2;
   string toUserId = 3;
-  // 0普通1充值
+  //0普通1充值
   int32 chatType = 4;
-  // 消息类型1文本2图片3语音4充值5系统回复6留言
+  //消息类型1文本2图片3语音4充值
   int32 msgType = 5;
-  // 会话id
+  //会话id
   int64 chatId = 6;
-}
 
-// 消息通知30002
+}
+//消息通知30002
 message ChatMsg{
-  string id = 1 ;
-  // 内容
+  string  id = 1 ;
+  //内容
   string sayContent = 2;
-  // 0普通1充值
+  //0普通1充值
   int32 chatType = 3;
-  // 发言时间
+  //发言时间
   int64 sayTime = 4;
   string fromImgUrl = 5;
-  // 0会员1客服
+  //0会员1客服
   int32 fromUserType = 6;
   string fromUserName = 7;
   string fromUserId = 8;
-  // 消息类型1文本2图片3语音4充值5系统回复
+  //消息类型1文本2图片3语音4充值
   int32 msgType = 9;
-  // 会话id
+  //会话id
   int64 chatId = 10;
 }
-
-// 关闭当前聊天30003
+//关闭当前聊天30003
 message CloseChatReq{
   string toUserId = 1;
-  // 会话id
+  //会话id
   int64 chatId = 2;
 }
-
-// 关闭会话通知30004
+//关闭会话通知30004
 message CloseChatMsg{
   string fromUserId = 1;
-  // 会话id
+  //会话id
   int64 chatId = 2;
 }
-
-// 会话超时通知30005
+//会话超时通知30005
 message ChatTimeOutMsg{
-  // 会话id
+  //会话id
   int64 chatId = 2;
 }
 
-// 登录20001
+//排队超时通知30006
+message QueueTimeOutMsg{
+  string timeOutMsg = 1;
+}
+//新增匹配客服30007
+message MathCsReq{
+  //0普通1充值
+  int32 chatType = 1;
+}
+//匹配客服结果30008
+message MathCsMsg{
+  //会话id
+  int64 chatId = 1;
+  //会话方id
+  string toUserId = 2;
+}
+//新增留言30009
+message LeaveMsgReq{
+  string msg = 1;
+}
+
+//登录20001
 message LoginReq{
-  // 用户名
-  string userName = 1;
-  // token
-  string token = 2;
-  // 0会员1客服
-  int32 userType = 3;
-  // 0普通1充值
+  //用户名
+  string  userName = 1;
+  //token
+  string  token = 2;
+  //0会员1客服
+  int32  userType = 3;
+  //0普通1充值
   int32 chatType = 4;
-  // token验证盐
+  //token验证盐
   string salt = 5 ;
-  // 设备ID
+  //设备ID
   string deviceId = 6 ;
 }
-// 登出20002
+//登出20002
 message LogoutReq{
 }
 
 message ResponseResult{
-  // 1成功0失败
+  //1成功0失败
   int32 result = 1;
-  // 对应 协议号
+  //对应 协议号
   int32 biz = 2;
   string msg = 3;
-  string id = 4;
+  string  id = 4;
 }

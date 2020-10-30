@@ -10,13 +10,18 @@ const val TYPE_TIME = 4
 const val TYPE_SYSTEM = 5
 const val TYPE_DEPOSIT = 6
 
-const val IM_BUZ_MSG = 30001
-const val IM_BUZ_NOTIFICATION = 30002
-const val IM_BUZ_CLOSE_BY_MYSELF = 30003
-const val IM_BUZ_CLOSE_BY_SYSTEM = 30004
-const val IM_BUZ_CHAT_TIMEOUT = 30005
-const val IM_BUZ_LOGIN = 20001
-const val IM_BUZ_LOGOUT = 20002
+const val IM_BUZ_LOGIN = 20001// 登录20001
+const val IM_BUZ_LOGOUT = 20002// 登出20002
+const val IM_BUZ_MSG = 30001// 发送聊天消息30001
+const val IM_BUZ_NOTIFICATION = 30002// 消息通知30002
+const val IM_BUZ_CLOSE_BY_MYSELF = 30003// 关闭当前聊天30003
+const val IM_BUZ_CLOSE_BY_SYSTEM = 30004// 关闭会话通知30004
+const val IM_BUZ_CHAT_TIMEOUT = 30005// 会话超时通知30005
+const val IM_BUZ_QUEUE_TIMEOUT = 30006// 排队超时通知30006
+const val IM_BUZ_REQUEST_SISTER = 30007// 新增匹配客服30007
+const val IM_BUZ_RESPOND_SISTER = 30008// 匹配客服结果30008
+const val IM_BUZ_LEAVE_MSG = 30009// 新增留言30009
+
 
 const val STATUS_MSG_PROCESSING = 1
 const val STATUS_MSG_SUCCESS = 2

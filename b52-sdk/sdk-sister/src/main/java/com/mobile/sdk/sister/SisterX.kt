@@ -31,8 +31,8 @@ object SisterX {
     var sisterUserId = "0"
     var chatId = 0L
 
-    var socketServer = "ws://172.31.50.152:30302/csms"
-    var httpServer = "http://172.31.50.152:30301/"
+    var socketServer = "ws://java.cg.xxx:30302/csms"
+    var httpServer = "http://java.cg.xxx:30301/"
 
     lateinit var component: SisterComponent
         private set
@@ -42,6 +42,10 @@ object SisterX {
     val isChatLogin: MutableLiveData<Boolean> = MutableLiveData()
 
     fun setup(app: Application, isDebug: Boolean) {
+        if (::component.isInitialized) {
+            return
+        }
+
         AndroidX.setup(app, isDebug)
         component = DaggerSisterComponent.factory().create(
             app,
