@@ -59,9 +59,7 @@ object AppWebSocket : LongLiveSocket() {
             if (false == it) {
                 reconnect(connectFailCount * 2000L)
             } else if (true == it) {
-                if (SisterX.isLoginUser()) {
-                    suspendAction { SocketUtils.postLogin() }
-                }
+                suspendAction { SocketUtils.postLogin() }
             }
         }
     }

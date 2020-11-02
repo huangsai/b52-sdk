@@ -48,6 +48,9 @@ object SocketUtils {
 
     @WorkerThread
     fun postLogin() {
+        if (!SisterX.hasUser) {
+            return
+        }
         ensureWorkThread()
         resetChat()
         val req = LoginReq.Builder()
@@ -105,11 +108,13 @@ object SocketUtils {
         when (commonMessage.bizId) {
             IM_BUZ_LOGIN -> {
                 ResponseResult.ADAPTER.decode(commonMessage.content).let {
+                    SisterX.isLogin.postValue(true)
                     requestSister()
                     Timber.tag(SisterX.TAG).d(it.msg)
                 }
             }
             IM_BUZ_LOGOUT -> {
+                SisterX.isLogin.postValue(false)
                 resetChat()
                 Timber.tag(SisterX.TAG).d("登出")
             }

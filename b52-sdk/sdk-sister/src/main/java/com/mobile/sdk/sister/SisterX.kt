@@ -32,16 +32,28 @@ object SisterX {
     internal var chatId = 0L
 
     internal var socketServer = ""
-    internal var httpServer = ""
+        private set
 
-    internal lateinit var component: SisterComponent
+    internal var httpServer = ""
+        private set
+
+    internal var hasUser = false
         private set
 
     internal val isSocketConnected: MutableLiveData<Boolean> = MutableLiveData()
 
-    internal val isChatLogin: MutableLiveData<Boolean> = MutableLiveData()
-
     internal val sisterState: MutableLiveData<Int> = MutableLiveData()
+
+    val isLogin: MutableLiveData<Boolean> = MutableLiveData()
+
+    lateinit var component: SisterComponent
+        private set
+
+    private fun createRoomDatabase(): RoomAppDatabase {
+        return Room.databaseBuilder(AndroidX.myApp, RoomAppDatabase::class.java, "sdk_sister.db3")
+            .addCallback(RoomAppDatabase.DbCallback())
+            .build()
+    }
 
     fun setup(app: Application, isDebug: Boolean) {
         if (::component.isInitialized) {
@@ -67,33 +79,20 @@ object SisterX {
         httpServer = _httpServer
     }
 
-    fun setUsername(username: String) {
-        isChatLogin.value = false
-
-        GlobalScope.launch(Dispatchers.IO) {
-            AppPrefs.userId = ""
-            AppPrefs.loginName = ""
-            component.sisterRepository().user(username).let {
-                AndroidX.notifyLogin()
-                SocketUtils.postLogin()
-            }
-            isChatLogin.postValue(true)
+    fun setUser(_loginName: String) = GlobalScope.launch(Dispatchers.IO) {
+        hasUser = false
+        isLogin.postValue(false)
+        AppPrefs.userId = ""
+        AppPrefs.loginName = ""
+        component.sisterRepository().user(_loginName).let {
+            hasUser = true
+            SocketUtils.postLogin()
         }
-    }
-
-    fun isLoginUser(): Boolean {
-        return AppPrefs.loginName.isNotEmpty() && AppPrefs.token.isNotEmpty()
     }
 
     fun show(activity: FragmentActivity, cancelable: Boolean): DialogFragment {
         return MainDialogFragment.newInstance(cancelable).also {
             activity.showDialogFragment(it)
         }
-    }
-
-    private fun createRoomDatabase(): RoomAppDatabase {
-        return Room.databaseBuilder(AndroidX.myApp, RoomAppDatabase::class.java, "sdk_sister.db3")
-            .addCallback(RoomAppDatabase.DbCallback())
-            .build()
     }
 }

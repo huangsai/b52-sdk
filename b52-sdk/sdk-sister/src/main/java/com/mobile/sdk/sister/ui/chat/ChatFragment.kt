@@ -95,7 +95,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         chatHelpPresenter.load()
-        SisterX.isChatLogin.observe(viewLifecycleOwner, Observer { isLogin ->
+        SisterX.isLogin.observe(viewLifecycleOwner, Observer { isLogin ->
             if (isLogin) {
                 chatListPresenter.load()
             } else {
