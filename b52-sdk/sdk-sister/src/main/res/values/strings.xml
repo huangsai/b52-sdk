@@ -18,4 +18,9 @@
     <string name="sister_chat_newest">查看新消息</string>
     <string name="sister_msg_content_empty_toast">不能发送空消息</string>
     <string name="sister_audio_play_error_toast">语音播放失败</string>
+    <string name="sister_leave_msg_text_content">当前咨询用于过多，为了不耽误您的时间，请您填写留言，我们将稍后联系您。</string>
+    <string name="sister_leave_msg_click_content">点击留言</string>
+    <string name="sister_leave_msg_input_hint">填写留言：请描述您在游戏中遇到的问题，内容至少10个字</string>
+    <string name="sister_leave_msg_input_content_toast">内容至少10个字</string>
+    <string name="sister_leave_msg_input_num">0/200</string>
 </resources>

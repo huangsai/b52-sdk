@@ -23,6 +23,7 @@
 -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName">
 
+    <color name="sister_color_transparent">#00000000</color>
     <color name="sister_color_white">#FFFFFF</color>
     <color name="sister_color_black">#000000</color>
     <color name="sister_color_black_transparent">#B2000000</color>

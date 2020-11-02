@@ -10,6 +10,7 @@ const val TYPE_TIME = 4
 const val TYPE_SYSTEM = 5
 const val TYPE_DEPOSIT = 6
 const val TYPE_AUTO_REPLY = 7
+const val TYPE_LEAVE_MSG = 8
 
 const val IM_BUZ_LOGIN = 20001// 登录20001
 const val IM_BUZ_LOGOUT = 20002// 登出20002
