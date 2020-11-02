@@ -167,6 +167,9 @@ class ChatListPresenter(
             R.id.status_failed -> {
                 retryPostMsg(AdapterUtils.getHolder(v).item<MsgItem>().data)
             }
+            R.id.leave_msg_click -> {
+                ChatLeaveMsgPresenter(fragment, binding, model).showPop()
+            }
         }
     }
 

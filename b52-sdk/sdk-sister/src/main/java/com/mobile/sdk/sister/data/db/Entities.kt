@@ -26,7 +26,7 @@ data class DbMessage(
     @ColumnInfo(name = "status") var status: Int
 ) {
 
-    fun isSister():Boolean = fromUserType == 1
+    fun isSister(): Boolean = fromUserType == 1
 
     @JsonClass(generateAdapter = true)
     data class Text(@Json(name = "msg") val msg: String)

@@ -1,5 +1,6 @@
 package com.mobile.sdk.sister.ui.items
 
+import android.graphics.Paint
 import android.graphics.drawable.AnimationDrawable
 import android.view.View
 import android.widget.ImageView
@@ -292,6 +293,22 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    class LeaveMsg(data: DbMessage) : MsgItem(data) {
+
+        override fun bind(holder: AdapterViewHolder) {
+            val binding = holder.binding(SisterItemChatLeaveMsgBinding::bind)
+            binding.leaveMsgClick.paint.flags = Paint.UNDERLINE_TEXT_FLAG; //下划线
+            binding.leaveMsgClick.paint.isAntiAlias = true;//抗锯齿
+            holder.attachImageLoader(R.id.profile)
+            holder.attachOnClickListener(R.id.profile)
+            holder.attachOnClickListener(R.id.leave_msg_click)
+        }
+
+        override fun getLayout(): Int {
+            return R.layout.sister_item_chat_leave_msg
+        }
+    }
+
     class Deposit(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -352,6 +369,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
                     TYPE_TIME -> Time(data).ofTime()
                     TYPE_SYSTEM -> System(data).ofSystem()
                     TYPE_DEPOSIT -> Deposit(data).ofDeposit()
+                    TYPE_LEAVE_MSG -> LeaveMsg(data)
                     else -> Upgrade(data).ofUpgrade()
                 }
             } catch (e: Exception) {
