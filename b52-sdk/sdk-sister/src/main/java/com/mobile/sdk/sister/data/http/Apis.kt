@@ -23,7 +23,6 @@ const val IM_BUZ_REQUEST_SISTER = 30007// 新增匹配客服30007
 const val IM_BUZ_REQUEST_SISTER_SUCCESS = 30008// 匹配客服结果30008
 const val IM_BUZ_LEAVE_MSG = 30009// 新增留言30009
 
-
 const val STATUS_MSG_PROCESSING = 1
 const val STATUS_MSG_SUCCESS = 2
 const val STATUS_MSG_FAILED = 3

@@ -26,13 +26,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         binding.csmsOpen.setOnClickListener {
             SisterX.setUsername(binding.editUsername.text.toString())
         }
 
-        SisterX.isChatLogin.observe(this, Observer { isLogin ->
-            if (isLogin) {
+        SisterX.isChatLogin.observe(this, Observer { isChatLogin ->
+            if (isChatLogin) {
                 binding.editUsername.setText("")
                 SisterX.show(this@MainActivity, false)
             }

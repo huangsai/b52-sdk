@@ -190,7 +190,7 @@ object SocketUtils {
 
     private fun onRequestSisterError() = GlobalScope.launch(Dispatchers.IO) {
         try {
-            val source = SisterX.component.sisterRepository().sysAutoReply()
+            val source = SisterX.component.sisterRepository().sysAutoReply("")
             when (source) {
                 is Source.Success -> {
                 }

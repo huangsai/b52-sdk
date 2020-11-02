@@ -23,11 +23,11 @@ class SisterRepository @Inject constructor(
     private val platformPrefs: PlatformPrefs
 ) {
 
-    suspend fun user(username: String): Source<ApiUser> {
+    suspend fun user(_loginName: String): Source<ApiUser> {
         return try {
-            dataService.token(2, username).execute().toSource {
+            dataService.token(2, _loginName).execute().toSource {
                 platformPrefs.userId = it.userId
-                platformPrefs.loginName = it.username
+                platformPrefs.loginName = _loginName
                 platformPrefs.token = it.token
                 platformPrefs.salt = it.salt
                 platformPrefs.userImage = it.userImage
@@ -35,9 +35,9 @@ class SisterRepository @Inject constructor(
                 return@toSource it
             }
         } catch (e: Exception) {
-            if (username.isEmpty()) {
+            if (_loginName.isEmpty()) {
                 platformPrefs.userId = ""
-                platformPrefs.loginName = username
+                platformPrefs.loginName = _loginName
                 platformPrefs.token = ""
                 platformPrefs.salt = ""
                 platformPrefs.userImage = ""
@@ -97,15 +97,15 @@ class SisterRepository @Inject constructor(
 
     suspend fun sysReply(): Source<List<ApiSysReply>> {
         return try {
-            dataService.sysReply(1).execute().toSource()
+            dataService.sysReply(1, "", "").execute().toSource()
         } catch (e: Exception) {
             errorSource(e)
         }
     }
 
-    suspend fun sysAutoReply(): Source<List<ApiSysReply>> {
+    suspend fun sysAutoReply(keyword: String): Source<List<ApiSysReply>> {
         return try {
-            dataService.sysReply(2).execute().toSource()
+            dataService.sysReply(2, keyword, "").execute().toSource()
         } catch (e: Exception) {
             errorSource(e)
         }

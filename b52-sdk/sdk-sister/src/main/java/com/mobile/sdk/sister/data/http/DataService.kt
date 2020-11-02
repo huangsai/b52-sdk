@@ -19,5 +19,9 @@ interface DataService {
     fun uploadFile(@Body body: RequestBody): Call<ApiFile>
 
     @GET("/sysReply/listSysReply")
-    fun sysReply(@Query("flag") flag: Int): Call<List<ApiSysReply>>
+    fun sysReply(
+        @Query("flag") flag: Int,
+        @Query("words") keyword: String,
+        @Query("content") content: String
+    ): Call<List<ApiSysReply>>
 }

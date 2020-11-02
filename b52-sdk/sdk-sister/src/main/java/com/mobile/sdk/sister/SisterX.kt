@@ -22,24 +22,26 @@ import kotlinx.coroutines.launch
 
 object SisterX {
 
-    const val TAG = "SisterX"
+    internal const val TAG = "SisterX"
 
-    const val BUS_MSG_AUDIO_PLAYING = 20048
-    const val BUS_MSG_STATUS = 20049
-    const val BUS_MSG_NEW = 20050
+    internal const val BUS_MSG_AUDIO_PLAYING = 20048
+    internal const val BUS_MSG_STATUS = 20049
+    internal const val BUS_MSG_NEW = 20050
 
-    var sisterUserId = "0"
-    var chatId = 0L
+    internal var sisterUserId = "0"
+    internal var chatId = 0L
 
-    var socketServer = "ws://java.cg.xxx:30302/csms"
-    var httpServer = "http://java.cg.xxx:30301/"
+    internal var socketServer = ""
+    internal var httpServer = ""
 
-    lateinit var component: SisterComponent
+    internal lateinit var component: SisterComponent
         private set
 
-    val isSocketConnected: MutableLiveData<Boolean> = MutableLiveData()
+    internal val isSocketConnected: MutableLiveData<Boolean> = MutableLiveData()
 
-    val isChatLogin: MutableLiveData<Boolean> = MutableLiveData()
+    internal val isChatLogin: MutableLiveData<Boolean> = MutableLiveData()
+
+    internal val sisterState: MutableLiveData<Int> = MutableLiveData()
 
     fun setup(app: Application, isDebug: Boolean) {
         if (::component.isInitialized) {
@@ -56,6 +58,13 @@ object SisterX {
 
         AppWebSocket.toString()
         AppManager.initialize()
+    }
+
+    fun setServers(_socketServer: String, _httpServer: String) {
+        require(_socketServer.isNotEmpty())
+        require(_httpServer.isNotEmpty())
+        socketServer = _socketServer
+        httpServer = _httpServer
     }
 
     fun setUsername(username: String) {
