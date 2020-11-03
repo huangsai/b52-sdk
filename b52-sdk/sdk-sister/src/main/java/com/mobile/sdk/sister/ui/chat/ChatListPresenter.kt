@@ -170,6 +170,9 @@ class ChatListPresenter(
             R.id.leave_msg_click -> {
                 ChatLeaveMsgPresenter(fragment, binding, model).showPop()
             }
+            R.id.auto_reply_click -> {
+                Msg.toast("联系客服")
+            }
         }
     }
 

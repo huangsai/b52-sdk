@@ -2,6 +2,9 @@ package com.mobile.sdk.sister.ui.items
 
 import android.graphics.Paint
 import android.graphics.drawable.AnimationDrawable
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
@@ -16,6 +19,7 @@ import com.mobile.sdk.sister.ui.*
 import com.mobile.sdk.sister.ui.chat.EmotionHandle
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
+
 
 abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
@@ -309,6 +313,32 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    class AutoReply(data: DbMessage) : MsgItem(data) {
+
+        override fun bind(holder: AdapterViewHolder) {
+            val binding = holder.binding(SisterItemChatAutoReplyBinding::bind)
+            val spannableString = SpannableStringBuilder()
+            val underlineSpan = UnderlineSpan()
+            val content = "如果以上答案未解决您的问题，请点击 联系客服"
+            spannableString.append(content)
+            spannableString.setSpan(
+                underlineSpan,
+                content.length - 4,
+                content.length,
+                Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+            )
+            binding.autoReplyClick.text = spannableString
+            holder.attachImageLoader(R.id.profile)
+            holder.attachOnClickListener(R.id.profile)
+            holder.attachOnClickListener(R.id.auto_reply_click)
+            //TODO 绑定自动回复recycler数据
+        }
+
+        override fun getLayout(): Int {
+            return R.layout.sister_item_chat_auto_reply
+        }
+    }
+
     class Deposit(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -354,11 +384,12 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             return try {
                 when (data.type) {
                     TYPE_TEXT -> {
-                        if (data.id.isEmpty()) {
-                            Text2(data).ofText()
-                        } else {
-                            (if (data.isSister()) Text2(data).ofText() else Text(data)).ofText()
-                        }
+                        AutoReply(data)
+//                        if (data.id.isEmpty()) {
+//                            Text2(data).ofText()
+//                        } else {
+//                            (if (data.isSister()) Text2(data).ofText() else Text(data)).ofText()
+//                        }
                     }
                     TYPE_IMAGE -> {
                         (if (data.isSister()) Image2(data).ofImage() else Image(data)).ofImage()
@@ -370,6 +401,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
                     TYPE_SYSTEM -> System(data).ofSystem()
                     TYPE_DEPOSIT -> Deposit(data).ofDeposit()
                     TYPE_LEAVE_MSG -> LeaveMsg(data)
+                    TYPE_AUTO_REPLY -> AutoReply(data)
                     else -> Upgrade(data).ofUpgrade()
                 }
             } catch (e: Exception) {
