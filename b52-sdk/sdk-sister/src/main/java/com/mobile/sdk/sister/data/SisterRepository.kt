@@ -103,7 +103,7 @@ class SisterRepository @Inject constructor(
         }
     }
 
-    suspend fun sysAutoReply(keyword: String): Source<List<ApiSysReply>> {
+    suspend fun robotReply(keyword: String): Source<List<ApiSysReply>> {
         return try {
             dataService.sysReply(2, keyword, "").execute().toSource()
         } catch (e: Exception) {

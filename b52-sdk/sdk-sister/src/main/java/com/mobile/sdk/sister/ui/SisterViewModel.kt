@@ -45,6 +45,7 @@ class SisterViewModel @Inject constructor(
     fun loadMessages(): List<DbMessage> {
         ensureWorkThread()
         return sisterRepository.loadMessage().also { list ->
+            // 离线消息推送按照业务流程图，还是有问题的
             postOfflineMessages(list.filter {
                 it.status == STATUS_MSG_PROCESSING || it.status == STATUS_MSG_FAILED
             })

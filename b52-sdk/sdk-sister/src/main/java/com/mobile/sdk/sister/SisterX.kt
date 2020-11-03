@@ -42,18 +42,18 @@ object SisterX {
 
     internal val isSocketConnected: MutableLiveData<Boolean> = MutableLiveData()
 
-    internal val sisterState: MutableLiveData<Int> = MutableLiveData()
+    internal lateinit var component: SisterComponent
+        private set
 
     val isLogin: MutableLiveData<Boolean> = MutableLiveData()
-
-    lateinit var component: SisterComponent
-        private set
 
     private fun createRoomDatabase(): RoomAppDatabase {
         return Room.databaseBuilder(AndroidX.myApp, RoomAppDatabase::class.java, "sdk_sister.db3")
             .addCallback(RoomAppDatabase.DbCallback())
             .build()
     }
+
+    internal fun hasSister(): Boolean = chatId > 0 && sisterUserId != "0"
 
     fun setup(app: Application, isDebug: Boolean) {
         if (::component.isInitialized) {

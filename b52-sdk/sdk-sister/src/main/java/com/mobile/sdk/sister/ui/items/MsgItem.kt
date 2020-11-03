@@ -20,7 +20,6 @@ import com.mobile.sdk.sister.ui.chat.EmotionHandle
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
 
-
 abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
     lateinit var text: DbMessage.Text
@@ -44,6 +43,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     lateinit var upgrade: DbMessage.Upgrade
         private set
 
+    lateinit var robot: List<ApiSysReply>
+        private set
+
     var isAudioPlaying: Boolean = false
 
     internal fun ofText(): MsgItem = apply { text = data.content.jsonToText() }
@@ -59,6 +61,8 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     internal fun ofSystem(): MsgItem = apply { system = data.content.jsonToSystem() }
 
     internal fun ofUpgrade(): MsgItem = apply { upgrade = data.content.jsonToUpgrade() }
+
+    internal fun ofRobot(): MsgItem = apply { robot = data.content.jsonToRobot() }
 
     protected fun setStatus(statusFailed: View, statusProcessing: View) {
         when (data.status) {
@@ -297,12 +301,13 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    @Deprecated("好像留言信息，不在聊聊天列表里面显示，请确认")
     class LeaveMsg(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatLeaveMsgBinding::bind)
-            binding.leaveMsgClick.paint.flags = Paint.UNDERLINE_TEXT_FLAG; //下划线
-            binding.leaveMsgClick.paint.isAntiAlias = true;//抗锯齿
+            binding.leaveMsgClick.paint.flags = Paint.UNDERLINE_TEXT_FLAG
+            binding.leaveMsgClick.paint.isAntiAlias = true
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.leave_msg_click)
@@ -313,13 +318,13 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class AutoReply(data: DbMessage) : MsgItem(data) {
+    class Robot(data: DbMessage) : MsgItem(data) {
+        private val spannableString = SpannableStringBuilder()
+        private val underlineSpan = UnderlineSpan()
+        private val content = "如果以上答案未解决您的问题，请点击 联系客服"
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatAutoReplyBinding::bind)
-            val spannableString = SpannableStringBuilder()
-            val underlineSpan = UnderlineSpan()
-            val content = "如果以上答案未解决您的问题，请点击 联系客服"
             spannableString.append(content)
             spannableString.setSpan(
                 underlineSpan,
@@ -331,7 +336,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.auto_reply_click)
-            //TODO 绑定自动回复recycler数据
+            // 使用robot变量绑定数据
         }
 
         override fun getLayout(): Int {
@@ -383,25 +388,14 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         fun create(data: DbMessage): MsgItem {
             return try {
                 when (data.type) {
-                    TYPE_TEXT -> {
-                        AutoReply(data)
-//                        if (data.id.isEmpty()) {
-//                            Text2(data).ofText()
-//                        } else {
-//                            (if (data.isSister()) Text2(data).ofText() else Text(data)).ofText()
-//                        }
-                    }
-                    TYPE_IMAGE -> {
-                        (if (data.isSister()) Image2(data).ofImage() else Image(data)).ofImage()
-                    }
-                    TYPE_AUDIO -> {
-                        (if (data.isSister()) Audio2(data).ofAudio() else Audio(data)).ofAudio()
-                    }
+                    TYPE_TEXT -> (if (data.isSister()) Text2(data).ofText() else Text(data)).ofText()
+                    TYPE_IMAGE -> (if (data.isSister()) Image2(data).ofImage() else Image(data)).ofImage()
+                    TYPE_AUDIO -> (if (data.isSister()) Audio2(data).ofAudio() else Audio(data)).ofAudio()
                     TYPE_TIME -> Time(data).ofTime()
                     TYPE_SYSTEM -> System(data).ofSystem()
                     TYPE_DEPOSIT -> Deposit(data).ofDeposit()
                     TYPE_LEAVE_MSG -> LeaveMsg(data)
-                    TYPE_AUTO_REPLY -> AutoReply(data)
+                    TYPE_ROBOT -> Robot(data).ofRobot()
                     else -> Upgrade(data).ofUpgrade()
                 }
             } catch (e: Exception) {

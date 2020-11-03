@@ -11,6 +11,7 @@ import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.proto.*
 import com.mobile.sdk.sister.ui.items.MsgItem
+import com.mobile.sdk.sister.ui.jsonToText
 import com.mobile.sdk.sister.ui.toChatRes
 import com.mobile.sdk.sister.ui.toDbMessage
 import com.mobile.sdk.sister.ui.toJson
@@ -86,22 +87,33 @@ object SocketUtils {
     @WorkerThread
     fun postMessage(dbMessage: DbMessage) {
         ensureWorkThread()
-        CommonMessage.Builder()
-            .bizId(IM_BUZ_MSG)
-            .msgType(2)
-            .content(dbMessage.toChatRes().encodeByteString())
-            .build()
-            .let {
-                if (true == SisterX.isSocketConnected.value) {
-                    Timber.tag(SisterX.TAG).d("发送->%s", dbMessage.toJson())
-                    AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
-                } else {
-                    dbMessage.status = STATUS_MSG_FAILED
-                    SisterX.component.sisterRepository().updateMessage(dbMessage)
+        if (SisterX.hasSister()) {
+            CommonMessage.Builder()
+                .bizId(IM_BUZ_MSG)
+                .msgType(2)
+                .content(dbMessage.toChatRes().encodeByteString())
+                .build()
+                .let {
+                    if (true == SisterX.isSocketConnected.value) {
+                        Timber.tag(SisterX.TAG).d("发送->%s", dbMessage.toJson())
+                        AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
+                    } else {
+                        dbMessage.status = STATUS_MSG_FAILED
+                        SisterX.component.sisterRepository().updateMessage(dbMessage)
 
-                    Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
+                        Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
+                    }
                 }
-            }
+        } else {
+            setDbMessageSuccess(dbMessage.id)
+            robotReplay(
+                if (dbMessage.type == TYPE_TEXT) {
+                    dbMessage.content.jsonToText().msg
+                } else {
+                    ""
+                }
+            )
+        }
     }
 
     fun onMessage(commonMessage: CommonMessage) {
@@ -109,7 +121,6 @@ object SocketUtils {
             IM_BUZ_LOGIN -> {
                 ResponseResult.ADAPTER.decode(commonMessage.content).let {
                     SisterX.isLogin.postValue(true)
-                    requestSister()
                     Timber.tag(SisterX.TAG).d(it.msg)
                 }
             }
@@ -120,11 +131,11 @@ object SocketUtils {
             }
             IM_BUZ_CLOSE_BY_MYSELF -> {
                 resetChat()
-                Timber.tag(SisterX.TAG).d("我关闭当前")
+                Timber.tag(SisterX.TAG).d("我关闭当前会话")
             }
             IM_BUZ_CLOSE_BY_SYSTEM -> {
                 resetChat()
-                Timber.tag(SisterX.TAG).d("客服关闭会话")
+                Timber.tag(SisterX.TAG).d("客服关闭当前会话")
             }
             IM_BUZ_CHAT_TIMEOUT -> {
                 resetChat()
@@ -135,7 +146,6 @@ object SocketUtils {
                     resetChat()
                     Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(it.toDbMessage()))
                     Timber.tag(SisterX.TAG).d(it.timeOutMsg.ifEmpty { "客服匹配失败" })
-                    onRequestSisterError()
                 }
             }
             IM_BUZ_REQUEST_SISTER_SUCCESS -> {
@@ -161,7 +171,11 @@ object SocketUtils {
                     }
                 }
             }
-            else -> Timber.tag(SisterX.TAG).d("未知socket业务消息")
+            IM_BUZ_REQUEST_SISTER -> {
+            }
+            else -> {
+                Timber.tag(SisterX.TAG).d("未知socket业务消息")
+            }
         }
     }
 
@@ -193,11 +207,12 @@ object SocketUtils {
             }
     }
 
-    private fun onRequestSisterError() = GlobalScope.launch(Dispatchers.IO) {
+    private fun robotReplay(keyword: String) = GlobalScope.launch(Dispatchers.IO) {
         try {
-            val source = SisterX.component.sisterRepository().sysAutoReply("")
+            val source = SisterX.component.sisterRepository().robotReply(keyword)
             when (source) {
                 is Source.Success -> {
+                    insertDbMessage(source.requireData().toDbMessage())
                 }
                 is Source.Error -> {
                     Timber.tag(SisterX.TAG).d(source.requireError())

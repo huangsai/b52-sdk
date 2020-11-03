@@ -7,8 +7,25 @@ import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.proto.ChatMsg
 import com.mobile.sdk.sister.proto.ChatReq
 import com.mobile.sdk.sister.proto.QueueTimeOutMsg
+import com.squareup.moshi.Types
 
 const val MSG_TIME_DIFF = 10 * 60 * 1000L // 消息显示时间差
+
+fun String.jsonToRobot(): List<ApiSysReply> {
+    val type = Types.newParameterizedType(List::class.java, ApiSysReply::class.java)
+    return SisterX.component.json()
+        .adapter<List<ApiSysReply>>(type)
+        .lenient()
+        .fromJson(this)!!
+}
+
+fun List<ApiSysReply>.toJson(): String {
+    val type = Types.newParameterizedType(List::class.java, ApiSysReply::class.java)
+    return SisterX.component.json()
+        .adapter<List<ApiSysReply>>(type)
+        .lenient()
+        .toJson(this)
+}
 
 fun String.jsonToText(): DbMessage.Text {
     return SisterX.component.json()
@@ -139,6 +156,23 @@ fun QueueTimeOutMsg.toDbMessage(): DbMessage {
         TYPE_TEXT,
         AppPrefs.userId,
         DbMessage.Text(timeOutMsg).toJson(),
+        System.currentTimeMillis(),
+        "",
+        "",
+        "0",
+        1,
+        0,
+        STATUS_MSG_SUCCESS
+    )
+}
+
+fun List<ApiSysReply>.toDbMessage(): DbMessage {
+    return DbMessage(
+        0L,
+        "",
+        TYPE_ROBOT,
+        AppPrefs.userId,
+        this.toJson(),
         System.currentTimeMillis(),
         "",
         "",
