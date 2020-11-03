@@ -75,8 +75,8 @@ object SisterX {
     fun setServers(_socketServer: String, _httpServer: String) {
         require(_socketServer.isNotEmpty())
         require(_httpServer.isNotEmpty())
-        socketServer = _socketServer
-        httpServer = _httpServer
+        socketServer = "ws://${_socketServer}:30301/ws/csms"
+        httpServer = "http://${_httpServer}:30301/"
     }
 
     fun setUser(_loginName: String) = GlobalScope.launch(Dispatchers.IO) {
