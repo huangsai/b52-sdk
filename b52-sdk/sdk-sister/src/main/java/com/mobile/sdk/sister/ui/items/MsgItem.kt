@@ -8,6 +8,8 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
@@ -18,6 +20,7 @@ import com.mobile.sdk.sister.databinding.*
 import com.mobile.sdk.sister.ui.*
 import com.mobile.sdk.sister.ui.chat.EmotionHandle
 import com.pacific.adapter.AdapterViewHolder
+import com.pacific.adapter.RecyclerAdapter
 import com.pacific.adapter.SimpleRecyclerItem
 
 abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
@@ -318,24 +321,24 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     }
 
     class Robot(data: DbMessage) : MsgItem(data) {
-        private val spannableString = SpannableStringBuilder()
-        private val underlineSpan = UnderlineSpan()
         private val content = "如果以上答案未解决您的问题，请点击 联系客服"
+        private val underlineSpan = UnderlineSpan()
+        private val spannableString = SpannableStringBuilder(content).setSpan(
+            underlineSpan,
+            content.length - 4,
+            content.length,
+            Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+        )
+        private val adapter = RecyclerAdapter()
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatAutoReplyBinding::bind)
-            spannableString.append(content)
-            spannableString.setSpan(
-                underlineSpan,
-                content.length - 4,
-                content.length,
-                Spannable.SPAN_EXCLUSIVE_INCLUSIVE
-            )
-            binding.autoReplyClick.text = spannableString
+            binding.autoReplyClick.text = spannableString.toString()
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.auto_reply_click)
             // 使用robot变量绑定数据
+//            binding.autoReplyRecycler.layoutManager = LinearLayoutManager(AndroidX.myApp)
         }
 
         override fun getLayout(): Int {
