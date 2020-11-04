@@ -11,7 +11,7 @@ class AutoReplyItem(val data: ApiSysReply) : SimpleRecyclerItem() {
     override fun bind(holder: AdapterViewHolder) {
         val binding = holder.binding(SisterItemAutoReplyBinding::bind)
         binding.itemAutoReply.text = data.words
-        holder.attachOnClickListener(R.id.item_help_tag)
+        holder.attachOnClickListener(R.id.item_auto_reply)
     }
 
     override fun getLayout(): Int {
