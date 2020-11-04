@@ -39,7 +39,9 @@ class SisterViewModel @Inject constructor(
     }
 
     fun requestSister() {
-        SocketUtils.requestSister()
+        if (!SisterX.hasSister()) {
+            SocketUtils.requestSister()
+        }
     }
 
     @WorkerThread

@@ -201,7 +201,7 @@ object SocketUtils {
 
     private fun insertDbMessage(dbMessage: DbMessage) = GlobalScope.launch(Dispatchers.IO) {
         SisterX.component.sisterRepository().let {
-            if (dbMessage.id != "0") {
+            if (dbMessage.id.length > 1) {
                 it.insetMessage(dbMessage)
             }
             Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))

@@ -95,9 +95,6 @@ class SisterRepository @Inject constructor(
         }
     }
 
-    /**
-     * flag：1常见问题设置 2知识库
-     */
     suspend fun sysReply(flag: Int, keyword: String, content: String): Source<List<ApiSysReply>> {
         return try {
             dataService.sysReply(flag, keyword, content).execute().toSource()
