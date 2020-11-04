@@ -69,7 +69,7 @@ class ChatHelpPresenter(
         when (v!!.id) {
             R.id.item_help_tag -> {
                 val data = AdapterUtils.getHolder(v).item<HelpItem>().data
-                model.createHelpDbMessage(DbMessage.Text(data.words).toJson()).also {
+                model.createReplyDbMessage(DbMessage.Text(data.words).toJson()).also {
                     SocketUtils.insertDbMessage(it)
                 }
                 SocketUtils.insertDbMessage(data.content.toDbMessage())
