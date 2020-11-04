@@ -5,15 +5,13 @@ import com.squareup.moshi.JsonClass
 
 const val TYPE_TEXT = 1
 const val TYPE_TEXT_A = -1// 快捷回复
-const val TYPE_TEXT_B = -2// 只能回复
+const val TYPE_TEXT_B = -2// 智能回复
 const val TYPE_IMAGE = 2
 const val TYPE_AUDIO = 3
 const val TYPE_TIME = 4
 const val TYPE_SYSTEM = 5
 const val TYPE_DEPOSIT = 6
 const val TYPE_ROBOT = 7
-
-@Deprecated("好像留言信息，不在聊聊天列表里面显示，请确认")
 const val TYPE_LEAVE_MSG = 8
 
 const val BUZ_LOGIN = 20001// 登录20001
