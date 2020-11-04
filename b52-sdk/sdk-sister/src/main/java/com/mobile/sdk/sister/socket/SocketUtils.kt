@@ -120,7 +120,7 @@ object SocketUtils {
             if (dbMessage.type == TYPE_TEXT) {
                 sysReply(dbMessage.content.jsonToText().msg)
             } else {
-                sysReply( "")
+                sysReply("")
             }
         }
     }
@@ -154,16 +154,14 @@ object SocketUtils {
             }
             BUZ_SISTER_REQUEST_TIMEOUT -> {
                 QueueTimeOutMsg.ADAPTER.decode(commonMessage.content).let {
-                    resetChat()
-                    Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(it.toDbMessage()))
+                    onRequestSisterError(it.timeOutMsg)
                     Timber.tag(SisterX.TAG).d(it.timeOutMsg.ifEmpty { "客服匹配超时" })
                 }
             }
-            BUZ_SISTER_REQUEST -> {
-                ResponseResult.ADAPTER.decode(commonMessage.content).let {
-                    resetChat()
-                    Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(it.toDbMessage()))
-                    Timber.tag(SisterX.TAG).d(it.msg.ifEmpty { "客服匹配失败" })
+            BUZ_SISTER_REQUEST_ERROR -> {
+                CSOfflineMsg.ADAPTER.decode(commonMessage.content).let {
+                    onRequestSisterError(it.offlineMsg)
+                    Timber.tag(SisterX.TAG).d(it.offlineMsg.ifEmpty { "没有客服在线" })
                 }
             }
             BUZ_SISTER_REQUEST_SUCCESS -> {
@@ -224,6 +222,25 @@ object SocketUtils {
         } catch (e: Exception) {
             Timber.tag(SisterX.TAG).d(e)
         }
+    }
+
+    private fun onRequestSisterError(msg: String) {
+        resetChat()
+        val obj = DbMessage(
+            0L,
+            "",
+            TYPE_LEAVE_MSG,
+            AppPrefs.userId,
+            DbMessage.Text(msg).toJson(),
+            System.currentTimeMillis(),
+            "",
+            "",
+            "0",
+            1,
+            0,
+            STATUS_MSG_SUCCESS
+        )
+        Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(obj))
     }
 
     private fun resetChat() {

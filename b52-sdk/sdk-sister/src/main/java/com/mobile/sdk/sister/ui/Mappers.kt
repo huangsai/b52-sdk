@@ -151,40 +151,6 @@ fun ChatMsg.toDbMessage(): DbMessage {
     )
 }
 
-fun QueueTimeOutMsg.toDbMessage(): DbMessage {
-    return DbMessage(
-        0L,
-        "",
-        TYPE_LEAVE_MSG,
-        AppPrefs.userId,
-        DbMessage.Text(timeOutMsg).toJson(),
-        System.currentTimeMillis(),
-        "",
-        "",
-        "0",
-        1,
-        0,
-        STATUS_MSG_SUCCESS
-    )
-}
-
-fun ResponseResult.toDbMessage(): DbMessage {
-    return DbMessage(
-        0L,
-        "",
-        TYPE_LEAVE_MSG,
-        AppPrefs.userId,
-        DbMessage.Text(msg).toJson(),
-        System.currentTimeMillis(),
-        "",
-        "",
-        "0",
-        1,
-        0,
-        STATUS_MSG_SUCCESS
-    )
-}
-
 fun List<ApiSysReply>.toDbMessage(): DbMessage {
     return DbMessage(
         0L,
