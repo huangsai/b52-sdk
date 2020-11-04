@@ -4,6 +4,8 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 const val TYPE_TEXT = 1
+const val TYPE_TEXT_A = -1// 快捷回复
+const val TYPE_TEXT_B = -2// 只能回复
 const val TYPE_IMAGE = 2
 const val TYPE_AUDIO = 3
 const val TYPE_TIME = 4

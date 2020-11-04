@@ -95,17 +95,12 @@ class SisterRepository @Inject constructor(
         }
     }
 
-    suspend fun sysReply(): Source<List<ApiSysReply>> {
+    /**
+     * flag：1常见问题设置 2知识库
+     */
+    suspend fun sysReply(flag: Int, keyword: String, content: String): Source<List<ApiSysReply>> {
         return try {
-            dataService.sysReply(1, "", "").execute().toSource()
-        } catch (e: Exception) {
-            errorSource(e)
-        }
-    }
-
-    suspend fun robotReply(keyword: String): Source<List<ApiSysReply>> {
-        return try {
-            dataService.sysReply(2, keyword, "").execute().toSource()
+            dataService.sysReply(flag, keyword, content).execute().toSource()
         } catch (e: Exception) {
             errorSource(e)
         }

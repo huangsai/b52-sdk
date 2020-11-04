@@ -8,6 +8,7 @@ import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.guava.jvm.domain.Source
 import com.mobile.sdk.sister.R
+import com.mobile.sdk.sister.data.http.TYPE_TEXT_A
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.items.HelpItem
@@ -65,7 +66,7 @@ class ChatHelpPresenter(
         when (v!!.id) {
             R.id.item_help_tag -> {
                 val data = AdapterUtils.getHolder(v).item<HelpItem>().data
-                fragment.chatListPresenter.postText(data.words)
+                fragment.chatListPresenter.postText(data.words, TYPE_TEXT_A)
             }
         }
     }

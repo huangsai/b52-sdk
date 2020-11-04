@@ -390,7 +390,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         fun create(data: DbMessage): MsgItem {
             return try {
                 when (data.type) {
-                    TYPE_TEXT -> {
+                    TYPE_TEXT, TYPE_TEXT_A, TYPE_TEXT_B -> {
                         (if (data.isSister()) Text2(data).ofText() else Text(data)).ofText()
                     }
                     TYPE_IMAGE -> {

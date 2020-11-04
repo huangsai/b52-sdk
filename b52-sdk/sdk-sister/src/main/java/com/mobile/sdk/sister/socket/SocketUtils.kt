@@ -117,13 +117,12 @@ object SocketUtils {
                 }
         } else {
             setDbMessageSuccess(dbMessage.id)
-            robotReplay(
-                if (dbMessage.type == TYPE_TEXT) {
-                    dbMessage.content.jsonToText().msg
-                } else {
-                    ""
-                }
-            )
+            when (dbMessage.type) {
+                TYPE_TEXT -> sysReply(2, dbMessage.content.jsonToText().msg, "")
+                TYPE_TEXT_A -> sysReply(1, "", dbMessage.content.jsonToText().msg)
+                TYPE_TEXT_B -> sysReply(2, dbMessage.content.jsonToText().msg, "")
+                else -> sysReply(2, "", "")
+            }
         }
     }
 
@@ -209,21 +208,18 @@ object SocketUtils {
         }
     }
 
-    private fun robotReplay(keyword: String) = GlobalScope.launch(Dispatchers.IO) {
-        try {
-            val source = SisterX.component.sisterRepository().robotReply(keyword)
-            when (source) {
-                is Source.Success -> {
-                    insertDbMessage(source.requireData().toDbMessage())
-                }
-                is Source.Error -> {
-                    Timber.tag(SisterX.TAG).d(source.requireError())
-                }
-            }.exhaustive
-        } catch (e: Exception) {
-            Timber.tag(SisterX.TAG).d(e)
+    private fun sysReply(flag: Int, keyword: String, content: String) =
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val source = SisterX.component.sisterRepository().sysReply(flag, keyword, content)
+                when (source) {
+                    is Source.Success -> insertDbMessage(source.requireData().toDbMessage())
+                    is Source.Error -> Timber.tag(SisterX.TAG).d(source.requireError())
+                }.exhaustive
+            } catch (e: Exception) {
+                Timber.tag(SisterX.TAG).d(e)
+            }
         }
-    }
 
     private fun resetChat() {
         SisterX.sisterUserId = "0"
