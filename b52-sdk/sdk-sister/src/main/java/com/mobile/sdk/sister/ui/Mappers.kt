@@ -8,6 +8,7 @@ import com.mobile.sdk.sister.proto.ChatMsg
 import com.mobile.sdk.sister.proto.ChatReq
 import com.mobile.sdk.sister.proto.QueueTimeOutMsg
 import com.squareup.moshi.Types
+import java.util.*
 
 const val MSG_TIME_DIFF = 10 * 60 * 1000L // 消息显示时间差
 
@@ -169,7 +170,7 @@ fun QueueTimeOutMsg.toDbMessage(): DbMessage {
 fun List<ApiSysReply>.toDbMessage(): DbMessage {
     return DbMessage(
         0L,
-        "",
+        UUID.randomUUID().toString(),
         TYPE_ROBOT,
         AppPrefs.userId,
         this.toJson(),

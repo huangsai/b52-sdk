@@ -360,7 +360,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     }
 
     class Time(data: DbMessage) : MsgItem(data) {
-        private val nanoStr: String by lazy { time.nano.yyyy_mm_dd_hh_mm_ss() }
+        private val nanoStr: String by lazy {
+            time.nano.yyyy_mm_dd_hh_mm_ss()
+        }
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatTimeBinding::bind)
@@ -388,9 +390,15 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         fun create(data: DbMessage): MsgItem {
             return try {
                 when (data.type) {
-                    TYPE_TEXT -> (if (data.isSister()) Text2(data).ofText() else Text(data)).ofText()
-                    TYPE_IMAGE -> (if (data.isSister()) Image2(data).ofImage() else Image(data)).ofImage()
-                    TYPE_AUDIO -> (if (data.isSister()) Audio2(data).ofAudio() else Audio(data)).ofAudio()
+                    TYPE_TEXT -> {
+                        (if (data.isSister()) Text2(data).ofText() else Text(data)).ofText()
+                    }
+                    TYPE_IMAGE -> {
+                        (if (data.isSister()) Image2(data).ofImage() else Image(data)).ofImage()
+                    }
+                    TYPE_AUDIO -> {
+                        (if (data.isSister()) Audio2(data).ofAudio() else Audio(data)).ofAudio()
+                    }
                     TYPE_TIME -> Time(data).ofTime()
                     TYPE_SYSTEM -> System(data).ofSystem()
                     TYPE_DEPOSIT -> Deposit(data).ofDeposit()

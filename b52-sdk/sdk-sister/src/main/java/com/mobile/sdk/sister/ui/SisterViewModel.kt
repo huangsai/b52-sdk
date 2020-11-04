@@ -35,6 +35,10 @@ class SisterViewModel @Inject constructor(
         SocketUtils.leaveMessage(msg)
     }
 
+    fun requestSister() {
+        SocketUtils.requestSister()
+    }
+
     @WorkerThread
     suspend fun getSysReply(): Source<List<ApiSysReply>> {
         ensureWorkThread()
