@@ -7,6 +7,7 @@ import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.proto.ChatMsg
 import com.mobile.sdk.sister.proto.ChatReq
 import com.mobile.sdk.sister.proto.QueueTimeOutMsg
+import com.mobile.sdk.sister.proto.ResponseResult
 import com.squareup.moshi.Types
 import java.util.*
 
@@ -154,9 +155,26 @@ fun QueueTimeOutMsg.toDbMessage(): DbMessage {
     return DbMessage(
         0L,
         "",
-        TYPE_TEXT,
+        TYPE_LEAVE_MSG,
         AppPrefs.userId,
         DbMessage.Text(timeOutMsg).toJson(),
+        System.currentTimeMillis(),
+        "",
+        "",
+        "0",
+        1,
+        0,
+        STATUS_MSG_SUCCESS
+    )
+}
+
+fun ResponseResult.toDbMessage(): DbMessage {
+    return DbMessage(
+        0L,
+        "",
+        TYPE_LEAVE_MSG,
+        AppPrefs.userId,
+        DbMessage.Text(msg).toJson(),
         System.currentTimeMillis(),
         "",
         "",

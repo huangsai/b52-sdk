@@ -13,7 +13,6 @@ const val TYPE_SYSTEM = 5
 const val TYPE_DEPOSIT = 6
 const val TYPE_ROBOT = 7
 
-@Deprecated("好像留言信息，不在聊聊天列表里面显示，请确认")
 const val TYPE_LEAVE_MSG = 8
 
 const val BUZ_LOGIN = 20001// 登录20001

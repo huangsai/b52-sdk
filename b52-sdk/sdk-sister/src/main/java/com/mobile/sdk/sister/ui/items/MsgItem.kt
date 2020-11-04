@@ -301,7 +301,6 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
-    @Deprecated("好像留言信息，不在聊聊天列表里面显示，请确认")
     class LeaveMsg(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {

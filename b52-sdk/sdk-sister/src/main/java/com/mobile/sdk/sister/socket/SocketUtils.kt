@@ -158,6 +158,13 @@ object SocketUtils {
                     Timber.tag(SisterX.TAG).d(it.timeOutMsg.ifEmpty { "客服匹配超时" })
                 }
             }
+            BUZ_SISTER_REQUEST -> {
+                ResponseResult.ADAPTER.decode(commonMessage.content).let {
+                    resetChat()
+                    Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(it.toDbMessage()))
+                    Timber.tag(SisterX.TAG).d(it.msg.ifEmpty { "没有客服在线" })
+                }
+            }
             BUZ_SISTER_REQUEST_SUCCESS -> {
                 MathCsMsg.ADAPTER.decode(commonMessage.content).let {
                     SisterX.chatId = it.chatId
@@ -180,8 +187,6 @@ object SocketUtils {
                         Timber.tag(SisterX.TAG).d("发送成功->%s", it.id)
                     }
                 }
-            }
-            BUZ_SISTER_REQUEST -> {
             }
             else -> {
                 Timber.tag(SisterX.TAG).d("未知socket业务消息")
