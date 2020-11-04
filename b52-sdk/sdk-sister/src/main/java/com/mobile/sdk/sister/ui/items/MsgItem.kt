@@ -8,6 +8,7 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
@@ -337,8 +338,8 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.auto_reply_click)
-            // 使用robot变量绑定数据
-            binding.autoReplyRecycler.layoutManager = LinearLayoutManager(AndroidX.myApp)
+            
+            binding.autoReplyRecycler.layoutManager = LinearLayoutManager(holder.itemView.context)
             binding.autoReplyRecycler.adapter = adapter
             adapter.replaceAll(robot.map { AutoReplyItem(it) })
         }
