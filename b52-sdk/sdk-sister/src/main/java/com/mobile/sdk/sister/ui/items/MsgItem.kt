@@ -323,22 +323,26 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     class Robot(data: DbMessage) : MsgItem(data) {
         private val content = "如果以上答案未解决您的问题，请点击 联系客服"
         private val underlineSpan = UnderlineSpan()
-        private val spannableString = SpannableStringBuilder(content).setSpan(
-            underlineSpan,
-            content.length - 4,
-            content.length,
-            Spannable.SPAN_EXCLUSIVE_INCLUSIVE
-        )
         private val adapter = RecyclerAdapter()
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatAutoReplyBinding::bind)
-            binding.autoReplyClick.text = spannableString.toString()
+            val spannableString = SpannableStringBuilder()
+            spannableString.append(content)
+            spannableString.setSpan(
+                underlineSpan,
+                content.length - 4,
+                content.length,
+                Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+            )
+            binding.autoReplyClick.text = spannableString
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.auto_reply_click)
             // 使用robot变量绑定数据
-//            binding.autoReplyRecycler.layoutManager = LinearLayoutManager(AndroidX.myApp)
+            binding.autoReplyRecycler.layoutManager = LinearLayoutManager(AndroidX.myApp)
+            binding.autoReplyRecycler.adapter = adapter
+            adapter.replaceAll(robot.map { AutoReplyItem(it) })
         }
 
         override fun getLayout(): Int {
