@@ -27,6 +27,8 @@ object SisterX {
     internal const val BUS_MSG_AUDIO_PLAYING = 20048
     internal const val BUS_MSG_STATUS = 20049
     internal const val BUS_MSG_NEW = 20050
+    internal const val BUS_MSG_AUTO_REPLY = 20051
+
 
     internal var sisterUserId = "0"
     internal var chatId = 0L

@@ -153,7 +153,7 @@ class SisterViewModel @Inject constructor(
         )
     }
 
-    fun createHelpDbMessage(jsonContent: String): DbMessage {
+    fun createReplyDbMessage(jsonContent: String): DbMessage {
         return DbMessage(
             0,
             UUID.randomUUID().toString(),

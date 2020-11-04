@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mobile.guava.jvm.coroutines.Bus
 import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
@@ -18,10 +19,10 @@ import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.databinding.*
 import com.mobile.sdk.sister.ui.*
 import com.mobile.sdk.sister.ui.chat.EmotionHandle
+import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
 import com.pacific.adapter.SimpleRecyclerItem
-import timber.log.Timber
 
 abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
@@ -320,7 +321,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
-    class Robot(data: DbMessage) : MsgItem(data) {
+    class Robot(data: DbMessage) : MsgItem(data), View.OnClickListener {
         private val content = "如果以上答案未解决您的问题，请点击 联系客服"
         private val underlineSpan = UnderlineSpan()
         private val adapter = RecyclerAdapter()
@@ -343,10 +344,16 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             binding.autoReplyRecycler.layoutManager = LinearLayoutManager(holder.itemView.context)
             binding.autoReplyRecycler.adapter = adapter
             adapter.replaceAll(robot.map { AutoReplyItem(it) })
+            adapter.onClickListener = this
         }
 
         override fun getLayout(): Int {
             return R.layout.sister_item_chat_auto_reply
+        }
+
+        override fun onClick(v: View) {
+            val data = AdapterUtils.getHolder(v).item<AutoReplyItem>().data
+            Bus.offer(SisterX.BUS_MSG_AUTO_REPLY, data)
         }
     }
 
@@ -394,7 +401,8 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         @JvmStatic
         fun create(data: DbMessage): MsgItem {
-                return when (data.type) {
+            return try {
+                when (data.type) {
                     TYPE_TEXT -> {
                         (if (data.isSister()) Text2(data).ofText() else Text(data)).ofText()
                     }
@@ -407,13 +415,13 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
                     TYPE_TIME -> Time(data).ofTime()
                     TYPE_SYSTEM -> System(data).ofSystem()
                     TYPE_DEPOSIT -> Deposit(data).ofDeposit()
-                    TYPE_LEAVE_MSG -> {
-                        Timber.tag(SisterX.TAG).d("====1=BUS_MSG_NEW")
-                        LeaveMsg(data).ofText()
-                    }
+                    TYPE_LEAVE_MSG -> LeaveMsg(data)
                     TYPE_ROBOT -> Robot(data).ofRobot()
                     else -> Upgrade(data).ofUpgrade()
                 }
+            } catch (e: Exception) {
+                Upgrade(data).ofUpgrade()
+            }
         }
     }
 }
