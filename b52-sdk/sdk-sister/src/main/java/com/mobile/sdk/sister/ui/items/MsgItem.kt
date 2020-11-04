@@ -21,6 +21,7 @@ import com.mobile.sdk.sister.ui.chat.EmotionHandle
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
 import com.pacific.adapter.SimpleRecyclerItem
+import timber.log.Timber
 
 abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
@@ -393,7 +394,6 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         @JvmStatic
         fun create(data: DbMessage): MsgItem {
-//            return try {
                 return when (data.type) {
                     TYPE_TEXT -> {
                         (if (data.isSister()) Text2(data).ofText() else Text(data)).ofText()
@@ -407,13 +407,13 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
                     TYPE_TIME -> Time(data).ofTime()
                     TYPE_SYSTEM -> System(data).ofSystem()
                     TYPE_DEPOSIT -> Deposit(data).ofDeposit()
-                    TYPE_LEAVE_MSG -> LeaveMsg(data)
+                    TYPE_LEAVE_MSG -> {
+                        Timber.tag(SisterX.TAG).d("====1=BUS_MSG_NEW")
+                        LeaveMsg(data).ofText()
+                    }
                     TYPE_ROBOT -> Robot(data).ofRobot()
                     else -> Upgrade(data).ofUpgrade()
                 }
-//            } catch (e: Exception) {
-//                Upgrade(data).ofUpgrade()
-//            }
         }
     }
 }

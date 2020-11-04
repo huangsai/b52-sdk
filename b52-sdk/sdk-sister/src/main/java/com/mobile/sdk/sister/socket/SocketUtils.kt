@@ -75,7 +75,7 @@ object SocketUtils {
 
     fun leaveMessage(msg: String) = GlobalScope.launch(Dispatchers.IO) {
         CommonMessage.Builder()
-            .bizId(BUZ_LEAVE_MSG)
+            .bizId(BUZ_LEAVE_MSG_REQUEST)
             .msgType(2)
             .content(LeaveMsgReq.Builder().msg(msg).build().encodeByteString())
             .build()
@@ -126,41 +126,25 @@ object SocketUtils {
     }
 
     fun onMessage(commonMessage: CommonMessage) {
+        Timber.tag(SisterX.TAG).d("收到buzId->%s", commonMessage.bizId)
         when (commonMessage.bizId) {
-            BUZ_LOGIN -> {
-                ResponseResult.ADAPTER.decode(commonMessage.content).let {
-                    SisterX.isLogin.postValue(true)
-                    Timber.tag(SisterX.TAG).d(it.msg)
-                }
-
-                requestSister()
-            }
-            BUZ_LOGOUT -> {
-                SisterX.isLogin.postValue(false)
-                resetChat()
-                Timber.tag(SisterX.TAG).d("登出")
-            }
-            BUZ_CHAT_CLOSE_BY_MYSELF -> {
-                resetChat()
-                Timber.tag(SisterX.TAG).d("我关闭当前会话")
-            }
-            BUZ_CHAT_CLOSE_BY_SISTER -> {
-                resetChat()
-                Timber.tag(SisterX.TAG).d("客服关闭当前会话")
-            }
-            BUZ_CHAT_CLOSE_TIMEOUT -> {
-                resetChat()
-                Timber.tag(SisterX.TAG).d("会话超时")
-            }
             BUZ_SISTER_REQUEST_TIMEOUT -> {
                 QueueTimeOutMsg.ADAPTER.decode(commonMessage.content).let {
-                    onRequestSisterError(it.timeOutMsg)
+                    resetChat()
+                    Bus.offer(
+                        SisterX.BUS_MSG_NEW,
+                        MsgItem.create(createTextMessage(TYPE_LEAVE_MSG, "", it.timeOutMsg))
+                    )
                     Timber.tag(SisterX.TAG).d(it.timeOutMsg.ifEmpty { "客服匹配超时" })
                 }
             }
             BUZ_SISTER_REQUEST_ERROR -> {
                 CSOfflineMsg.ADAPTER.decode(commonMessage.content).let {
-                    onRequestSisterError(it.offlineMsg)
+                    resetChat()
+                    Bus.offer(
+                        SisterX.BUS_MSG_NEW,
+                        MsgItem.create(createTextMessage(TYPE_LEAVE_MSG, "", it.offlineMsg))
+                    )
                     Timber.tag(SisterX.TAG).d(it.offlineMsg.ifEmpty { "无人在线请留言" })
                 }
             }
@@ -179,15 +163,46 @@ object SocketUtils {
                     }
                 }
             }
-            BUZ_MSG_REQUEST -> {
-                ResponseResult.ADAPTER.decode(commonMessage.content).let {
-                    if (!it.id.isNullOrEmpty()) {
-                        setDbMessageSuccess(it.id)
-                        Timber.tag(SisterX.TAG).d("发送成功->%s", it.id)
+            BUZ_LEAVE_MSG_SUCCESS -> {
+                LeaveMsg.ADAPTER.decode(commonMessage.content).let {
+                    it.chatMsg.forEach { chatMsg ->
+                        if (!chatMsg.id.isNullOrEmpty()) {
+                            insertDbMessage(chatMsg.toDbMessage())
+                            Timber.tag(SisterX.TAG).d("收到留言信息->%s", it.chatMsg)
+                        }
                     }
                 }
             }
-            else -> Timber.tag(SisterX.TAG).d("未知socket业务消息")
+            else -> {
+                try {
+                    onResponseResult(ResponseResult.ADAPTER.decode(commonMessage.content))
+                } catch (ignore: Exception) {
+                    Timber.tag(SisterX.TAG).d("未知buzId->%s", commonMessage.bizId)
+                }
+            }
+        }
+    }
+
+    private fun onResponseResult(response: ResponseResult) {
+        Timber.tag(SisterX.TAG).d(response.msg)
+        when (response.biz) {
+            BUZ_MSG_REQUEST -> {
+                if (!response.id.isNullOrEmpty()) {
+                    setDbMessageSuccess(response.id)
+                }
+            }
+            BUZ_LOGIN -> {
+                SisterX.isLogin.postValue(response.result == 1)
+            }
+            BUZ_LOGOUT -> {
+                SisterX.isLogin.postValue(false)
+                resetChat()
+            }
+            BUZ_CHAT_CLOSE_BY_MYSELF -> resetChat()
+            BUZ_CHAT_CLOSE_BY_SISTER -> resetChat()
+            BUZ_CHAT_CLOSE_TIMEOUT -> resetChat()
+            BUZ_LEAVE_MSG_REQUEST -> {
+            }
         }
     }
 
@@ -222,14 +237,13 @@ object SocketUtils {
         }
     }
 
-    private fun onRequestSisterError(msg: String) {
-        resetChat()
-        val obj = DbMessage(
+    private fun createTextMessage(type: Int, id: String, message: String): DbMessage {
+        return DbMessage(
             0L,
-            "",
-            TYPE_LEAVE_MSG,
+            id,
+            type,
             AppPrefs.userId,
-            DbMessage.Text(msg).toJson(),
+            DbMessage.Text(message).toJson(),
             System.currentTimeMillis(),
             "",
             "",
@@ -238,7 +252,6 @@ object SocketUtils {
             0,
             STATUS_MSG_SUCCESS
         )
-        Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(obj))
     }
 
     private fun resetChat() {

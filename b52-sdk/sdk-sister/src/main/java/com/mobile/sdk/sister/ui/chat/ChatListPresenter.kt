@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.core.view.isInvisible
-import androidx.core.view.postDelayed
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -249,9 +248,7 @@ class ChatListPresenter(
             }
         }
         adapter.add(item)
-        binding.chatRecycler.postDelayed(200) {
-            binding.chatRecycler.smoothScrollToPosition(adapter.itemCount - 1)
-        }
+        binding.chatRecycler.keepItemViewVisible(adapter.itemCount - 1, false)
     }
 
     private fun retryPostMsg(dbMessage: DbMessage) {
