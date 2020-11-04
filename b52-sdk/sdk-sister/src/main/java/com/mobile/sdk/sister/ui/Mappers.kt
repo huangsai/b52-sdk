@@ -168,6 +168,24 @@ fun List<ApiSysReply>.toDbMessage(): DbMessage {
     )
 }
 
+fun String.toDbMessage(): DbMessage {
+    return DbMessage(
+        0L,
+        UUID.randomUUID().toString(),
+        TYPE_TEXT,
+        AppPrefs.userId,
+        DbMessage.Text(this).toJson(),
+        System.currentTimeMillis(),
+        "",
+        "",
+        "0",
+        1,
+        0,
+        STATUS_MSG_SUCCESS
+    )
+}
+
+
 fun DbMessage.toChatRes(): ChatReq {
     return ChatReq.Builder()
         .id(id)
