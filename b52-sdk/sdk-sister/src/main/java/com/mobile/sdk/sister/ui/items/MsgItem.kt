@@ -338,7 +338,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.auto_reply_click)
-            
+
             binding.autoReplyRecycler.layoutManager = LinearLayoutManager(holder.itemView.context)
             binding.autoReplyRecycler.adapter = adapter
             adapter.replaceAll(robot.map { AutoReplyItem(it) })
@@ -393,8 +393,8 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         @JvmStatic
         fun create(data: DbMessage): MsgItem {
-            return try {
-                when (data.type) {
+//            return try {
+                return when (data.type) {
                     TYPE_TEXT -> {
                         (if (data.isSister()) Text2(data).ofText() else Text(data)).ofText()
                     }
@@ -411,9 +411,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
                     TYPE_ROBOT -> Robot(data).ofRobot()
                     else -> Upgrade(data).ofUpgrade()
                 }
-            } catch (e: Exception) {
-                Upgrade(data).ofUpgrade()
-            }
+//            } catch (e: Exception) {
+//                Upgrade(data).ofUpgrade()
+//            }
         }
     }
 }

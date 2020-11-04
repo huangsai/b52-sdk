@@ -13,10 +13,7 @@ import com.mobile.sdk.sister.base.InputStreamRequestBody
 import com.mobile.sdk.sister.data.SisterRepository
 import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPrefs
-import com.mobile.sdk.sister.data.http.ApiNotice1
-import com.mobile.sdk.sister.data.http.ApiSysReply
-import com.mobile.sdk.sister.data.http.STATUS_MSG_FAILED
-import com.mobile.sdk.sister.data.http.STATUS_MSG_PROCESSING
+import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.socket.SocketUtils
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -153,6 +150,23 @@ class SisterViewModel @Inject constructor(
             0,
             SisterX.chatId,
             STATUS_MSG_PROCESSING,
+        )
+    }
+
+    fun createHelpDbMessage(jsonContent: String): DbMessage {
+        return DbMessage(
+            0,
+            UUID.randomUUID().toString(),
+            TYPE_TEXT,
+            SisterX.sisterUserId,
+            jsonContent,
+            System.currentTimeMillis(),
+            AppPrefs.userImage,
+            AppPrefs.loginName,
+            AppPrefs.userId,
+            0,
+            SisterX.chatId,
+            STATUS_MSG_SUCCESS,
         )
     }
 

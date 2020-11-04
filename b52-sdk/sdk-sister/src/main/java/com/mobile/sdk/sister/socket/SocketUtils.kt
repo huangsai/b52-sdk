@@ -120,7 +120,7 @@ object SocketUtils {
             if (dbMessage.type == TYPE_TEXT) {
                 sysReply(dbMessage.content.jsonToText().msg)
             } else {
-                sysReply( "")
+                sysReply("")
             }
         }
     }
@@ -205,7 +205,7 @@ object SocketUtils {
         }
     }
 
-    private fun insertDbMessage(dbMessage: DbMessage) = GlobalScope.launch(Dispatchers.IO) {
+    fun insertDbMessage(dbMessage: DbMessage) = GlobalScope.launch(Dispatchers.IO) {
         SisterX.component.sisterRepository().let {
             if (dbMessage.id.length > 1) {
                 it.insetMessage(dbMessage)
