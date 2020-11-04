@@ -8,8 +8,6 @@ import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
@@ -392,7 +390,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         fun create(data: DbMessage): MsgItem {
             return try {
                 when (data.type) {
-                    TYPE_TEXT, TYPE_TEXT_A, TYPE_TEXT_B -> {
+                    TYPE_TEXT -> {
                         (if (data.isSister()) Text2(data).ofText() else Text(data)).ofText()
                     }
                     TYPE_IMAGE -> {

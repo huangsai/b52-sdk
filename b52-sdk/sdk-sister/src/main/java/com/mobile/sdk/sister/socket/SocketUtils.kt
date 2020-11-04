@@ -117,11 +117,10 @@ object SocketUtils {
                 }
         } else {
             setDbMessageSuccess(dbMessage.id)
-            when (dbMessage.type) {
-                TYPE_TEXT -> sysReply(2, dbMessage.content.jsonToText().msg, "")
-                TYPE_TEXT_A -> sysReply(1, "", dbMessage.content.jsonToText().msg)
-                TYPE_TEXT_B -> sysReply(2, dbMessage.content.jsonToText().msg, "")
-                else -> sysReply(2, "", "")
+            if (dbMessage.type == TYPE_TEXT) {
+                sysReply(dbMessage.content.jsonToText().msg)
+            } else {
+                sysReply( "")
             }
         }
     }
@@ -133,6 +132,8 @@ object SocketUtils {
                     SisterX.isLogin.postValue(true)
                     Timber.tag(SisterX.TAG).d(it.msg)
                 }
+
+                requestSister()
             }
             BUZ_LOGOUT -> {
                 SisterX.isLogin.postValue(false)
@@ -162,7 +163,7 @@ object SocketUtils {
                 ResponseResult.ADAPTER.decode(commonMessage.content).let {
                     resetChat()
                     Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(it.toDbMessage()))
-                    Timber.tag(SisterX.TAG).d(it.msg.ifEmpty { "没有客服在线" })
+                    Timber.tag(SisterX.TAG).d(it.msg.ifEmpty { "客服匹配失败" })
                 }
             }
             BUZ_SISTER_REQUEST_SUCCESS -> {
@@ -213,18 +214,17 @@ object SocketUtils {
         }
     }
 
-    private fun sysReply(flag: Int, keyword: String, content: String) =
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val source = SisterX.component.sisterRepository().sysReply(flag, keyword, content)
-                when (source) {
-                    is Source.Success -> insertDbMessage(source.requireData().toDbMessage())
-                    is Source.Error -> Timber.tag(SisterX.TAG).d(source.requireError())
-                }.exhaustive
-            } catch (e: Exception) {
-                Timber.tag(SisterX.TAG).d(e)
-            }
+    private fun sysReply(keyword: String) = GlobalScope.launch(Dispatchers.IO) {
+        try {
+            val source = SisterX.component.sisterRepository().sysReply(2, keyword)
+            when (source) {
+                is Source.Success -> insertDbMessage(source.requireData().toDbMessage())
+                is Source.Error -> Timber.tag(SisterX.TAG).d(source.requireError())
+            }.exhaustive
+        } catch (e: Exception) {
+            Timber.tag(SisterX.TAG).d(e)
         }
+    }
 
     private fun resetChat() {
         SisterX.sisterUserId = "0"

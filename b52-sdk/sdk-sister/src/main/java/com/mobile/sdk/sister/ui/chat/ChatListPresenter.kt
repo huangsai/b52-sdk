@@ -194,14 +194,14 @@ class ChatListPresenter(
         }
     }
 
-    fun postText(text: String, type: Int = TYPE_TEXT) {
+    fun postText(text: String) {
         if (text.isNullOrEmpty()) {
             Msg.toast(R.string.sister_msg_content_empty_toast)
             return
         }
         fragment.hideSoftInput()
         fragment.lifecycleScope.launch(Dispatchers.IO) {
-            val dbMessage = model.createDbMessage(type, DbMessage.Text(text).toJson())
+            val dbMessage = model.createDbMessage(TYPE_TEXT, DbMessage.Text(text).toJson())
             val item = MsgItem.create(dbMessage)
             withContext(Dispatchers.Main) {
                 addMsgItem(item)

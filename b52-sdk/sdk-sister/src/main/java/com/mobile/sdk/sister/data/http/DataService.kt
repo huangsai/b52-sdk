@@ -21,7 +21,6 @@ interface DataService {
     @GET("/api/sysReply/listSysReply")
     fun sysReply(
         @Query("flag") flag: Int,
-        @Query("words") keyword: String,
-        @Query("content") content: String
+        @Query("words") keyword: String
     ): Call<List<ApiSysReply>>
 }

@@ -47,7 +47,7 @@ class SisterViewModel @Inject constructor(
     @WorkerThread
     suspend fun getSysReply(): Source<List<ApiSysReply>> {
         ensureWorkThread()
-        return sisterRepository.sysReply(1, "", "")
+        return sisterRepository.sysReply(1, "")
     }
 
     @WorkerThread
