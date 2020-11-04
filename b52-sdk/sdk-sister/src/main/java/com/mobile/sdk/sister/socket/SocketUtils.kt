@@ -161,7 +161,7 @@ object SocketUtils {
             BUZ_SISTER_REQUEST_ERROR -> {
                 CSOfflineMsg.ADAPTER.decode(commonMessage.content).let {
                     onRequestSisterError(it.offlineMsg)
-                    Timber.tag(SisterX.TAG).d(it.offlineMsg.ifEmpty { "没有客服在线" })
+                    Timber.tag(SisterX.TAG).d(it.offlineMsg.ifEmpty { "无人在线请留言" })
                 }
             }
             BUZ_SISTER_REQUEST_SUCCESS -> {
@@ -187,9 +187,7 @@ object SocketUtils {
                     }
                 }
             }
-            else -> {
-                Timber.tag(SisterX.TAG).d("未知socket业务消息")
-            }
+            else -> Timber.tag(SisterX.TAG).d("未知socket业务消息")
         }
     }
 
