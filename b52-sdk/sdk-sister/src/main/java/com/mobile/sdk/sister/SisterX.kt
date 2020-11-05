@@ -57,6 +57,11 @@ object SisterX {
 
     internal fun hasSister(): Boolean = chatId > 0 && sisterUserId != "0"
 
+    internal fun resetChat() {
+        sisterUserId = "0"
+        chatId = 0L
+    }
+
     fun setup(app: Application, isDebug: Boolean) {
         if (::component.isInitialized) {
             return
@@ -75,20 +80,20 @@ object SisterX {
     }
 
     fun setServers(_socketServer: String, _httpServer: String) {
-        require(_socketServer.isNotEmpty())
-        require(_httpServer.isNotEmpty())
         socketServer = "ws://${_socketServer}:30301/ws/csms"
         httpServer = "http://${_httpServer}:30301/"
     }
 
     fun setUser(_loginName: String) = GlobalScope.launch(Dispatchers.IO) {
         hasUser = false
+        resetChat()
         isLogin.postValue(false)
+        AppWebSocket.forceDisconnect()
         AppPrefs.userId = ""
         AppPrefs.loginName = ""
         component.sisterRepository().user(_loginName).let {
             hasUser = true
-            SocketUtils.postLogin()
+            AppWebSocket.forceConnect()
         }
     }
 

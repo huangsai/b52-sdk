@@ -9,14 +9,8 @@ import androidx.lifecycle.Observer
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
-import com.mobile.sdk.sister.data.db.DbMessage
-import com.mobile.sdk.sister.data.http.ApiSysReply
-import com.mobile.sdk.sister.data.http.STATUS_MSG_SUCCESS
-import com.mobile.sdk.sister.data.http.TYPE_TEXT
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
-import com.mobile.sdk.sister.ui.sisterTextDbMessage
-import com.mobile.sdk.sister.ui.toJson
 import com.mobile.sdk.sister.ui.views.MyKeyboardHelper
 
 class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.OnKeyListener {
@@ -100,10 +94,10 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        chatHelpPresenter.load()
         SisterX.isLogin.observe(viewLifecycleOwner, Observer { isLogin ->
             if (isLogin) {
                 chatListPresenter.load()
+                chatHelpPresenter.load()
             } else {
                 chatListPresenter.cleanMessages()
             }

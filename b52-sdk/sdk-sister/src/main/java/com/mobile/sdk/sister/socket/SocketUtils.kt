@@ -50,7 +50,6 @@ object SocketUtils {
             return
         }
         ensureWorkThread()
-        resetChat()
         val req = LoginReq.Builder()
             .userName(AppPrefs.loginName)
             .token(AppPrefs.token)
@@ -127,7 +126,7 @@ object SocketUtils {
         when (commonMessage.bizId) {
             BUZ_SISTER_REQUEST_TIMEOUT -> {
                 QueueTimeOutMsg.ADAPTER.decode(commonMessage.content).let {
-                    resetChat()
+                    SisterX.resetChat()
                     Bus.offer(
                         SisterX.BUS_MSG_NEW,
                         MsgItem.create(createTextMessage(TYPE_LEAVE_MSG, "", it.timeOutMsg))
@@ -137,7 +136,7 @@ object SocketUtils {
             }
             BUZ_SISTER_REQUEST_ERROR -> {
                 CSOfflineMsg.ADAPTER.decode(commonMessage.content).let {
-                    resetChat()
+                    SisterX.resetChat()
                     Bus.offer(
                         SisterX.BUS_MSG_NEW,
                         MsgItem.create(createTextMessage(TYPE_LEAVE_MSG, "", it.offlineMsg))
@@ -204,16 +203,16 @@ object SocketUtils {
             }
             BUZ_LOGOUT -> {
                 SisterX.isLogin.postValue(false)
-                resetChat()
+                SisterX.resetChat()
             }
             BUZ_CHAT_CLOSE_BY_MYSELF -> {
-                resetChat()
+                SisterX.resetChat()
             }
             BUZ_CHAT_CLOSE_BY_SISTER -> {
-                resetChat()
+                SisterX.resetChat()
             }
             BUZ_CHAT_CLOSE_TIMEOUT -> {
-                resetChat()
+                SisterX.resetChat()
             }
             BUZ_LEAVE_MSG_REQUEST -> {
             }
@@ -257,10 +256,5 @@ object SocketUtils {
             0,
             STATUS_MSG_SUCCESS
         )
-    }
-
-    private fun resetChat() {
-        SisterX.sisterUserId = "0"
-        SisterX.chatId = 0L
     }
 }

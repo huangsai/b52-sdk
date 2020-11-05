@@ -67,6 +67,7 @@ object AppWebSocket : LongLiveSocket() {
     override fun connect() {
         if (true != AndroidX.isNetworkConnected.value) return
         if (true == SisterX.isSocketConnected.value) return
+        if (!SisterX.hasUser) return
 
         suspendAction {
             val request: Request
@@ -112,4 +113,8 @@ object AppWebSocket : LongLiveSocket() {
     override fun log(t: Throwable) {
         Timber.tag(SisterX.TAG).d(t)
     }
+
+    fun forceDisconnect() = disconnect()
+
+    fun forceConnect() = connect()
 }

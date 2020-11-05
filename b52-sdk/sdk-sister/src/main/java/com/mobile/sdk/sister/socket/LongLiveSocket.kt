@@ -23,6 +23,8 @@ abstract class LongLiveSocket {
 
     protected fun reconnect(delayTimeMillis: Long) {
         if (true != AndroidX.isNetworkConnected.value) return
+        if (!SisterX.hasUser) return
+
         suspendAction {
             if (delayTimeMillis > 0) {
                 delay(delayTimeMillis)
