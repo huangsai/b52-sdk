@@ -7,7 +7,7 @@ class MyApp : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        SisterX.setServers("java.cg.xxx", "java.cg.xxx")
         SisterX.setup(this, BuildConfig.DEBUG)
+        SisterX.setServers("java.cg.xxx", "java.cg.xxx")
     }
 }
