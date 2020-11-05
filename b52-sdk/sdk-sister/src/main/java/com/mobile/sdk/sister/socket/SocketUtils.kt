@@ -10,11 +10,8 @@ import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.proto.*
+import com.mobile.sdk.sister.ui.*
 import com.mobile.sdk.sister.ui.items.MsgItem
-import com.mobile.sdk.sister.ui.jsonToText
-import com.mobile.sdk.sister.ui.toChatRes
-import com.mobile.sdk.sister.ui.toDbMessage
-import com.mobile.sdk.sister.ui.toJson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -183,6 +180,17 @@ object SocketUtils {
         }
     }
 
+    fun insertDbMessage(dbMessage: DbMessage) {
+        Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))
+        GlobalScope.launch(Dispatchers.IO) {
+            SisterX.component.sisterRepository().let {
+                if (dbMessage.id.length > 1) {
+                    it.insetMessage(dbMessage)
+                }
+            }
+        }
+    }
+
     private fun onResponseResult(response: ResponseResult) {
         Timber.tag(SisterX.TAG).d(response.msg)
         when (response.biz) {
@@ -198,9 +206,15 @@ object SocketUtils {
                 SisterX.isLogin.postValue(false)
                 resetChat()
             }
-            BUZ_CHAT_CLOSE_BY_MYSELF -> resetChat()
-            BUZ_CHAT_CLOSE_BY_SISTER -> resetChat()
-            BUZ_CHAT_CLOSE_TIMEOUT -> resetChat()
+            BUZ_CHAT_CLOSE_BY_MYSELF -> {
+                resetChat()
+            }
+            BUZ_CHAT_CLOSE_BY_SISTER -> {
+                resetChat()
+            }
+            BUZ_CHAT_CLOSE_TIMEOUT -> {
+                resetChat()
+            }
             BUZ_LEAVE_MSG_REQUEST -> {
             }
         }
@@ -216,22 +230,11 @@ object SocketUtils {
         }
     }
 
-    fun insertDbMessage(dbMessage: DbMessage) {
-        Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))
-        GlobalScope.launch(Dispatchers.IO) {
-            SisterX.component.sisterRepository().let {
-                if (dbMessage.id.length > 1) {
-                    it.insetMessage(dbMessage)
-                }
-            }
-        }
-    }
-
     private fun sysReply(keyword: String) = GlobalScope.launch(Dispatchers.IO) {
         try {
             val source = SisterX.component.sisterRepository().sysReply(2, keyword)
             when (source) {
-                is Source.Success -> insertDbMessage(source.requireData().toDbMessage())
+                is Source.Success -> insertDbMessage(source.requireData().sisterRobotDbMessage())
                 is Source.Error -> Timber.tag(SisterX.TAG).d(source.requireError())
             }.exhaustive
         } catch (e: Exception) {

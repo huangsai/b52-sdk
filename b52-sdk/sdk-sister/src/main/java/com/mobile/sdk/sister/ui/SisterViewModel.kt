@@ -4,6 +4,7 @@ import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mobile.guava.android.ensureWorkThread
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.jvm.coroutines.Bus
@@ -15,6 +16,8 @@ import com.mobile.sdk.sister.data.db.DbMessage
 import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.socket.SocketUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -153,21 +156,13 @@ class SisterViewModel @Inject constructor(
         )
     }
 
-    fun createReplyDbMessage(jsonContent: String): DbMessage {
-        return DbMessage(
-            0,
-            UUID.randomUUID().toString(),
-            TYPE_TEXT,
-            SisterX.sisterUserId,
-            jsonContent,
-            System.currentTimeMillis(),
-            AppPrefs.userImage,
-            AppPrefs.loginName,
-            AppPrefs.userId,
-            0,
-            SisterX.chatId,
-            STATUS_MSG_SUCCESS,
-        )
+    fun postSysReply(apiSysReply: ApiSysReply) {
+        viewModelScope.launch(Dispatchers.IO) {
+            createDbMessage(TYPE_TEXT, DbMessage.Text(apiSysReply.words).toJson()).also {
+                SocketUtils.insertDbMessage(it.copy(status = STATUS_MSG_SUCCESS))
+                SocketUtils.insertDbMessage(apiSysReply.content.sisterTextDbMessage())
+            }
+        }
     }
 
     private fun createImageRequestBody(url: String): RequestBody {

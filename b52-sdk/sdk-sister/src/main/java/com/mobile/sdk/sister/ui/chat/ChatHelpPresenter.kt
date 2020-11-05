@@ -9,12 +9,12 @@ import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.guava.jvm.domain.Source
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.data.db.DbMessage
+import com.mobile.sdk.sister.data.http.STATUS_MSG_SUCCESS
+import com.mobile.sdk.sister.data.http.TYPE_TEXT
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.socket.SocketUtils
-import com.mobile.sdk.sister.ui.SisterViewModel
+import com.mobile.sdk.sister.ui.*
 import com.mobile.sdk.sister.ui.items.HelpItem
-import com.mobile.sdk.sister.ui.toDbMessage
-import com.mobile.sdk.sister.ui.toJson
 import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
@@ -68,11 +68,7 @@ class ChatHelpPresenter(
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.item_help_tag -> {
-                val data = AdapterUtils.getHolder(v).item<HelpItem>().data
-                model.createReplyDbMessage(DbMessage.Text(data.words).toJson()).also {
-                    SocketUtils.insertDbMessage(it)
-                }
-                SocketUtils.insertDbMessage(data.content.toDbMessage())
+                model.postSysReply(AdapterUtils.getHolder(v).item<HelpItem>().data)
             }
         }
     }

@@ -6,8 +6,6 @@ import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.proto.ChatMsg
 import com.mobile.sdk.sister.proto.ChatReq
-import com.mobile.sdk.sister.proto.QueueTimeOutMsg
-import com.mobile.sdk.sister.proto.ResponseResult
 import com.squareup.moshi.Types
 import java.util.*
 
@@ -151,13 +149,21 @@ fun ChatMsg.toDbMessage(): DbMessage {
     )
 }
 
-fun List<ApiSysReply>.toDbMessage(): DbMessage {
+fun List<ApiSysReply>.sisterRobotDbMessage(): DbMessage {
+    return toJson().dbMessageFromJson(TYPE_ROBOT)
+}
+
+fun String.sisterTextDbMessage(): DbMessage {
+    return DbMessage.Text(this).toJson().dbMessageFromJson(TYPE_TEXT)
+}
+
+private fun String.dbMessageFromJson(type: Int): DbMessage {
     return DbMessage(
         0L,
         UUID.randomUUID().toString(),
-        TYPE_ROBOT,
+        type,
         AppPrefs.userId,
-        this.toJson(),
+        this,
         System.currentTimeMillis(),
         "",
         "",
@@ -167,24 +173,6 @@ fun List<ApiSysReply>.toDbMessage(): DbMessage {
         STATUS_MSG_SUCCESS
     )
 }
-
-fun String.toDbMessage(): DbMessage {
-    return DbMessage(
-        0L,
-        UUID.randomUUID().toString(),
-        TYPE_TEXT,
-        AppPrefs.userId,
-        DbMessage.Text(this).toJson(),
-        System.currentTimeMillis(),
-        "",
-        "",
-        "0",
-        1,
-        0,
-        STATUS_MSG_SUCCESS
-    )
-}
-
 
 fun DbMessage.toChatRes(): ChatReq {
     return ChatReq.Builder()

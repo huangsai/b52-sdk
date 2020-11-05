@@ -2,13 +2,12 @@ package com.mobile.sdk.sister.ui.items
 
 import android.graphics.Paint
 import android.graphics.drawable.AnimationDrawable
-import android.text.Spannable
-import android.text.SpannableStringBuilder
 import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mobile.guava.android.ui.view.text.MySpannable
 import com.mobile.guava.jvm.coroutines.Bus
 import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
 import com.mobile.guava.jvm.extension.cast
@@ -23,6 +22,7 @@ import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
 import com.pacific.adapter.SimpleRecyclerItem
+import timber.log.Timber
 
 abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
@@ -322,29 +322,28 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     }
 
     class Robot(data: DbMessage) : MsgItem(data), View.OnClickListener {
-        private val content = "如果以上答案未解决您的问题，请点击 联系客服"
-        private val underlineSpan = UnderlineSpan()
-        private val adapter = RecyclerAdapter()
+        private val adapter: RecyclerAdapter by lazy {
+            RecyclerAdapter().apply {
+                addAll(robot.map { AutoReplyItem(it) })
+            }
+        }
+
+        private val mySpannable = MySpannable().apply {
+            append("如果以上答案未解决您的问题，请点击 联系客服")
+            findAndSpan("联系客服") { UnderlineSpan() }
+        }
 
         override fun bind(holder: AdapterViewHolder) {
             val binding = holder.binding(SisterItemChatAutoReplyBinding::bind)
-            val spannableString = SpannableStringBuilder()
-            spannableString.append(content)
-            spannableString.setSpan(
-                underlineSpan,
-                content.length - 4,
-                content.length,
-                Spannable.SPAN_EXCLUSIVE_INCLUSIVE
-            )
-            binding.autoReplyClick.text = spannableString
+
+            binding.autoReplyClick.text = mySpannable
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.auto_reply_click)
 
+            adapter.onClickListener = this
             binding.autoReplyRecycler.layoutManager = LinearLayoutManager(holder.itemView.context)
             binding.autoReplyRecycler.adapter = adapter
-            adapter.replaceAll(robot.map { AutoReplyItem(it) })
-            adapter.onClickListener = this
         }
 
         override fun getLayout(): Int {
@@ -420,6 +419,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
                     else -> Upgrade(data).ofUpgrade()
                 }
             } catch (e: Exception) {
+                Timber.d(e)
                 Upgrade(data).ofUpgrade()
             }
         }
