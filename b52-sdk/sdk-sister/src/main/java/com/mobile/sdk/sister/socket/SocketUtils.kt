@@ -180,7 +180,13 @@ object SocketUtils {
     }
 
     fun insertDbMessage(dbMessage: DbMessage) {
-        Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))
+        val newMsgItem = MsgItem.create(dbMessage)
+        if (SisterX.uiPrepared) {
+            Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))
+        } else {
+            SisterX.bufferMsgItems.add(newMsgItem)
+        }
+
         GlobalScope.launch(Dispatchers.IO) {
             SisterX.component.sisterRepository().let {
                 if (dbMessage.id.length > 1) {

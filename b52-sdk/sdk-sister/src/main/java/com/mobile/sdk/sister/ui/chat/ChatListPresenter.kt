@@ -105,10 +105,18 @@ class ChatListPresenter(
                 MsgItem.create(it)
             }
             withContext(Dispatchers.Main) {
-                adapter.replaceAll(sourceItems)
-                binding.chatRecycler.postDelayed({
-                    binding.chatRecycler.keepItemViewVisible(adapter.itemCount - 1, false)
-                }, 300)
+                adapter.replaceAll(sourceItems.plus(SisterX.bufferMsgItems))
+                SisterX.uiPrepared = true
+                SisterX.bufferMsgItems.clear()
+                binding.chatRecycler.postDelayed(
+                    {
+                        binding.chatRecycler.keepItemViewVisible(
+                            adapter.itemCount - 1,
+                            false
+                        )
+                    },
+                    300
+                )
             }
         }
     }

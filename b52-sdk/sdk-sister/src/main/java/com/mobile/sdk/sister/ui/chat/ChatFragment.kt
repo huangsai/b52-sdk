@@ -94,7 +94,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        SisterX.isLogin.observe(viewLifecycleOwner, Observer { isLogin ->
+        SisterX.isLogin.observe(viewLifecycleOwner, { isLogin ->
             if (isLogin) {
                 chatListPresenter.load()
                 chatHelpPresenter.load()
@@ -112,6 +112,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
         chatListPresenter.onDestroyView()
         chatEmotionPresenter.onDestroyView()
         _binding = null
+        SisterX.uiPrepared = false
     }
 
     override fun onDestroy() {
