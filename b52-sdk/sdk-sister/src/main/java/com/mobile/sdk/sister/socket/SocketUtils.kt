@@ -155,7 +155,7 @@ object SocketUtils {
                 ChatMsg.ADAPTER.decode(commonMessage.content).let {
                     if (!it.id.isNullOrEmpty()) {
                         insertDbMessage(it.toDbMessage())
-                        Timber.tag(SisterX.TAG).d("收到信息->%s", it.id)
+                        Timber.tag(SisterX.TAG).d("收到信息->%s->%s", it.id, it.sayContent)
                     }
                 }
             }
