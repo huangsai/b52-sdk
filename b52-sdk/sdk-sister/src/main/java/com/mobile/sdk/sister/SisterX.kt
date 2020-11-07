@@ -14,8 +14,8 @@ import com.mobile.sdk.sister.dagger.SisterComponent
 import com.mobile.sdk.sister.data.db.RoomAppDatabase
 import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.socket.AppWebSocket
-import com.mobile.sdk.sister.socket.SocketUtils
 import com.mobile.sdk.sister.ui.MainDialogFragment
+import com.mobile.sdk.sister.ui.items.MsgItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,6 +29,8 @@ object SisterX {
     internal const val BUS_MSG_NEW = 20050
     internal const val BUS_MSG_AUTO_REPLY = 20051
 
+    internal val bufferMsgItems = ArrayList<MsgItem>()
+    internal var uiPrepared = false
 
     internal var sisterUserId = "0"
     internal var chatId = 0L

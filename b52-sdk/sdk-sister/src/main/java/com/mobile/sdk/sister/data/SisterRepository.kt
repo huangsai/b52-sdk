@@ -97,7 +97,9 @@ class SisterRepository @Inject constructor(
 
     suspend fun sysReply(flag: Int, keyword: String): Source<List<ApiSysReply>> {
         return try {
-            dataService.sysReply(flag, keyword).execute().toSource()
+            dataService.sysReply(flag, keyword).execute().toSource {
+                return@toSource if (2 == flag && it.size > 5) it.subList(0, 5) else it
+            }
         } catch (e: Exception) {
             errorSource(e)
         }

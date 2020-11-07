@@ -155,7 +155,7 @@ object SocketUtils {
                 ChatMsg.ADAPTER.decode(commonMessage.content).let {
                     if (!it.id.isNullOrEmpty()) {
                         insertDbMessage(it.toDbMessage())
-                        Timber.tag(SisterX.TAG).d("收到信息->%s", it.id)
+                        Timber.tag(SisterX.TAG).d("收到信息->%s->%s", it.id, it.sayContent)
                     }
                 }
             }
@@ -180,7 +180,13 @@ object SocketUtils {
     }
 
     fun insertDbMessage(dbMessage: DbMessage) {
-        Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))
+        val newMsgItem = MsgItem.create(dbMessage)
+        if (SisterX.uiPrepared) {
+            Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))
+        } else {
+            SisterX.bufferMsgItems.add(newMsgItem)
+        }
+
         GlobalScope.launch(Dispatchers.IO) {
             SisterX.component.sisterRepository().let {
                 if (dbMessage.id.length > 1) {
