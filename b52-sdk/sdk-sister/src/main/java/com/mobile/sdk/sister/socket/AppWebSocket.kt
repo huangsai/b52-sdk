@@ -67,6 +67,7 @@ object AppWebSocket : LongLiveSocket() {
     override fun connect() {
         if (true != AndroidX.isNetworkConnected.value) return
         if (true == SisterX.isSocketConnected.value) return
+        if (SisterX.socketServer.isEmpty()) return
         if (!SisterX.hasUser) return
 
         suspendAction {
