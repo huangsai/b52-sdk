@@ -47,33 +47,39 @@ message ChatMsg{
   //会话id
   int64 chatId = 10;
 }
+
 //关闭当前聊天30003
 message CloseChatReq{
   string toUserId= 1;
   //会话id
   int64 chatId = 2;
 }
+
 //关闭会话通知30004
 message CloseChatMsg{
   string fromUserId=1;
   //会话id
   int64 chatId = 2;
 }
+
 //会话超时通知30005
 message ChatTimeOutMsg{
   //会话id
-  int64 chatId = 2;
+  int64 chatId = 1;
+  string timeOutMsg= 2;
 }
 
 //排队超时通知30006
 message QueueTimeOutMsg{
   string timeOutMsg= 1;
 }
+
 //匹配客服30007
 message MathCsReq{
   //0普通1充值
   int32 chatType=1;
 }
+
 //匹配客服结果30008
 message MathCsMsg{
   //会话id
@@ -81,17 +87,24 @@ message MathCsMsg{
   //会话方id
   string toUserId= 2;
 }
+
 //会员留言请求30009
 message LeaveMsgReq{
   string msg= 1;
 }
+
 //留言回复与离线消息推送30010
 message LeaveMsg{
   repeated ChatMsg chatMsg=1;
 }
+
 //无人在线通知30011
 message CSOfflineMsg{
   string offlineMsg= 1;
+}
+//排队提示30012
+message QueueMsg{
+  string msg= 1;
 }
 
 //登录20001
