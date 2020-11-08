@@ -12,8 +12,8 @@
         android:layout_height="@dimen/size_48dp"
         android:layout_marginTop="@dimen/size_32dp"
         android:gravity="center"
-        android:lines="1"
         android:imeOptions="flagNoExtractUi"
+        android:lines="1"
         android:maxLines="1"
         android:textColor="@android:color/black"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -24,9 +24,18 @@
         android:id="@+id/csms_open"
         style="@style/WrapWrap"
         android:layout_marginTop="@dimen/size_32dp"
-        android:text="打开客服"
+        android:text="打开客服（切换用户）"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_username" />
+
+    <Button
+        android:id="@+id/csms_reopen"
+        style="@style/WrapWrap"
+        android:layout_marginTop="@dimen/size_32dp"
+        android:text="再次显示客服（不切换用户）"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/csms_open" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

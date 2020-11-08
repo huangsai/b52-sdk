@@ -14,32 +14,38 @@ abstract class LongLiveSocket {
     private val singleRunner = SingleRunner()
 
     protected var connectFailCount = 0L
+    protected var neededReconnect = true
 
     init {
         AndroidX.isNetworkConnected.observeForever {
-            if (true == it) connect() else SisterX.isSocketConnected.value = false
+            if (it) {
+                if (SisterX.hasUser) {
+                    connect()
+                }
+            } else {
+                SisterX.isSocketConnected.value = false
+            }
         }
     }
 
-    protected fun reconnect(delayTimeMillis: Long) {
-        if (true != AndroidX.isNetworkConnected.value) return
-        if (!SisterX.hasUser) return
+    protected fun suspendAction(action: suspend () -> Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            singleRunner.afterPrevious {
+                try {
+                    action.invoke()
+                } catch (e: Exception) {
+                    log(e)
+                }
+            }
+        }
+    }
 
+    protected fun reconnectWhenLose(delayTimeMillis: Long) {
         suspendAction {
             if (delayTimeMillis > 0) {
                 delay(delayTimeMillis)
             }
             connect()
-        }
-    }
-
-    protected fun suspendAction(action: suspend () -> Unit) = GlobalScope.launch(Dispatchers.IO) {
-        singleRunner.afterPrevious {
-            try {
-                action.invoke()
-            } catch (e: Exception) {
-                log(e)
-            }
         }
     }
 

@@ -100,25 +100,34 @@ class ChatListPresenter(
     }
 
     override fun load() {
+        if (!adapter.isEmpty()) {
+            return
+        }
+
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             val sourceItems = model.loadMessages().map {
                 MsgItem.create(it)
             }
+
             withContext(Dispatchers.Main) {
                 adapter.replaceAll(sourceItems.plus(SisterX.bufferMsgItems))
-                SisterX.uiPrepared = true
                 SisterX.bufferMsgItems.clear()
-                binding.chatRecycler.postDelayed(
-                    {
-                        binding.chatRecycler.keepItemViewVisible(
-                            adapter.itemCount - 1,
-                            false
-                        )
-                    },
-                    300
-                )
+                SisterX.isUiPrepared.value = true
+                scrollToBottom()
             }
         }
+    }
+
+    private fun scrollToBottom() {
+        binding.chatRecycler.postDelayed(
+            {
+                binding.chatRecycler.keepItemViewVisible(
+                    adapter.itemCount - 1,
+                    true
+                )
+            },
+            300
+        )
     }
 
     fun cleanMessages() {
@@ -256,7 +265,7 @@ class ChatListPresenter(
             }
         }
         adapter.add(item)
-        binding.chatRecycler.keepItemViewVisible(adapter.itemCount - 1, false)
+        scrollToBottom()
     }
 
     private fun retryPostMsg(dbMessage: DbMessage) {

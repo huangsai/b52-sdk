@@ -14,6 +14,7 @@ import com.mobile.sdk.sister.dagger.SisterComponent
 import com.mobile.sdk.sister.data.db.RoomAppDatabase
 import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.socket.AppWebSocket
+import com.mobile.sdk.sister.socket.SocketUtils
 import com.mobile.sdk.sister.ui.MainDialogFragment
 import com.mobile.sdk.sister.ui.items.MsgItem
 import kotlinx.coroutines.Dispatchers
@@ -22,18 +23,24 @@ import kotlinx.coroutines.launch
 
 object SisterX {
 
-    internal const val TAG = "SisterX"
+    const val TAG = "SisterX"
 
-    internal const val BUS_MSG_AUDIO_PLAYING = 20048
-    internal const val BUS_MSG_STATUS = 20049
-    internal const val BUS_MSG_NEW = 20050
-    internal const val BUS_MSG_AUTO_REPLY = 20051
+    const val BUS_MSG_AUDIO_PLAYING = 20048
+    const val BUS_MSG_STATUS = 20049
+    const val BUS_MSG_NEW = 20050
+    const val BUS_MSG_AUTO_REPLY = 20051
+
+    internal val isSocketConnected = MutableLiveData<Boolean>()
+    internal val isUiPrepared = MutableLiveData<Boolean>()
+    internal val isLogin = MutableLiveData<Boolean>()
 
     internal val bufferMsgItems = ArrayList<MsgItem>()
-    internal var uiPrepared = false
 
     internal var sisterUserId = "0"
     internal var chatId = 0L
+
+    var hasUser = false
+        private set
 
     internal var socketServer = ""
         private set
@@ -41,15 +48,19 @@ object SisterX {
     internal var httpServer = ""
         private set
 
-    internal var hasUser = false
-        private set
-
-    internal val isSocketConnected: MutableLiveData<Boolean> = MutableLiveData()
-
     internal lateinit var component: SisterComponent
         private set
 
-    val isLogin: MutableLiveData<Boolean> = MutableLiveData()
+    init {
+        isSocketConnected.observeForever {
+            if (it) {
+                require(hasUser)
+                SocketUtils.postLogin()
+            } else {
+                resetChatSession()
+            }
+        }
+    }
 
     private fun createRoomDatabase(): RoomAppDatabase {
         return Room.databaseBuilder(AndroidX.myApp, RoomAppDatabase::class.java, "sdk_sister.db3")
@@ -59,7 +70,7 @@ object SisterX {
 
     internal fun hasSister(): Boolean = chatId > 0 && sisterUserId != "0"
 
-    internal fun resetChat() {
+    internal fun resetChatSession() {
         sisterUserId = "0"
         chatId = 0L
     }
@@ -87,15 +98,18 @@ object SisterX {
     }
 
     fun setUser(_loginName: String) = GlobalScope.launch(Dispatchers.IO) {
+        if (true == isLogin.value && _loginName == AppPrefs.loginName) {
+            return@launch
+        }
+
+        resetChatSession()
         hasUser = false
-        resetChat()
         isLogin.postValue(false)
-        AppWebSocket.forceDisconnect()
         AppPrefs.userId = ""
         AppPrefs.loginName = ""
         component.sisterRepository().user(_loginName).let {
             hasUser = true
-            AppWebSocket.forceConnect()
+            AppWebSocket.reconnect()
         }
     }
 

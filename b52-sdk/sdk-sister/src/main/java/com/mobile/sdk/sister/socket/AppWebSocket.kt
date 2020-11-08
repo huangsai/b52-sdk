@@ -12,7 +12,7 @@ import timber.log.Timber
 
 object AppWebSocket : LongLiveSocket() {
 
-    private val webSocketListener: WebSocketListener = object : WebSocketListener() {
+    private val webSocketListener = object : WebSocketListener() {
 
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
             log("---------onClosed---------")
@@ -51,36 +51,38 @@ object AppWebSocket : LongLiveSocket() {
         }
     }
 
-    private var realSocket: WebSocket? = null
-    private val socket: WebSocket get() = realSocket!!
+    private var realWebSocket: WebSocket? = null
+    private val webSocket: WebSocket get() = realWebSocket!!
 
     init {
         SisterX.isSocketConnected.observeForever {
             if (false == it) {
-                reconnect(connectFailCount * 2000L)
-            } else if (true == it) {
-                suspendAction { SocketUtils.postLogin() }
+                if (neededReconnect) {
+                    reconnectWhenLose(connectFailCount * 2000L)
+                }
             }
         }
     }
 
     override fun connect() {
-        if (true != AndroidX.isNetworkConnected.value) return
-        if (true == SisterX.isSocketConnected.value) return
-        if (SisterX.socketServer.isEmpty()) return
-        if (!SisterX.hasUser) return
+        if (true != AndroidX.isNetworkConnected.value) {
+            return
+        }
+        if (true == SisterX.isSocketConnected.value) {
+            return
+        }
 
         suspendAction {
             val request: Request
-            if (realSocket != null) {
-                request = socket.request()
-                socket.close(1000, "reconnect")
+            if (realWebSocket != null) {
+                request = webSocket.request()
+                webSocket.close(1000, "reconnect")
             } else {
                 request = Request.Builder()
                     .url(SisterX.socketServer)
                     .build()
             }
-            realSocket = SisterX.component.okHttpClient().newWebSocket(
+            realWebSocket = SisterX.component.okHttpClient().newWebSocket(
                 request, webSocketListener
             )
             log("---------connect---------")
@@ -88,20 +90,25 @@ object AppWebSocket : LongLiveSocket() {
     }
 
     override fun disconnect() {
-        if (true != AndroidX.isNetworkConnected.value) return
-        if (true != SisterX.isSocketConnected.value) return
+        if (true != AndroidX.isNetworkConnected.value) {
+            return
+        }
+        if (true != SisterX.isSocketConnected.value) {
+            return
+        }
         suspendAction {
-            if (realSocket != null) {
-                socket.close(1000, "disconnect")
+            if (realWebSocket != null) {
+                neededReconnect = false
+                webSocket.close(1000, "disconnect")
                 log("---------disconnect---------")
             }
         }
     }
 
     override fun post(bytes: ByteString) {
-        if (realSocket != null && true == SisterX.isSocketConnected.value) {
+        if (realWebSocket != null && true == SisterX.isSocketConnected.value) {
             suspendAction {
-                socket.send(SocketUtils.encrypt(bytes))
+                webSocket.send(SocketUtils.encrypt(bytes))
                 log("---------post---bytes[${bytes.size}]")
             }
         }
@@ -115,7 +122,22 @@ object AppWebSocket : LongLiveSocket() {
         Timber.tag(SisterX.TAG).d(t)
     }
 
-    fun forceDisconnect() = disconnect()
+    fun reconnect() {
+        neededReconnect = true
 
-    fun forceConnect() = connect()
+        if (true != AndroidX.isNetworkConnected.value) {
+            return
+        }
+
+        if (true == SisterX.isSocketConnected.value) {
+            suspendAction {
+                if (realWebSocket != null) {
+                    webSocket.close(1000, "disconnect")
+                    log("---------disconnect---------")
+                }
+            }
+        } else {
+            connect()
+        }
+    }
 }

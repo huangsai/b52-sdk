@@ -8,12 +8,8 @@ import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.guava.jvm.domain.Source
 import com.mobile.sdk.sister.R
-import com.mobile.sdk.sister.data.db.DbMessage
-import com.mobile.sdk.sister.data.http.STATUS_MSG_SUCCESS
-import com.mobile.sdk.sister.data.http.TYPE_TEXT
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
-import com.mobile.sdk.sister.socket.SocketUtils
-import com.mobile.sdk.sister.ui.*
+import com.mobile.sdk.sister.ui.SisterViewModel
 import com.mobile.sdk.sister.ui.items.HelpItem
 import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
@@ -47,6 +43,10 @@ class ChatHelpPresenter(
     }
 
     override fun load() {
+        if (!adapter.isEmpty()) {
+            return
+        }
+        
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             val source = model.getSysReply()
             withContext(Dispatchers.Main) {

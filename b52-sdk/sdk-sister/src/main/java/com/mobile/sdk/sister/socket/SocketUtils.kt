@@ -44,12 +44,11 @@ object SocketUtils {
         return decryptedAES.toByteString()
     }
 
-    @WorkerThread
-    fun postLogin() {
+    fun postLogin() = GlobalScope.launch(Dispatchers.IO) {
         if (!SisterX.hasUser) {
-            return
+            return@launch
         }
-        ensureWorkThread()
+
         val req = LoginReq.Builder()
             .userName(AppPrefs.loginName)
             .token(AppPrefs.token)
@@ -126,7 +125,7 @@ object SocketUtils {
         when (commonMessage.bizId) {
             BUZ_SISTER_REQUEST_TIMEOUT -> {
                 QueueTimeOutMsg.ADAPTER.decode(commonMessage.content).let {
-                    SisterX.resetChat()
+                    SisterX.resetChatSession()
                     Bus.offer(
                         SisterX.BUS_MSG_NEW,
                         MsgItem.create(
@@ -142,7 +141,7 @@ object SocketUtils {
             }
             BUZ_CHAT_CLOSE_TIMEOUT -> {
                 ChatTimeOutMsg.ADAPTER.decode(commonMessage.content).let {
-                    SisterX.resetChat()
+                    SisterX.resetChatSession()
                     Bus.offer(
                         SisterX.BUS_MSG_NEW,
                         MsgItem.create(createTextMessage(TYPE_TEXT, "", it.timeOutMsg.jsonToText()))
@@ -161,7 +160,7 @@ object SocketUtils {
             }
             BUZ_SISTER_REQUEST_ERROR -> {
                 CSOfflineMsg.ADAPTER.decode(commonMessage.content).let {
-                    SisterX.resetChat()
+                    SisterX.resetChatSession()
                     Bus.offer(
                         SisterX.BUS_MSG_NEW,
                         MsgItem.create(
@@ -212,7 +211,7 @@ object SocketUtils {
 
     fun insertDbMessage(dbMessage: DbMessage) {
         val newMsgItem = MsgItem.create(dbMessage)
-        if (SisterX.uiPrepared) {
+        if (true == SisterX.isUiPrepared.value) {
             Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))
         } else {
             SisterX.bufferMsgItems.add(newMsgItem)
@@ -240,13 +239,13 @@ object SocketUtils {
             }
             BUZ_LOGOUT -> {
                 SisterX.isLogin.postValue(false)
-                SisterX.resetChat()
+                SisterX.resetChatSession()
             }
             BUZ_CHAT_CLOSE_BY_MYSELF -> {
-                SisterX.resetChat()
+                SisterX.resetChatSession()
             }
             BUZ_CHAT_CLOSE_BY_SISTER -> {
-                SisterX.resetChat()
+                SisterX.resetChatSession()
             }
             BUZ_LEAVE_MSG_REQUEST -> {
             }

@@ -3,8 +3,8 @@ package com.mobile.app.sdk
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.mobile.app.sdk.databinding.ActivityMainBinding
+import com.mobile.guava.android.mvvm.Msg
 import com.mobile.sdk.sister.SisterX
 
 class MainActivity : AppCompatActivity() {
@@ -28,13 +28,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.csmsOpen.setOnClickListener {
             SisterX.setUser(binding.editUsername.text.toString())
+            SisterX.show(this@MainActivity, false)
+            binding.editUsername.setText("")
         }
 
-        SisterX.isLogin.observe(this, Observer { isLogin ->
-            if (true == isLogin) {
-                binding.editUsername.setText("")
+        binding.csmsReopen.setOnClickListener {
+            if (SisterX.hasUser) {
                 SisterX.show(this@MainActivity, false)
+            } else {
+                Msg.toast("请先登录一次用户，点击\"打开客服\"按钮")
             }
-        })
+        }
     }
 }

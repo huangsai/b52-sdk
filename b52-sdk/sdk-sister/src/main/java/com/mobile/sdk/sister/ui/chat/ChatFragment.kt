@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
-import androidx.lifecycle.Observer
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
@@ -112,7 +111,8 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
         chatListPresenter.onDestroyView()
         chatEmotionPresenter.onDestroyView()
         _binding = null
-        SisterX.uiPrepared = false
+
+        SisterX.isUiPrepared.value = false
     }
 
     override fun onDestroy() {

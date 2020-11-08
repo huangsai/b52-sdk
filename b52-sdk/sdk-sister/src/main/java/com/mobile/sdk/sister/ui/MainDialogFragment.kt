@@ -60,6 +60,7 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
      * 加载红点提示
      */
     private fun loadPoint() {
+        viewLifecycleOwner.lifecycle.currentState
 
     }
 
