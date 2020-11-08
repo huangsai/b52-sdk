@@ -20,6 +20,7 @@ import com.mobile.guava.android.ui.view.recyclerview.keepItemViewVisible
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
+import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.data.http.TYPE_AUDIO
 import com.mobile.sdk.sister.data.http.TYPE_IMAGE
 import com.mobile.sdk.sister.data.http.TYPE_TEXT
@@ -184,10 +185,13 @@ class ChatListPresenter(
     }
 
     override fun load(view: ImageView, holder: AdapterViewHolder) {
+
         when (view.id) {
             R.id.profile -> {
+                val dbMessage = holder.item<MsgItem>().data
+                val url = if (dbMessage.isSister()) dbMessage.fromUserImage else AppPrefs.userImage
                 GlideApp.with(fragment)
-                    .load(holder.item<MsgItem>().data.fromUserImage)
+                    .load(url)
                     .placeholder(R.drawable.sister_default_profile)
                     .into(view)
             }

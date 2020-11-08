@@ -129,19 +129,34 @@ object SocketUtils {
                     SisterX.resetChat()
                     Bus.offer(
                         SisterX.BUS_MSG_NEW,
-                        MsgItem.create(createTextMessage(TYPE_LEAVE_MSG, "", it.timeOutMsg))
+                        MsgItem.create(
+                            createTextMessage(
+                                TYPE_LEAVE_MSG,
+                                "",
+                                DbMessage.Text(it.timeOutMsg)
+                            )
+                        )
                     )
                     Timber.tag(SisterX.TAG).d(it.timeOutMsg.ifEmpty { "客服匹配超时" })
                 }
             }
-            BUZ_SISTER_REQUEST_PROGRESS -> {
-                QueueMsg.ADAPTER.decode(commonMessage.content).let {
+            BUZ_CHAT_CLOSE_TIMEOUT -> {
+                ChatTimeOutMsg.ADAPTER.decode(commonMessage.content).let {
                     SisterX.resetChat()
                     Bus.offer(
                         SisterX.BUS_MSG_NEW,
-                        MsgItem.create(createTextMessage(TYPE_TEXT, "", it.msg))
+                        MsgItem.create(createTextMessage(TYPE_TEXT, "", it.timeOutMsg.jsonToText()))
                     )
-                    Timber.tag(SisterX.TAG).d(it.msg.ifEmpty { "排队匹配客服中" })
+                    Timber.tag(SisterX.TAG).d(it.timeOutMsg.ifEmpty { "会话超时" })
+                }
+            }
+            BUZ_SISTER_REQUEST_PROGRESS -> {
+                QueueMsg.ADAPTER.decode(commonMessage.content).let {
+                    Bus.offer(
+                        SisterX.BUS_MSG_NEW,
+                        MsgItem.create(createTextMessage(TYPE_TEXT, "", it.msg.jsonToText()))
+                    )
+                    Timber.tag(SisterX.TAG).d(it.msg.ifEmpty { "排队匹配客服中，请耐心等待" })
                 }
             }
             BUZ_SISTER_REQUEST_ERROR -> {
@@ -149,7 +164,13 @@ object SocketUtils {
                     SisterX.resetChat()
                     Bus.offer(
                         SisterX.BUS_MSG_NEW,
-                        MsgItem.create(createTextMessage(TYPE_LEAVE_MSG, "", it.offlineMsg))
+                        MsgItem.create(
+                            createTextMessage(
+                                TYPE_LEAVE_MSG,
+                                "",
+                                DbMessage.Text(it.offlineMsg)
+                            )
+                        )
                     )
                     Timber.tag(SisterX.TAG).d(it.offlineMsg.ifEmpty { "无人在线请留言" })
                 }
@@ -227,9 +248,6 @@ object SocketUtils {
             BUZ_CHAT_CLOSE_BY_SISTER -> {
                 SisterX.resetChat()
             }
-            BUZ_CHAT_CLOSE_TIMEOUT -> {
-                SisterX.resetChat()
-            }
             BUZ_LEAVE_MSG_REQUEST -> {
             }
         }
@@ -257,13 +275,13 @@ object SocketUtils {
         }
     }
 
-    private fun createTextMessage(type: Int, id: String, message: String): DbMessage {
+    private fun createTextMessage(type: Int, id: String, text: DbMessage.Text): DbMessage {
         return DbMessage(
             0L,
             id,
             type,
             AppPrefs.userId,
-            DbMessage.Text(message).toJson(),
+            text.toJson(),
             System.currentTimeMillis(),
             "",
             "",
