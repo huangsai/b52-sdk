@@ -134,6 +134,16 @@ object SocketUtils {
                     Timber.tag(SisterX.TAG).d(it.timeOutMsg.ifEmpty { "客服匹配超时" })
                 }
             }
+            BUZ_SISTER_REQUEST_PROGRESS -> {
+                QueueMsg.ADAPTER.decode(commonMessage.content).let {
+                    SisterX.resetChat()
+                    Bus.offer(
+                        SisterX.BUS_MSG_NEW,
+                        MsgItem.create(createTextMessage(TYPE_LEAVE_MSG, "", it.msg))
+                    )
+                    Timber.tag(SisterX.TAG).d(it.msg.ifEmpty { "排队匹配客服中" })
+                }
+            }
             BUZ_SISTER_REQUEST_ERROR -> {
                 CSOfflineMsg.ADAPTER.decode(commonMessage.content).let {
                     SisterX.resetChat()
