@@ -139,7 +139,7 @@ object SocketUtils {
                     SisterX.resetChat()
                     Bus.offer(
                         SisterX.BUS_MSG_NEW,
-                        MsgItem.create(createTextMessage(TYPE_LEAVE_MSG, "", it.msg))
+                        MsgItem.create(createTextMessage(TYPE_TEXT, "", it.msg))
                     )
                     Timber.tag(SisterX.TAG).d(it.msg.ifEmpty { "排队匹配客服中" })
                 }

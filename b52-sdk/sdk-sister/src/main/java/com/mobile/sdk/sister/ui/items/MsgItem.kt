@@ -311,6 +311,8 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             val binding = holder.binding(SisterItemChatLeaveMsgBinding::bind)
             binding.leaveMsgClick.paint.flags = Paint.UNDERLINE_TEXT_FLAG
             binding.leaveMsgClick.paint.isAntiAlias = true
+
+            binding.textContent.text = text.msg
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.leave_msg_click)
@@ -414,7 +416,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
                     TYPE_TIME -> Time(data).ofTime()
                     TYPE_SYSTEM -> System(data).ofSystem()
                     TYPE_DEPOSIT -> Deposit(data).ofDeposit()
-                    TYPE_LEAVE_MSG -> LeaveMsg(data)
+                    TYPE_LEAVE_MSG -> LeaveMsg(data).ofText()
                     TYPE_ROBOT -> Robot(data).ofRobot()
                     else -> Upgrade(data).ofUpgrade()
                 }
