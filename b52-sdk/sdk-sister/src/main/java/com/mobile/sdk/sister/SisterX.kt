@@ -42,13 +42,13 @@ object SisterX {
     var hasUser = false
         private set
 
-    internal var socketServer = ""
+    var socketServer = ""
         private set
 
-    internal var httpServer = ""
+    var httpServer = ""
         private set
 
-    internal lateinit var component: SisterComponent
+    lateinit var component: SisterComponent
         private set
 
     init {
