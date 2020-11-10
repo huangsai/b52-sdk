@@ -19,3 +19,21 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-ignorewarnings
+-keepattributes *Annotation*
+-keepattributes Exceptions
+-keepattributes InnerClasses
+-keepattributes Signature
+-keepattributes SourceFile,LineNumberTable
+-keep class com.hianalytics.android.**{*;}
+-keep class com.huawei.updatesdk.**{*;}
+-keep class com.huawei.hms.**{*;}
+
+-keep public class * extends android.app.Service
+-keep class com.heytap.msp.** { *;}
+
+-dontwarn com.vivo.push.**
+-keep class com.vivo.push.**{*;   }
+-keep class com.vivo.vms.**{*; }
+-keep class com.mobile.sdk.push.vivo.PushMessageReceiverImpl{*;}
