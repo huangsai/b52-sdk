@@ -1,7 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="ok.game.sdk.push">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mobile.sdk.push">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
-        
+
+        <!--        Huawei-->
+        <meta-data
+            android:name="com.huawei.hms.client.appid"
+            android:value="my_appid" />
+
+        <service
+            android:name="come.mobile.sdk.push.huawei.HmsPushService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!--        VIVO-->
+        <service
+            android:name="com.vivo.push.sdk.service.CommandClientService"
+            android:exported="true" />
+
+        <meta-data
+            android:name="com.vivo.push.api_key"
+            android:value="xxxxxxxx" />
+
+        <meta-data
+            android:name="com.vivo.push.app_id"
+            android:value="xxxx" />
+
+        <receiver android:name="come.mobile.sdk.push.vivo.VivoPushReceiverImpl">
+            <intent-filter>
+                <action android:name="com.vivo.pushclient.action.RECEIVE" />
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>

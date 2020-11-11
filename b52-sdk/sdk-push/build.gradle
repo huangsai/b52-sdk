@@ -8,6 +8,12 @@ android {
     }
 
     resourcePrefix "push_"
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 wire {
@@ -22,6 +28,10 @@ dependencies {
     implementation dep.company.guavaAndroid
     implementation dep.company.guavaMvvm
     implementation dep.company.guavaData
-
     api 'com.squareup.wire:wire-runtime:3.4.0'
+
+    implementation 'com.huawei.hms:push:5.0.0.300'
+    implementation(name: 'com.heytap.msp', ext: 'aar')
+    implementation(name: 'vivo_pushsdk-v2.9.0.0', ext: 'aar')
+//    implementation files("libs/vivo_pushsdk-2.9.0.0.aar")
 }

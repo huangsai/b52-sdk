@@ -13,6 +13,7 @@ buildscript {
         maven { url "https://kotlin.bintray.com/kotlinx" }
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
         maven { url "https://jitpack.io" }
+        maven { url 'http://developer.huawei.com/repo/' }
     }
 
     dependencies {
@@ -26,6 +27,7 @@ buildscript {
 
         classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.10'
         classpath 'com.squareup.wire:wire-gradle-plugin:3.5.0'
+        classpath 'com.huawei.agconnect:agcp:1.2.0.300'
     }
 }
 
@@ -42,6 +44,7 @@ allprojects { project ->
         maven { url "https://jitpack.io" }
         maven { url "http://172.31.9.72:8081/repository/maven-releases/" }
         maven { url "http://172.31.9.72:8081/repository/maven-snapshots/" }
+        maven { url 'http://developer.huawei.com/repo/' }
 
         flatDir {
             dirs 'libs'
