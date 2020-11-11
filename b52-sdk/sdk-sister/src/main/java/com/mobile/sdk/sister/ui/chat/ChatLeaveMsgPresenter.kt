@@ -7,6 +7,8 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.mobile.guava.android.context.hideSoftInput
+import com.mobile.guava.android.ime.ImeUtils
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
@@ -59,6 +61,7 @@ class ChatLeaveMsgPresenter(
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.btn_submit -> {
+                ImeUtils.hideIme(inputContentEt)
                 val content = inputContentEt.text.toString().trim()
                 if (content.isNullOrEmpty() || content.length < 10) {
                     Msg.toast(R.string.sister_leave_msg_input_content_toast)

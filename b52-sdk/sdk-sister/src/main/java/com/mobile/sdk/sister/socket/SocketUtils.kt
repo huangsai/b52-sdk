@@ -2,6 +2,8 @@ package com.mobile.sdk.sister.socket
 
 import androidx.annotation.WorkerThread
 import com.mobile.guava.android.ensureWorkThread
+import com.mobile.guava.android.mvvm.Msg
+import com.mobile.guava.android.postToMainThread
 import com.mobile.guava.jvm.coroutines.Bus
 import com.mobile.guava.jvm.domain.Source
 import com.mobile.guava.jvm.extension.exhaustive
@@ -248,6 +250,9 @@ object SocketUtils {
                 SisterX.resetChatSession()
             }
             BUZ_LEAVE_MSG_REQUEST -> {
+                postToMainThread {
+                    Msg.toast(response.msg)
+                }
             }
         }
     }
