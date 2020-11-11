@@ -286,22 +286,24 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     class Upgrade(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
-            TODO("Not yet implemented")
+            val binding = holder.binding(SisterItemChatToTextBinding::bind)
+            binding.textContent.text = "不支持该类型消息，请升级"
         }
 
         override fun getLayout(): Int {
-            TODO("Not yet implemented")
+            return R.layout.sister_item_chat_to_text
         }
     }
 
     class Upgrade2(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
-            TODO("Not yet implemented")
+            val binding = holder.binding(SisterItemChatFromTextBinding::bind)
+            binding.textContent.text = "不支持该类型消息，请升级"
         }
 
         override fun getLayout(): Int {
-            TODO("Not yet implemented")
+            return R.layout.sister_item_chat_from_text
         }
     }
 
@@ -332,7 +334,13 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
         private val mySpannable by lazy {
             MySpannable().apply {
-                append(if (robot.isNullOrEmpty()) "对不起，没有查询到您发送的问题，您可试试 联系客服" else "如果以上答案未解决您的问题，请点击 联系客服")
+                append(
+                    if (robot.isNullOrEmpty()) {
+                        "对不起，没有查询到您发送的问题，您可试试 联系客服"
+                    } else {
+                        "如果以上答案未解决您的问题，请点击 联系客服"
+                    }
+                )
                 findAndSpan("联系客服") { UnderlineSpan() }
             }
         }
@@ -352,8 +360,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
                 binding.autoReplyRecycler.visibility = View.VISIBLE
                 binding.textTitle.visibility = View.VISIBLE
                 adapter.onClickListener = this
-                binding.autoReplyRecycler.layoutManager =
-                    LinearLayoutManager(holder.itemView.context)
+                binding.autoReplyRecycler.layoutManager = LinearLayoutManager(
+                    holder.itemView.context
+                )
                 binding.autoReplyRecycler.adapter = adapter
             }
         }
@@ -371,7 +380,6 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     class Deposit(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
-            val binding = holder.binding(SisterItemChatDepositBinding::bind)
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.deposit_wechat)
