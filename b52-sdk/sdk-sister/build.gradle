@@ -32,5 +32,5 @@ dependencies {
     implementation 'com.github.skydoves:balloon:1.2.2'
     implementation 'it.sephiroth.android.library.imagezoom:imagezoom:2.3.0'
 
-    api 'com.squareup.wire:wire-runtime:3.4.0'
+    api 'com.squareup.wire:wire-runtime:3.5.0'
 }
