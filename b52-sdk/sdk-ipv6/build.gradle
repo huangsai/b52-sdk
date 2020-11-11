@@ -23,5 +23,5 @@ dependencies {
     implementation dep.company.guavaMvvm
     implementation dep.company.guavaData
 
-    api 'com.squareup.wire:wire-runtime:3.4.0'
+    api 'com.squareup.wire:wire-runtime:3.5.0'
 }
