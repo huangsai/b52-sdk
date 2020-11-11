@@ -156,9 +156,12 @@ class SisterViewModel @Inject constructor(
         )
     }
 
-    fun postSysReply(apiSysReply: ApiSysReply) {
+    fun postSysReply(isHelp: Boolean, apiSysReply: ApiSysReply) {
         viewModelScope.launch(Dispatchers.IO) {
-            createDbMessage(TYPE_TEXT, DbMessage.Text(apiSysReply.words).toJson()).also {
+            createDbMessage(
+                TYPE_TEXT,
+                DbMessage.Text(if (isHelp) apiSysReply.words else apiSysReply.question!!).toJson()
+            ).also {
                 SocketUtils.insertDbMessage(it.copy(status = STATUS_MSG_SUCCESS))
                 SocketUtils.insertDbMessage(apiSysReply.content.sisterTextDbMessage())
             }

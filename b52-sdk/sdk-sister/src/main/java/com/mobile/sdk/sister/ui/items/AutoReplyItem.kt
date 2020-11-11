@@ -13,7 +13,7 @@ class AutoReplyItem(val data: ApiSysReply) : SimpleRecyclerItem() {
     override fun bind(holder: AdapterViewHolder) {
         val binding = holder.binding(SisterItemAutoReplyBinding::bind)
         binding.itemAutoReply.text = MySpannable(
-            "${(holder.bindingAdapterPosition + 1)}.${data.words}",
+            "${(holder.bindingAdapterPosition + 1)}.${data.question}",
             UnderlineSpan()
         )
         holder.attachOnClickListener(R.id.item_auto_reply)

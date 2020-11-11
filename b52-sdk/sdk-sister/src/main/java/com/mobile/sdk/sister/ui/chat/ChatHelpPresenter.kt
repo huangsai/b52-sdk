@@ -46,7 +46,7 @@ class ChatHelpPresenter(
         if (!adapter.isEmpty()) {
             return
         }
-        
+
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             val source = model.getSysReply()
             withContext(Dispatchers.Main) {
@@ -68,7 +68,7 @@ class ChatHelpPresenter(
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.item_help_tag -> {
-                model.postSysReply(AdapterUtils.getHolder(v).item<HelpItem>().data)
+                model.postSysReply(true, AdapterUtils.getHolder(v).item<HelpItem>().data)
             }
         }
     }

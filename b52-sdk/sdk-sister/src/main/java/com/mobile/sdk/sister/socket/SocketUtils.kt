@@ -167,7 +167,7 @@ object SocketUtils {
                             createTextMessage(
                                 TYPE_LEAVE_MSG,
                                 "",
-                                DbMessage.Text(it.offlineMsg)
+                                it.offlineMsg.jsonToText()
                             )
                         )
                     )

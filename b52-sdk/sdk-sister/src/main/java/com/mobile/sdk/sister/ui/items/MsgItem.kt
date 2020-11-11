@@ -330,9 +330,11 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             }
         }
 
-        private val mySpannable = MySpannable().apply {
-            append("如果以上答案未解决您的问题，请点击 联系客服")
-            findAndSpan("联系客服") { UnderlineSpan() }
+        private val mySpannable by lazy {
+            MySpannable().apply {
+                append(if (robot.isNullOrEmpty()) "对不起，没有查询到您发送的问题，您可试试 联系客服" else "如果以上答案未解决您的问题，请点击 联系客服")
+                findAndSpan("联系客服") { UnderlineSpan() }
+            }
         }
 
         override fun bind(holder: AdapterViewHolder) {
@@ -343,9 +345,17 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.auto_reply_click)
 
-            adapter.onClickListener = this
-            binding.autoReplyRecycler.layoutManager = LinearLayoutManager(holder.itemView.context)
-            binding.autoReplyRecycler.adapter = adapter
+            if (robot.isNullOrEmpty()) {
+                binding.autoReplyRecycler.visibility = View.GONE
+                binding.textTitle.visibility = View.GONE
+            } else {
+                binding.autoReplyRecycler.visibility = View.VISIBLE
+                binding.textTitle.visibility = View.VISIBLE
+                adapter.onClickListener = this
+                binding.autoReplyRecycler.layoutManager =
+                    LinearLayoutManager(holder.itemView.context)
+                binding.autoReplyRecycler.adapter = adapter
+            }
         }
 
         override fun getLayout(): Int {

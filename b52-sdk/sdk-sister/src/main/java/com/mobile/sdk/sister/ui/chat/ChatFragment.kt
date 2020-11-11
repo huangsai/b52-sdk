@@ -147,7 +147,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
             return
         }
         if (event.first == SisterX.BUS_MSG_AUTO_REPLY) {
-            fParent.model.postSysReply(event.second.cast())
+            fParent.model.postSysReply(false, event.second.cast())
             return
         }
     }

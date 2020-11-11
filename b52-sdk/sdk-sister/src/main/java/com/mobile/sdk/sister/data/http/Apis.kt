@@ -57,6 +57,7 @@ data class ApiSysReply(
     @Json(name = "delFlag") val delFlag: Int,
     @Json(name = "flag") val flag: Int,
     @Json(name = "words") val words: String,
+    @Json(name = "question") val question: String?,
     @Json(name = "content") val content: String,
     @Json(name = "createBy") val createBy: String,
     @Json(name = "updateBy") val updateBy: String,
