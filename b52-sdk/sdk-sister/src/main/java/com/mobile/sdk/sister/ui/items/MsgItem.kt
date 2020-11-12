@@ -336,9 +336,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             MySpannable().apply {
                 append(
                     if (robot.isNullOrEmpty()) {
-                        "对不起，没有查询到您发送的问题，您可试试 联系客服"
+                        "对不起，没有查询到您发送的问题，您可试试\t联系客服"
                     } else {
-                        "如果以上答案未解决您的问题，请点击 联系客服"
+                        "如果以上答案未解决您的问题，请点击\t联系客服"
                     }
                 )
                 findAndSpan("联系客服") { UnderlineSpan() }

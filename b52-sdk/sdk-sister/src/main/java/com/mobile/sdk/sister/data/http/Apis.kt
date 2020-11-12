@@ -14,6 +14,7 @@ const val TYPE_LEAVE_MSG = 8
 
 const val BUZ_LOGIN = 20001// 登录20001
 const val BUZ_LOGOUT = 20002// 登出20002
+const val BUZ_LOGOUT_MSG = 20004// 登出20004
 const val BUZ_MSG_REQUEST = 30001// 发送聊天消息30001
 const val BUZ_MSG_NOTIFICATION = 30002// 消息通知30002
 const val BUZ_CHAT_CLOSE_BY_MYSELF = 30003// 我关闭当前聊天30003

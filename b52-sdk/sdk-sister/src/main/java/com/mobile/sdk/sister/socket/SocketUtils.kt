@@ -203,6 +203,14 @@ object SocketUtils {
                     }
                 }
             }
+            BUZ_LOGOUT_MSG -> {
+                LogoutMsg.ADAPTER.decode(commonMessage.content).let {
+                    SisterX.isForceLogout = true
+                    SisterX.resetChatSession()
+                    Bus.offer(BUZ_LOGOUT_MSG, it.msg)
+                    Timber.tag(SisterX.TAG).d("顶号->%s", it.msg)
+                }
+            }
             else -> {
                 try {
                     onResponseResult(ResponseResult.ADAPTER.decode(commonMessage.content))

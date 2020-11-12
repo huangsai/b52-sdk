@@ -126,6 +126,12 @@ message LoginReq{
 message LogoutReq{
 }
 
+//登出20004
+message LogoutMsg{
+  string msg =1 ;
+}
+
+// 20003
 message ResponseResult{
   //1成功0失败
   int32 result = 1;

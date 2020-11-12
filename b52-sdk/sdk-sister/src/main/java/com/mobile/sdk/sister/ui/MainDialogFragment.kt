@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -14,6 +15,7 @@ import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.ui.screen.screen
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
+import com.mobile.sdk.sister.data.http.BUZ_LOGOUT_MSG
 import com.mobile.sdk.sister.databinding.SisterDialogMainBinding
 import com.mobile.sdk.sister.ui.chat.ChatFragment
 import com.mobile.sdk.sister.ui.system.SystemFragment
@@ -107,6 +109,21 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onBusEvent(event: Pair<Int, Any>) {
+        if (event.first == BUZ_LOGOUT_MSG) {
+            AlertDialog.Builder(requireActivity())
+                .setTitle("温馨提示")
+                .setMessage(event.second as String)
+                .setPositiveButton("确定") { dialog, _ ->
+                    dialog.dismiss()
+                    dismissAllowingStateLoss()
+                }
+                .create()
+                .show()
+            return
+        }
     }
 
     companion object {

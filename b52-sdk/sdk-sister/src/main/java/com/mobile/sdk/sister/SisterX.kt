@@ -38,6 +38,7 @@ object SisterX {
 
     internal var sisterUserId = "0"
     internal var chatId = 0L
+    internal var isForceLogout = false
 
     var hasUser = false
         private set
@@ -54,6 +55,7 @@ object SisterX {
     init {
         isSocketConnected.observeForever {
             if (it) {
+                isForceLogout = false
                 require(hasUser)
                 SocketUtils.postLogin()
             } else {
@@ -93,7 +95,7 @@ object SisterX {
     }
 
     fun setServers(_socketServer: String, _httpServer: String) {
-        socketServer = "ws://${_socketServer}:30301/ws/csms"
+        socketServer = "ws://${_socketServer}:30301/ws/csms?from=android"
         httpServer = "http://${_httpServer}:30301/"
     }
 
@@ -103,6 +105,7 @@ object SisterX {
         }
 
         resetChatSession()
+        isForceLogout = false
         hasUser = false
         isLogin.postValue(false)
         AppPrefs.userId = ""

@@ -57,7 +57,7 @@ object AppWebSocket : LongLiveSocket() {
     init {
         SisterX.isSocketConnected.observeForever {
             if (false == it) {
-                if (neededReconnect) {
+                if (neededReconnect && !SisterX.isForceLogout) {
                     reconnectWhenLose(connectFailCount * 2000L)
                 }
             }
