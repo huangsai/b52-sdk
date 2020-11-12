@@ -71,13 +71,15 @@ object SocketUtils {
     }
 
     fun leaveMessage(msg: String) = GlobalScope.launch(Dispatchers.IO) {
+        val text = DbMessage.Text(msg).toJson()
         CommonMessage.Builder()
             .bizId(BUZ_LEAVE_MSG_REQUEST)
             .msgType(2)
-            .content(LeaveMsgReq.Builder().msg(msg).build().encodeByteString())
+            .content(LeaveMsgReq.Builder().msg(text).build().encodeByteString())
             .build()
             .let {
                 AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
+                Timber.tag(SisterX.TAG).d("发送留言->%s", text)
             }
     }
 
@@ -196,7 +198,7 @@ object SocketUtils {
                     it.chatMsg.forEach { chatMsg ->
                         if (!chatMsg.id.isNullOrEmpty()) {
                             insertDbMessage(chatMsg.toDbMessage())
-                            Timber.tag(SisterX.TAG).d("收到留言信息->%s", it.chatMsg)
+                            Timber.tag(SisterX.TAG).d("收到留言/离线回复->%s", it.chatMsg)
                         }
                     }
                 }
