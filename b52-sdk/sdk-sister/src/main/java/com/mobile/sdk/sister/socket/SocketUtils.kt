@@ -211,6 +211,12 @@ object SocketUtils {
                     Timber.tag(SisterX.TAG).d("顶号->%s", it.msg)
                 }
             }
+            BUZ_CHAT_CLOSE_BY_SISTER -> {
+                CloseChatMsg.ADAPTER.decode(commonMessage.content).let {
+                    SisterX.resetChatSession()
+                    Timber.tag(SisterX.TAG).d("客服关闭会话")
+                }
+            }
             else -> {
                 try {
                     onResponseResult(ResponseResult.ADAPTER.decode(commonMessage.content))
@@ -254,9 +260,6 @@ object SocketUtils {
                 SisterX.resetChatSession()
             }
             BUZ_CHAT_CLOSE_BY_MYSELF -> {
-                SisterX.resetChatSession()
-            }
-            BUZ_CHAT_CLOSE_BY_SISTER -> {
                 SisterX.resetChatSession()
             }
             BUZ_LEAVE_MSG_REQUEST -> {
