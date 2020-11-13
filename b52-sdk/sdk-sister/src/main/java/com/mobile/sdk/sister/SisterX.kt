@@ -60,6 +60,7 @@ object SisterX {
                 SocketUtils.postLogin()
             } else {
                 resetChatSession()
+                isLogin.value = false
             }
         }
     }

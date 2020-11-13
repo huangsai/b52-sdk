@@ -116,6 +116,7 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
             AlertDialog.Builder(requireActivity())
                 .setTitle("温馨提示")
                 .setMessage(event.second as String)
+                .setCancelable(false)
                 .setPositiveButton("确定") { dialog, _ ->
                     dialog.dismiss()
                     dismissAllowingStateLoss()
