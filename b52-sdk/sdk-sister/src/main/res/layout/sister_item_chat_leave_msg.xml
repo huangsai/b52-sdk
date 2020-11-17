@@ -31,8 +31,7 @@
             android:textSize="@dimen/font_15sp"
             app:layout_constraintBottom_toTopOf="@id/leave_msg_click"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/sister_leave_msg_text_content" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/leave_msg_click"
