@@ -31,6 +31,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="@string/sister_main_tab_system_text"
+                android:visibility="gone"
                 android:textColor="@color/sister_main_tab_text_color"
                 android:textSize="@dimen/font_20sp" />
 
@@ -43,6 +44,7 @@
                 android:button="@null"
                 android:checked="true"
                 android:gravity="center"
+                android:enabled="false"
                 android:text="@string/sister_main_tab_csms_text"
                 android:textColor="@color/sister_main_tab_text_color"
                 android:textSize="@dimen/font_20sp" />
@@ -54,6 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/size_16dp"
             android:paddingLeft="@dimen/size_10dp"
+            android:visibility="invisible"
             android:paddingRight="@dimen/size_10dp"
             android:src="@drawable/sister_icon_call"
             app:layout_constraintBottom_toTopOf="@id/voice_btn"
