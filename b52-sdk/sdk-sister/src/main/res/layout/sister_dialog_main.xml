@@ -31,9 +31,9 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="@string/sister_main_tab_system_text"
-                android:visibility="gone"
                 android:textColor="@color/sister_main_tab_text_color"
-                android:textSize="@dimen/font_17sp" />
+                android:textSize="@dimen/font_17sp"
+                android:visibility="gone" />
 
             <RadioButton
                 android:id="@+id/rb_chat"
@@ -43,8 +43,8 @@
                 android:background="@drawable/sister_main_tab_selector"
                 android:button="@null"
                 android:checked="true"
-                android:gravity="center"
                 android:enabled="false"
+                android:gravity="center"
                 android:text="@string/sister_main_tab_csms_text"
                 android:textColor="@color/sister_main_tab_text_color"
                 android:textSize="@dimen/font_17sp" />
@@ -56,9 +56,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/size_16dp"
             android:paddingLeft="@dimen/size_10dp"
-            android:visibility="invisible"
             android:paddingRight="@dimen/size_10dp"
             android:src="@drawable/sister_icon_call"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@id/voice_btn"
             app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -66,6 +66,7 @@
             android:id="@+id/voice_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_6dp"
             android:paddingLeft="@dimen/size_10dp"
             android:paddingRight="@dimen/size_10dp"
             android:src="@drawable/sister_voice_icon_selector"

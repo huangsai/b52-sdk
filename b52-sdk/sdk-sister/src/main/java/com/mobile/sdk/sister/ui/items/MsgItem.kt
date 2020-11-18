@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.guava.android.ui.view.text.MySpannable
 import com.mobile.guava.jvm.coroutines.Bus
+import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm
 import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
@@ -393,7 +394,7 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
     class Time(data: DbMessage) : MsgItem(data) {
         private val nanoStr: String by lazy {
-            time.nano.yyyy_mm_dd_hh_mm_ss()
+            time.nano.yyyy_mm_dd_hh_mm()
         }
 
         override fun bind(holder: AdapterViewHolder) {

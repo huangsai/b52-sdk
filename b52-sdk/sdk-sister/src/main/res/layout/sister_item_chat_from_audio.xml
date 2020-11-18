@@ -6,8 +6,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profile"
-        android:layout_width="@dimen/size_40dp"
-        android:layout_height="@dimen/size_40dp"
+        android:layout_width="@dimen/sister_msg_profile"
+        android:layout_height="@dimen/sister_msg_profile"
         android:src="@drawable/sister_icon_add"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,8 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_5dp"
         android:background="@drawable/sister_chat_pop_white"
-        android:maxWidth="200dp"
-        android:minHeight="@dimen/size_40dp"
+        android:maxWidth="@dimen/sister_msg_item_max_width"
+        android:minHeight="@dimen/sister_msg_text_item_mini_height"
         app:layout_constraintLeft_toRightOf="@id/profile"
         app:layout_constraintTop_toTopOf="parent">
 
