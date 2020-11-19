@@ -20,6 +20,7 @@ import com.mobile.sdk.sister.ui.views.RecordButtonTouchCallback
 import com.pacific.adapter.AdapterViewHolder
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
+import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -51,6 +52,8 @@ class ChatVoicePresenter(
             cornerRadius = 0f
             arrowVisible = false
             setBackgroundDrawableResource(R.drawable.sister_press_voice_popup_bg)
+            setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
+            setLifecycleOwner(fragment)
         }
         pressDuration = balloon.getContentView().findViewById(R.id.press_duration)
         pressStatus = balloon.getContentView().findViewById(R.id.press_status)

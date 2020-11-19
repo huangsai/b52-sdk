@@ -16,6 +16,7 @@ import com.mobile.sdk.sister.ui.SisterViewModel
 import com.pacific.adapter.AdapterViewHolder
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
+import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 
 class ChatLeaveMsgPresenter(
     fragment: ChatFragment,
@@ -35,6 +36,8 @@ class ChatLeaveMsgPresenter(
         width = binding.chatRecycler.width - 16
         setBackgroundDrawableResource(R.drawable.sister_leave_msg_bg)
         setElevation(0)
+        setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
+        setLifecycleOwner(fragment)
     }
 
     init {

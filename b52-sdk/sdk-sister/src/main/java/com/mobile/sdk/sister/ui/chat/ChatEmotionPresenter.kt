@@ -14,6 +14,7 @@ import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
+import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 
 class ChatEmotionPresenter(
     fragment: ChatFragment,
@@ -43,6 +44,8 @@ class ChatEmotionPresenter(
             marginRight = 10
             setBackgroundColorResource(R.color.sister_color_black_transparent)
             setElevation(0)
+            setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
+            setLifecycleOwner(fragment)
         }
         balloon!!.showAlignTop(binding.layoutInput)
         emotionDelete = balloon!!.getContentView().findViewById(R.id.emotion_delete)

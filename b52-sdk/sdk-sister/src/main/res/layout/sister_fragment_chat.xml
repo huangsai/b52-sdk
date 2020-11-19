@@ -33,11 +33,12 @@
             <TextView
                 android:id="@+id/txt_newest"
                 android:layout_width="@dimen/size_84dp"
-                android:layout_height="@dimen/size_32dp"
+                android:layout_height="@dimen/size_30dp"
                 android:layout_marginBottom="@dimen/size_10dp"
                 android:background="@drawable/sister_chat_newest"
                 android:gravity="center"
                 android:text="@string/sister_chat_newest"
+                android:textSize="@dimen/sister_msg_text_font"
                 android:textColor="@android:color/white"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/chat_recycler"

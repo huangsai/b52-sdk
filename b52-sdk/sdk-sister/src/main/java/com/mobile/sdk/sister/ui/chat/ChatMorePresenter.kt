@@ -20,6 +20,7 @@ import com.pacific.adapter.AdapterViewHolder
 import com.skydoves.balloon.ArrowOrientation
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
+import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 import java.io.File
 
 class ChatMorePresenter(
@@ -103,6 +104,8 @@ class ChatMorePresenter(
             arrowSize = 0
             setBackgroundColorResource(R.color.sister_color_black_transparent)
             setElevation(0)
+            setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
+            setLifecycleOwner(fragment)
         }
         balloon!!.showAlignTop(binding.layoutInput, 0, 0)
         balloon!!.getContentView().findViewById<ImageView>(R.id.iv_picture).setOnClickListener(this)
