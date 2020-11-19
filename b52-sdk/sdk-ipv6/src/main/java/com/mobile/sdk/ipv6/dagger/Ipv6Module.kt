@@ -80,7 +80,7 @@ class Ipv6Module : DataModule {
     @Singleton
     override fun provideRetrofit(okHttpClient: OkHttpClient, json: Moshi): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.2.92:31001")
+            .baseUrl("http://172.31.8.110:30400")
             .client(okHttpClient)
             .addConverterFactory(ApiConverterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create(json))
