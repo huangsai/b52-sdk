@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface DataService {
 
-    @GET("/taskUrlConfig/getInitConfig")
+    @GET("/api/taskUrlConfig/getInitConfig")
     suspend fun config(): ApiConfig
 }
