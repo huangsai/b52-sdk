@@ -18,28 +18,26 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/size_10dp"
-            android:paddingRight="@dimen/size_10dp"
+            android:paddingLeft="@dimen/size_8dp"
+            android:paddingRight="@dimen/size_8dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <RadioButton
                 android:id="@+id/rb_system"
-                android:layout_width="@dimen/size_40dp"
-                android:layout_height="@dimen/size_60dp"
+                style="@style/WrapWrap"
+                android:layout_marginBottom="@dimen/size_10dp"
                 android:background="@drawable/sister_main_tab_selector"
                 android:button="@null"
                 android:gravity="center"
                 android:text="@string/sister_main_tab_system_text"
                 android:textColor="@color/sister_main_tab_text_color"
-                android:textSize="@dimen/font_17sp"
+                android:textSize="@dimen/font_16sp"
                 android:visibility="gone" />
 
             <RadioButton
                 android:id="@+id/rb_chat"
-                android:layout_width="@dimen/size_40dp"
-                android:layout_height="@dimen/size_60dp"
-                android:layout_marginTop="@dimen/size_10dp"
+                style="@style/WrapWrap"
                 android:background="@drawable/sister_main_tab_selector"
                 android:button="@null"
                 android:checked="true"
@@ -47,7 +45,7 @@
                 android:gravity="center"
                 android:text="@string/sister_main_tab_csms_text"
                 android:textColor="@color/sister_main_tab_text_color"
-                android:textSize="@dimen/font_17sp" />
+                android:textSize="@dimen/font_16sp" />
         </RadioGroup>
 
         <ImageView

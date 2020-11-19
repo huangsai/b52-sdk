@@ -19,6 +19,8 @@ import com.mobile.sdk.sister.data.http.BUZ_LOGOUT_MSG
 import com.mobile.sdk.sister.databinding.SisterDialogMainBinding
 import com.mobile.sdk.sister.ui.chat.ChatFragment
 import com.mobile.sdk.sister.ui.system.SystemFragment
+import kotlin.math.max
+import kotlin.math.min
 
 class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedChangeListener,
     View.OnClickListener {
@@ -98,8 +100,8 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
         // 将对话框的大小按屏幕大小的百分比设置
         dialog?.window?.let { _window ->
             val lp = _window.attributes
-            lp.width = (screen.x * 0.65).toInt() //设置宽度
-            lp.height = (screen.y * 0.9).toInt() //设置宽度
+            lp.width = (max(screen.x, screen.y) * 0.6).toInt() //设置宽度
+            lp.height = (min(screen.x, screen.y) * 0.9).toInt() //设置宽度
             _window.attributes = lp
             _window.setGravity(Gravity.LEFT)
             _window.setWindowAnimations(R.style.sister_DialogWindow)
