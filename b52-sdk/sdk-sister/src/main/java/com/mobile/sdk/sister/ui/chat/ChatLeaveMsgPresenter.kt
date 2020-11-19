@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import com.mobile.guava.android.context.hideSoftInput
+import com.mobile.guava.android.context.dp2px2
 import com.mobile.guava.android.ime.ImeUtils
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.sdk.sister.R
@@ -31,9 +31,8 @@ class ChatLeaveMsgPresenter(
         setLayout(R.layout.sister_popup_chat_leave_msg)
         arrowVisible = false
         cornerRadius = 0f
-        marginLeft = 20
-        marginRight = 20
-        width = binding.chatRecycler.width
+        marginTop = (binding.chatRecycler.measuredHeight - fragment.requireContext().dp2px2(160f)) / 2
+        width = binding.chatRecycler.width - 16
         setBackgroundDrawableResource(R.drawable.sister_leave_msg_bg)
         setElevation(0)
     }
@@ -55,7 +54,7 @@ class ChatLeaveMsgPresenter(
     }
 
     fun showPop() {
-        balloon.showAlignTop(binding.layoutInput, 0, -40)
+        balloon.showAlignTop(binding.chatRecycler)
     }
 
     override fun onClick(v: View?) {

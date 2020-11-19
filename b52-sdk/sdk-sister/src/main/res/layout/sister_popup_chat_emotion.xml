@@ -13,22 +13,21 @@
 
     <ImageView
         android:id="@+id/emotion_delete"
-        android:layout_width="@dimen/size_26dp"
-        android:layout_height="@dimen/size_26dp"
-        android:layout_marginEnd="@dimen/size_10dp"
+        style="@style/WrapWrap"
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="@dimen/size_5dp"
         android:src="@drawable/sister_emoji_delete_selector"
         app:layout_constraintBottom_toBottomOf="@id/view_pager"
         app:layout_constraintRight_toLeftOf="@id/emotion_send" />
 
     <ImageView
         android:id="@+id/emotion_send"
-        android:layout_width="@dimen/size_66dp"
-        android:layout_height="@dimen/size_26dp"
+        style="@style/WrapWrap"
+        android:scaleType="centerCrop"
         android:layout_marginEnd="@dimen/size_5dp"
         android:src="@drawable/sister_emoji_send_selector"
         app:layout_constraintBottom_toBottomOf="@id/view_pager"
         app:layout_constraintRight_toRightOf="@id/view_pager" />
-
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"

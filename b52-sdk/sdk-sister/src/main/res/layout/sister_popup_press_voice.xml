@@ -3,16 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_popup"
-    android:layout_width="180dp"
-    android:layout_height="180dp"
+    android:layout_width="@dimen/size_132dp"
+    android:layout_height="@dimen/size_132dp"
     android:background="@drawable/sister_press_voice_popup_bg">
 
     <TextView
         android:id="@+id/press_duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/WrapWrap"
         android:textColor="@color/sister_color_E5D7B0"
-        android:textSize="@dimen/font_15sp"
+        android:textSize="@dimen/sister_msg_text_font"
         app:layout_constraintBottom_toTopOf="@id/layout_audio_img"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -29,26 +28,22 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/WrapWrap"
             android:src="@drawable/sister_icon_press_mic" />
 
         <ImageView
             android:id="@+id/press_audio_anim"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/WrapWrap"
             android:src="@drawable/sister_audio_press_anim" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/press_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/WrapWrap"
         android:textColor="@color/sister_color_E5D7B0"
-        android:textSize="@dimen/font_15sp"
+        android:textSize="@dimen/sister_msg_text_font"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_audio_img"
-        tools:text="" />
+        app:layout_constraintTop_toBottomOf="@id/layout_audio_img"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

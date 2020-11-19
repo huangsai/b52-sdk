@@ -26,7 +26,6 @@ import io.reactivex.rxjava3.disposables.Disposable
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-
 class ChatVoicePresenter(
     fragment: ChatFragment,
     binding: SisterFragmentChatBinding,
@@ -60,7 +59,12 @@ class ChatVoicePresenter(
     }
 
     private fun showPopup() {
-        balloon.showAlignTop(binding.layoutInput, 0, -50)
+        val rootView = fragment.requireView()
+        balloon.showAlignRight(
+            rootView,
+            0,
+            0
+        )
     }
 
     private fun startRecord() {

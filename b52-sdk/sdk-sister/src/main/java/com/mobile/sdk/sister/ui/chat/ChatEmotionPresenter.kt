@@ -12,7 +12,6 @@ import com.mobile.sdk.sister.ui.chat.EmotionHandle.splitEmotionInfo
 import com.mobile.sdk.sister.ui.items.ViewerEmotionItem
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
-import com.skydoves.balloon.ArrowOrientation
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
 
