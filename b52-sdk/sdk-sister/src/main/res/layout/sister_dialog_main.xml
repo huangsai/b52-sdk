@@ -18,8 +18,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/size_8dp"
-            android:paddingRight="@dimen/size_8dp"
+            android:paddingLeft="@dimen/size_6dp"
+            android:paddingRight="@dimen/size_6dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -32,7 +32,7 @@
                 android:gravity="center"
                 android:text="@string/sister_main_tab_system_text"
                 android:textColor="@color/sister_main_tab_text_color"
-                android:textSize="@dimen/font_16sp"
+                android:textSize="@dimen/font_13sp"
                 android:visibility="gone" />
 
             <RadioButton
@@ -45,7 +45,7 @@
                 android:gravity="center"
                 android:text="@string/sister_main_tab_csms_text"
                 android:textColor="@color/sister_main_tab_text_color"
-                android:textSize="@dimen/font_16sp" />
+                android:textSize="@dimen/font_13sp" />
         </RadioGroup>
 
         <ImageView
@@ -78,6 +78,7 @@
             app:layout_constraintLeft_toRightOf="@id/main_rg"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
