@@ -8,4 +8,4 @@
     android:lines="1"
     android:maxLines="1"
     android:textColor="@color/sister_color_black"
-    android:textSize="@dimen/font_15sp" />
+    android:textSize="@dimen/sister_msg_text_font" />

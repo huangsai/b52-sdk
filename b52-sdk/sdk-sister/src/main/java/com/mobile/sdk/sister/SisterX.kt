@@ -96,6 +96,8 @@ object SisterX {
     }
 
     fun setServers(_socketServer: String, _httpServer: String) {
+        // socketServer = "ws://${_socketServer}:30301/ws/csms?from=android"
+        // httpServer = "http://${_httpServer}:30301/"
         socketServer = "ws://${_socketServer}:31301/ws/csms?from=android"
         httpServer = "http://${_httpServer}:31301/"
     }

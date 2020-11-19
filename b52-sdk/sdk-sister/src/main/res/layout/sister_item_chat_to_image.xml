@@ -16,9 +16,9 @@
 
     <ImageView
         android:id="@+id/image_content"
-        android:layout_width="@dimen/size_172dp"
-        android:layout_height="@dimen/size_172dp"
-        android:layout_marginEnd="@dimen/size_10dp"
+        android:layout_width="@dimen/sister_msg_image"
+        android:layout_height="@dimen/sister_msg_image"
+        android:layout_marginEnd="@dimen/size_5dp"
         android:scaleType="centerCrop"
         app:layout_constraintRight_toLeftOf="@id/profile"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,6 +26,7 @@
     <ImageView
         android:id="@+id/status_failed"
         style="@style/sister_MsgStatusFailed"
+        android:layout_marginRight="@dimen/size_3dp"
         android:src="@drawable/sister_icon_fail"
         app:layout_constraintBottom_toBottomOf="@id/image_content"
         app:layout_constraintRight_toLeftOf="@id/image_content"
@@ -35,6 +36,7 @@
     <ProgressBar
         android:id="@+id/status_processing"
         style="@style/sister_MsgStatusProcessing"
+        android:layout_marginRight="@dimen/size_3dp"
         app:layout_constraintBottom_toBottomOf="@id/image_content"
         app:layout_constraintRight_toLeftOf="@id/image_content"
         app:layout_constraintTop_toTopOf="@id/image_content"

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="sister_msg_text_item_mini_height">@dimen/size_34dp</dimen>
+    <dimen name="sister_msg_text_item_mini_height">@dimen/size_32dp</dimen>
     <dimen name="sister_msg_item_max_width">@dimen/size_164dp</dimen>
-    <dimen name="sister_msg_profile">@dimen/size_38dp</dimen>
+    <dimen name="sister_msg_profile">@dimen/size_34dp</dimen>
+    <dimen name="sister_msg_image">113dp</dimen>
+    <dimen name="sister_msg_text_font">10sp</dimen>
 
 </resources>

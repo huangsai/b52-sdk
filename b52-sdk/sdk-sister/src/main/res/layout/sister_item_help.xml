@@ -5,10 +5,10 @@
     android:layout_height="wrap_content"
     android:background="@drawable/sister_help_tag_bg"
     android:gravity="center"
-    android:minWidth="@dimen/size_60dp"
+    android:minWidth="@dimen/size_48dp"
     android:paddingLeft="@dimen/size_6dp"
     android:paddingTop="@dimen/size_3dp"
     android:paddingRight="@dimen/size_6dp"
     android:paddingBottom="@dimen/size_3dp"
     android:textColor="@color/sister_color_gray"
-    android:textSize="@dimen/font_15sp" />
+    android:textSize="@dimen/sister_msg_text_font" />

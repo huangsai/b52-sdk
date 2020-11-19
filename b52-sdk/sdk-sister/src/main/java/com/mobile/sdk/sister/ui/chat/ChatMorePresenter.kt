@@ -1,6 +1,7 @@
 package com.mobile.sdk.sister.ui.chat
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -16,6 +17,7 @@ import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
 import com.pacific.adapter.AdapterViewHolder
+import com.skydoves.balloon.ArrowOrientation
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
 import java.io.File
@@ -85,9 +87,10 @@ class ChatMorePresenter(
 
     private var balloon: Balloon? = null
 
+    @SuppressLint("Range")
     fun showPop() {
         if (balloon != null) {
-            balloon!!.showAlignTop(binding.layoutInput, 0, 10)
+            balloon!!.showAlignTop(binding.layoutInput, 0, 0)
             return
         }
         val popWidth = binding.layoutInput.width
@@ -96,10 +99,12 @@ class ChatMorePresenter(
             cornerRadius = 0f
             arrowVisible = false
             width = popWidth
+            arrowOrientation = ArrowOrientation.TOP
+            arrowSize = 0
             setBackgroundColorResource(R.color.sister_color_black_transparent)
             setElevation(0)
         }
-        balloon!!.showAlignTop(binding.layoutInput, 0, 10)
+        balloon!!.showAlignTop(binding.layoutInput, 0, 0)
         balloon!!.getContentView().findViewById<ImageView>(R.id.iv_picture).setOnClickListener(this)
         balloon!!.getContentView().findViewById<ImageView>(R.id.iv_camera).setOnClickListener(this)
     }

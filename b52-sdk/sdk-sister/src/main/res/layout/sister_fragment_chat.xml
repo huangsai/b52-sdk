@@ -53,14 +53,13 @@
             android:layout_marginTop="@dimen/size_10dp"
             android:overScrollMode="never"
             android:scrollbars="none" />
-
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_input"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_40dp"
-        android:layout_marginTop="@dimen/size_10dp"
+        android:layout_height="@dimen/size_34dp"
+        android:layout_marginTop="@dimen/size_6dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -78,7 +77,7 @@
             android:singleLine="true"
             android:textColor="@color/sister_color_black"
             android:textColorHint="@color/sister_color_gray"
-            android:textSize="@dimen/font_13sp"
+            android:textSize="@dimen/sister_msg_text_font"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/chat_emotion" />
 
@@ -90,7 +89,7 @@
             android:gravity="center"
             android:text="@string/sister_input_press_voice_text"
             android:textColor="@color/sister_color_black"
-            android:textSize="@dimen/font_16sp"
+            android:textSize="@dimen/sister_msg_text_font"
             android:visibility="invisible"
             app:layout_constraintLeft_toLeftOf="@id/chat_et"
             app:layout_constraintRight_toRightOf="@id/chat_et" />
@@ -99,7 +98,7 @@
             android:id="@+id/chat_emotion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_10dp"
+            android:layout_marginStart="@dimen/size_7dp"
             android:src="@drawable/sister_icon_emoji"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/chat_et"
@@ -110,7 +109,7 @@
             android:id="@+id/chat_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_10dp"
+            android:layout_marginStart="@dimen/size_7dp"
             android:src="@drawable/sister_add_icon_selector"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/chat_emotion"

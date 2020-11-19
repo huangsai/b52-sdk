@@ -73,7 +73,7 @@ class ChatListPresenter(
         binding.chatRecycler.layoutManager = LinearLayoutManager(fragment.requireContext())
         binding.chatRecycler.addItemDecoration(
             LinearItemDecoration.builder(fragment.requireContext())
-                .color(android.R.color.transparent, R.dimen.size_10dp)
+                .color(android.R.color.transparent, R.dimen.size_8dp)
                 .build()
         )
         binding.chatRecycler.addOnScrollListener(scrollListener)

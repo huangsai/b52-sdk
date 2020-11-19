@@ -15,9 +15,9 @@
 
     <ImageView
         android:id="@+id/image_content"
-        android:layout_width="@dimen/size_172dp"
-        android:layout_height="@dimen/size_172dp"
-        android:layout_marginStart="@dimen/size_10dp"
+        android:layout_width="@dimen/sister_msg_image"
+        android:layout_height="@dimen/sister_msg_image"
+        android:layout_marginStart="@dimen/size_5dp"
         android:scaleType="centerCrop"
         app:layout_constraintLeft_toRightOf="@id/profile"
         app:layout_constraintTop_toTopOf="parent" />

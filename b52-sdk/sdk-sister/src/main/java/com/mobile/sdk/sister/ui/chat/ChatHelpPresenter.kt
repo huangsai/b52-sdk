@@ -34,7 +34,7 @@ class ChatHelpPresenter(
         )
         binding.helpRecycler.addItemDecoration(
             LinearItemDecoration.builder(fragment.requireContext())
-                .color(android.R.color.transparent, R.dimen.size_6dp)
+                .color(android.R.color.transparent, R.dimen.size_5dp)
                 .horizontal()
                 .build()
         )

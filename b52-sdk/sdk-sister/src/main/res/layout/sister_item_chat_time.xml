@@ -6,5 +6,5 @@
     android:layout_height="@dimen/size_30dp"
     android:gravity="center"
     android:textColor="@color/sister_color_gray_transparent"
-    android:textSize="@dimen/font_12sp"
+    android:textSize="@dimen/font_8sp"
     tools:text="2010-22:20" />
