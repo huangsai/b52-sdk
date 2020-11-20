@@ -5,10 +5,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
+import com.lzf.easyfloat.EasyFloat
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.android.mvvm.AppContext
 import com.mobile.guava.android.mvvm.AppManager
 import com.mobile.guava.android.mvvm.showDialogFragment
+import com.mobile.guava.android.postToMainThread
 import com.mobile.sdk.sister.dagger.DaggerSisterComponent
 import com.mobile.sdk.sister.dagger.SisterComponent
 import com.mobile.sdk.sister.data.db.RoomAppDatabase
@@ -17,6 +19,7 @@ import com.mobile.sdk.sister.socket.AppWebSocket
 import com.mobile.sdk.sister.socket.SocketUtils
 import com.mobile.sdk.sister.ui.MainDialogFragment
 import com.mobile.sdk.sister.ui.items.MsgItem
+import com.mobile.sdk.sister.ui.views.MyKeyboardHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -33,6 +36,7 @@ object SisterX {
     internal val isSocketConnected = MutableLiveData<Boolean>()
     internal val isUiPrepared = MutableLiveData<Boolean>()
     internal val isLogin = MutableLiveData<Boolean>()
+    internal val hasBufferMsgItems = MutableLiveData<Boolean>()
 
     internal val bufferMsgItems = ArrayList<MsgItem>()
 
@@ -76,6 +80,9 @@ object SisterX {
     internal fun resetChatSession() {
         sisterUserId = "0"
         chatId = 0L
+        postToMainThread {
+            EasyFloat.dismissAppFloat(TAG)
+        }
     }
 
     fun setup(app: Application, isDebug: Boolean) {
@@ -92,6 +99,7 @@ object SisterX {
         )
 
         AppWebSocket.toString()
+        MyKeyboardHelper.toString()
         AppManager.initialize()
     }
 

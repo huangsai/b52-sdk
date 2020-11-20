@@ -3,9 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/WrapWrap">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/img_sister"
-        style="@style/WrapWrap"
-        android:layout_width=""
-        android:layout_height=""></ImageView>
+        android:layout_width="@dimen/size_54dp"
+        android:layout_height="@dimen/size_54dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/sister_CircleImageView"
+        app:srcCompat="@drawable/sister_default_profile" />
+
+    <View
+        android:id="@+id/view_dot"
+        android:layout_width="@dimen/size_6dp"
+        android:layout_height="@dimen/size_6dp"
+        android:background="@drawable/sister_circle_red_dot"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

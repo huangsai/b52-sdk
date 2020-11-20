@@ -10,6 +10,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.lzf.easyfloat.EasyFloat
+import com.lzf.easyfloat.interfaces.OnPermissionResult
+import com.lzf.easyfloat.permission.PermissionUtils
+import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.android.mvvm.BaseAppCompatDialogFragment
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.ui.screen.screen
@@ -19,6 +23,7 @@ import com.mobile.sdk.sister.data.http.BUZ_LOGOUT_MSG
 import com.mobile.sdk.sister.databinding.SisterDialogMainBinding
 import com.mobile.sdk.sister.ui.chat.ChatFragment
 import com.mobile.sdk.sister.ui.system.SystemFragment
+import com.mobile.sdk.sister.ui.views.MyKeyboardHelper
 import kotlin.math.max
 import kotlin.math.min
 
@@ -108,9 +113,30 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!PermissionUtils.checkPermission(requireActivity())) {
+            PermissionUtils.requestPermission(
+                requireActivity(),
+                object : OnPermissionResult {
+                    override fun permissionResult(isOpen: Boolean) {
+                    }
+                }
+            )
+        }
+        EasyFloat.dismissAppFloat(SisterX.TAG)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (PermissionUtils.checkPermission(AndroidX.myApp) && SisterX.hasSister()) {
+            MyKeyboardHelper.showFloatWindow()
+        }
     }
 
     override fun onBusEvent(event: Pair<Int, Any>) {
@@ -154,5 +180,4 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
             return 2
         }
     }
-
 }

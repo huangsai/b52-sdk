@@ -233,6 +233,7 @@ object SocketUtils {
             Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))
         } else {
             SisterX.bufferMsgItems.add(newMsgItem)
+            SisterX.hasBufferMsgItems.postValue(true)
         }
 
         GlobalScope.launch(Dispatchers.IO) {
