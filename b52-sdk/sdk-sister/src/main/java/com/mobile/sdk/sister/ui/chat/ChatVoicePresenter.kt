@@ -143,17 +143,9 @@ class ChatVoicePresenter(
     }
 
     /**
-     * 取消录制
-     */
-    override fun onCancel() {
-        stopRecord()
-    }
-
-    /**
      * 停止录制
      */
     override fun onFinish() {
-        stopRecord()
         sendMsg()
     }
 
@@ -161,6 +153,7 @@ class ChatVoicePresenter(
      * 松手，隐藏弹窗
      */
     override fun onTerminate() {
+        stopRecord()
         clearDisposable()
         balloon.dismissWithDelay(50)
     }
