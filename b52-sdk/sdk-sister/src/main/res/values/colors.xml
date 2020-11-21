@@ -35,5 +35,6 @@
     <color name="sister_color_E5D7B0">#E5D7B0</color>
     <color name="sister_color_D82323">#D82323</color>
     <color name="sister_black_alpha_50">#4c939393</color>
+    <color name="sister_text_link">#2271e6</color>
 
 </resources>

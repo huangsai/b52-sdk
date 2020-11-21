@@ -1,7 +1,9 @@
 package com.mobile.sdk.sister.ui.items
 
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.AnimationDrawable
+import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.ImageView
@@ -10,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.guava.android.ui.view.text.MySpannable
 import com.mobile.guava.jvm.coroutines.Bus
 import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm
-import com.mobile.guava.jvm.date.yyyy_mm_dd_hh_mm_ss
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
@@ -337,12 +338,15 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             MySpannable().apply {
                 append(
                     if (robot.isNullOrEmpty()) {
-                        "对不起，没有查询到您发送的问题，您可试试\t联系客服"
+                        "对不起，没有查询到您发送的问题，您可试试\n联系客服"
                     } else {
-                        "如果以上答案未解决您的问题，请点击\t联系客服"
+                        "如果以上答案未解决您的问题，请点击\n联系客服"
                     }
                 )
                 findAndSpan("联系客服") { UnderlineSpan() }
+                findAndSpan("联系客服") {
+                    ForegroundColorSpan(Color.parseColor("#2271e6"))
+                }
             }
         }
 

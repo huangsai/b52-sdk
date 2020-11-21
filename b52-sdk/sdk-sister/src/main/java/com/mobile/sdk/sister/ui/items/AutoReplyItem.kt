@@ -1,5 +1,7 @@
 package com.mobile.sdk.sister.ui.items
 
+import android.graphics.Color
+import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
 import com.mobile.guava.android.ui.view.text.MySpannable
 import com.mobile.sdk.sister.R
@@ -14,7 +16,8 @@ class AutoReplyItem(val data: ApiSysReply) : SimpleRecyclerItem() {
         val binding = holder.binding(SisterItemAutoReplyBinding::bind)
         binding.itemAutoReply.text = MySpannable(
             "${(holder.bindingAdapterPosition + 1)}.${data.question}",
-            UnderlineSpan()
+            UnderlineSpan(),
+            ForegroundColorSpan(Color.parseColor("#2271e6"))
         )
         holder.attachOnClickListener(R.id.item_auto_reply)
     }
