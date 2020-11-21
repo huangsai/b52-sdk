@@ -112,6 +112,7 @@ class ChatListPresenter(
             withContext(Dispatchers.Main) {
                 adapter.replaceAll(sourceItems.plus(SisterX.bufferMsgItems))
                 SisterX.bufferMsgItems.clear()
+                SisterX.hasBufferMsgItems.value = false
                 SisterX.isUiPrepared.value = true
                 scrollToBottom()
             }
