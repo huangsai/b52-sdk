@@ -14,11 +14,6 @@ interface RecordButtonTouchCallback {
     fun onStartAudio()
 
     /**
-     * 手动取消录制
-     */
-    fun onCancel()
-
-    /**
      * 结束录制
      */
     fun onFinish()

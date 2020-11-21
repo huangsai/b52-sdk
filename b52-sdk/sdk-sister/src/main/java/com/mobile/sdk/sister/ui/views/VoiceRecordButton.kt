@@ -51,16 +51,12 @@ class VoiceRecordButton @JvmOverloads constructor(
             rawX = event.rawX
             rawY = event.rawY
             val intervalTime = System.currentTimeMillis() - mDownTime
-            //不够最短时间
             when {
-                intervalTime <= MIN_INTERVAL_TIME -> {
+                intervalTime <= MIN_INTERVAL_TIME && isTouchPointInView(rawX, rawY) -> {
                     mCallback?.onTouchIntervalTimeSmall()
                 }
                 isTouchPointInView(rawX, rawY) -> {
                     mCallback?.onFinish()
-                }
-                else -> {
-                    mCallback?.onCancel()
                 }
             }
             mCallback?.onTerminate()
