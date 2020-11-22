@@ -80,7 +80,9 @@ object SisterX {
         sisterUserId = "0"
         chatId = 0L
         postToMainThread {
-            // MyKeyboardHelper.hideFloatWindow()
+            Runnable {
+                MyKeyboardHelper.hideFloatWindow()
+            }
         }
     }
 

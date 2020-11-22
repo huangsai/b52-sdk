@@ -134,7 +134,7 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
 
     override fun onDestroy() {
         super.onDestroy()
-        if (PermissionUtils.checkPermission(AndroidX.myApp)) {
+        if (PermissionUtils.checkPermission(AndroidX.myApp) && SisterX.hasSister()) {
             MyKeyboardHelper.showFloatWindow()
         }
     }
