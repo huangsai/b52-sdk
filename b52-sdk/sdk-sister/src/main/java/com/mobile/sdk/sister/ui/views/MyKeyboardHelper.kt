@@ -2,10 +2,10 @@ package com.mobile.sdk.sister.ui.views
 
 import android.app.Dialog
 import android.graphics.Rect
-import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.isInvisible
+import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentActivity
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.anim.AppFloatDefaultAnimator
@@ -18,17 +18,18 @@ import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.android.mvvm.AppManager
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
+import com.mobile.sdk.sister.databinding.SisterLayoutFloatingBinding
 import kotlin.math.roundToInt
 
 object MyKeyboardHelper : OnFloatCallbacks, View.OnClickListener {
 
     private var neededRecoverFloatWindow = false
+    private val location = intArrayOf(200, 200)
 
     init {
         SisterX.hasBufferMsgItems.observeForever {
             EasyFloat.getAppFloatView(SisterX.TAG)?.let { view ->
-                view.findViewById<View>(R.id.view_dot).isInvisible =
-                    SisterX.bufferMsgItems.isEmpty()
+                setView(EasyFloat.lastFlag, view)
             }
         }
         AndroidX.isAppInForeground.observeForever {
@@ -40,7 +41,7 @@ object MyKeyboardHelper : OnFloatCallbacks, View.OnClickListener {
             } else {
                 if (EasyFloat.appFloatIsShow(SisterX.TAG)) {
                     neededRecoverFloatWindow = true
-                    EasyFloat.dismissAppFloat(SisterX.TAG)
+                    hideFloatWindow()
                 }
             }
         }
@@ -65,6 +66,8 @@ object MyKeyboardHelper : OnFloatCallbacks, View.OnClickListener {
     }
 
     override fun dragEnd(view: View) {
+        view.getLocationOnScreen(location)
+        setView(EasyFloat.lastFlag, view)
     }
 
     override fun hide(view: View) {
@@ -93,8 +96,7 @@ object MyKeyboardHelper : OnFloatCallbacks, View.OnClickListener {
             EasyFloat.with(AndroidX.myApp)
                 // 设置浮窗xml布局文件，并可设置详细信息
                 .setLayout(R.layout.sister_layout_floating) { view ->
-                    view.findViewById<View>(R.id.view_dot).isInvisible =
-                        SisterX.bufferMsgItems.isEmpty()
+                    setView(EasyFloat.lastFlag, view)
                     view.setOnClickListener(this)
                 }
                 // 设置浮窗显示类型，默认只在当前Activity显示，可选一直显示、仅前台显示、仅后台显示
@@ -108,9 +110,9 @@ object MyKeyboardHelper : OnFloatCallbacks, View.OnClickListener {
                 // 系统浮窗是否包含EditText，仅针对系统浮窗，默认不包含
                 .hasEditText(false)
                 // 设置浮窗固定坐标，ps：设置固定坐标，Gravity属性和offset属性将无效
-                .setLocation(100, 200)
+                .setLocation(location[0], location[1])
                 // 设置浮窗的对齐方式和坐标偏移量
-                .setGravity(Gravity.END or Gravity.CENTER_VERTICAL, 0, 0)
+                // .setGravity(Gravity.END or Gravity.CENTER_VERTICAL, 0, 0)
                 // 设置宽高是否充满父布局，直接在xml设置match_parent属性无效
                 .setMatchParent(widthMatch = false, heightMatch = false)
                 // 设置Activity浮窗的出入动画，可自定义，实现相应接口即可（策略模式），无需动画直接设置为null
@@ -125,6 +127,35 @@ object MyKeyboardHelper : OnFloatCallbacks, View.OnClickListener {
                 .show()
         } catch (ignored: Exception) {
             ignored.printStackTrace()
+        }
+    }
+
+    fun hideFloatWindow() {
+        EasyFloat.dismissAppFloat(SisterX.TAG)
+    }
+
+    private fun setView(flag: Int, view: View) {
+        val rIsInvisible = SisterX.bufferMsgItems.isEmpty()
+        val binding = SisterLayoutFloatingBinding.bind(
+            view.findViewById(R.id.sister_layout_floating)
+        )
+        binding.viewDotLeftTop.isInvisible = true
+        binding.viewDotLeftBottom.isInvisible = true
+        binding.viewDotRightTop.isInvisible = true
+        binding.viewDotRightBottom.isInvisible = true
+        when (flag) {
+            1 -> {
+                binding.viewDotRightTop.isInvisible = rIsInvisible
+            }
+            2 -> {
+                binding.viewDotLeftBottom.isInvisible = rIsInvisible
+            }
+            3 -> {
+                binding.viewDotLeftTop.isInvisible = rIsInvisible
+            }
+            4 -> {
+                binding.viewDotLeftTop.isInvisible = rIsInvisible
+            }
         }
     }
 }

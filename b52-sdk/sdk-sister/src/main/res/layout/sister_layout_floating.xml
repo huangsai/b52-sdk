@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sister_layout_floating"
     style="@style/WrapWrap">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -11,14 +13,48 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/sister_CircleImageView"
-        app:srcCompat="@drawable/sister_float" />
+        app:srcCompat="@drawable/sister_float"
+        tools:layout_height="@dimen/size_100dp"
+        tools:layout_width="@dimen/size_100dp" />
 
     <ImageView
-        android:id="@+id/view_dot"
+        android:id="@+id/view_dot_left_top"
         style="@style/WrapWrap"
+        android:layout_margin="@dimen/size_3dp"
         android:src="@drawable/sister_red_dot"
         android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/view_dot_left_bottom"
+        style="@style/WrapWrap"
+        android:layout_margin="@dimen/size_3dp"
+        android:src="@drawable/sister_red_dot"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/view_dot_right_top"
+        style="@style/WrapWrap"
+        android:layout_margin="@dimen/size_3dp"
+        android:src="@drawable/sister_red_dot"
+        android:visibility="invisible"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/view_dot_right_bottom"
+        style="@style/WrapWrap"
+        android:layout_margin="@dimen/size_3dp"
+        android:src="@drawable/sister_red_dot"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

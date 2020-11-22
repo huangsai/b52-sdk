@@ -5,7 +5,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
-import com.lzf.easyfloat.EasyFloat
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.guava.android.mvvm.AppContext
 import com.mobile.guava.android.mvvm.AppManager
@@ -81,7 +80,7 @@ object SisterX {
         sisterUserId = "0"
         chatId = 0L
         postToMainThread {
-            EasyFloat.dismissAppFloat(TAG)
+            // MyKeyboardHelper.hideFloatWindow()
         }
     }
 
@@ -104,10 +103,14 @@ object SisterX {
     }
 
     fun setServers(_socketServer: String, _httpServer: String) {
-        // socketServer = "ws://${_socketServer}:30301/ws/csms?from=android"
-        // httpServer = "http://${_httpServer}:30301/"
-        socketServer = "ws://${_socketServer}:31301/ws/csms?from=android"
-        httpServer = "http://${_httpServer}:31301/"
+        // socketServer = "wss://${_socketServer}:30301/ws/csms?from=android"
+        // httpServer = "https://${_httpServer}:30301/"
+
+        // socketServer = "ws://${_socketServer}:31301/ws/csms?from=android"
+        // httpServer = "http://${_httpServer}:31301/"
+
+        socketServer = "wss://${_socketServer}:31301/ws/csms?from=android"
+        httpServer = "https://${_httpServer}:31301/"
     }
 
     fun setUser(_loginName: String) = GlobalScope.launch(Dispatchers.IO) {

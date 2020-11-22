@@ -124,7 +124,7 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
                 }
             )
         }
-        EasyFloat.dismissAppFloat(SisterX.TAG)
+        MyKeyboardHelper.hideFloatWindow()
     }
 
     override fun onDestroyView() {
@@ -134,7 +134,7 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
 
     override fun onDestroy() {
         super.onDestroy()
-        if (PermissionUtils.checkPermission(AndroidX.myApp) && SisterX.hasSister()) {
+        if (PermissionUtils.checkPermission(AndroidX.myApp)) {
             MyKeyboardHelper.showFloatWindow()
         }
     }

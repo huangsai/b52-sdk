@@ -14,10 +14,12 @@
         app:shapeAppearanceOverlay="@style/sister_CircleImageView" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="@dimen/sister_msg_item_max_width"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_5dp"
         android:background="@drawable/sister_chat_pop_white"
+        android:maxWidth="@dimen/sister_msg_item_max_width"
+        android:minHeight="@dimen/sister_msg_text_item_mini_height"
         app:layout_constraintLeft_toRightOf="@id/profile"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -37,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_5dp"
+            android:maxWidth="@dimen/sister_msg_item_max_width"
             app:layout_constraintBottom_toTopOf="@id/auto_reply_click"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_title" />
