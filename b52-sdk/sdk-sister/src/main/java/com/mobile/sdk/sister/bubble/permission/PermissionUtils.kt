@@ -1,4 +1,4 @@
-package com.lzf.easyfloat.permission
+package com.mobile.sdk.sister.bubble.permission
 
 import android.app.Activity
 import android.app.Fragment
@@ -8,15 +8,8 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import com.lzf.easyfloat.interfaces.OnPermissionResult
-import com.lzf.easyfloat.permission.rom.*
-import com.lzf.easyfloat.utils.Logger
+import com.mobile.sdk.sister.bubble.permission.rom.*
 
-/**
- * @author: liuzhenfeng
- * @function: 悬浮窗权限工具类
- * @date: 2019-07-15  10:22
- */
 object PermissionUtils {
 
     internal const val requestCode = 199
@@ -51,7 +44,7 @@ object PermissionUtils {
             RomUtils.checkIsOppoRom() -> OppoUtils.applyOppoPermission(fragment.activity)
             RomUtils.checkIsMeizuRom() -> MeizuUtils.applyPermission(fragment)
             RomUtils.checkIs360Rom() -> QikuUtils.applyPermission(fragment.activity)
-            else -> Logger.i(TAG, "原生 Android 6.0 以下无需权限申请")
+            else -> Log.i(TAG, "原生 Android 6.0 以下无需权限申请")
         } else commonROMPermissionApply(fragment)
 
     private fun huaweiPermissionCheck(context: Context) =
@@ -96,10 +89,10 @@ object PermissionUtils {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> try {
             commonROMPermissionApplyInternal(fragment)
         } catch (e: Exception) {
-            Logger.e(TAG, Log.getStackTraceString(e))
+            Log.e(TAG, Log.getStackTraceString(e))
         }
         // 需要做统计效果
-        else -> Logger.d(TAG, "user manually refuse OVERLAY_PERMISSION")
+        else -> Log.d(TAG, "user manually refuse OVERLAY_PERMISSION")
     }
 
     @JvmStatic
@@ -110,8 +103,7 @@ object PermissionUtils {
         intent.data = Uri.parse("package:${fragment.activity.packageName}")
         fragment.startActivityForResult(intent, requestCode)
     } catch (e: Exception) {
-        Logger.e(TAG, "$e")
+        Log.e(TAG, "$e")
     }
-
 }
 

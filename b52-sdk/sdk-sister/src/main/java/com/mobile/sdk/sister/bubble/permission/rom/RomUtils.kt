@@ -1,4 +1,4 @@
-package com.lzf.easyfloat.permission.rom
+package com.mobile.sdk.sister.bubble.permission.rom
 
 import android.os.Build
 import android.text.TextUtils

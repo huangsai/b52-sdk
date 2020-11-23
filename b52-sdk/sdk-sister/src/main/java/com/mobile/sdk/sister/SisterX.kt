@@ -10,6 +10,7 @@ import com.mobile.guava.android.mvvm.AppContext
 import com.mobile.guava.android.mvvm.AppManager
 import com.mobile.guava.android.mvvm.showDialogFragment
 import com.mobile.guava.android.postToMainThread
+import com.mobile.sdk.sister.bubble.Bubble
 import com.mobile.sdk.sister.dagger.DaggerSisterComponent
 import com.mobile.sdk.sister.dagger.SisterComponent
 import com.mobile.sdk.sister.data.db.RoomAppDatabase
@@ -81,7 +82,7 @@ object SisterX {
         chatId = 0L
         postToMainThread {
             Runnable {
-                MyKeyboardHelper.hideFloatWindow()
+                Bubble.hide()
             }
         }
     }

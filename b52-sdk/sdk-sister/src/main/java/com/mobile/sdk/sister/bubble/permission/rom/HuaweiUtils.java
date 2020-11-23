@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2016 Facishare Technology Co., Ltd. All Rights Reserved.
  */
-package com.lzf.easyfloat.permission.rom;
+package com.mobile.sdk.sister.bubble.permission.rom;
 
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;

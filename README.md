@@ -30,7 +30,7 @@ allprojects { project ->
 依赖sister-sdk库
 
 ```
-implementation 'com.mobile.sdk:sdk-sister:0.0.4'
+implementation 'com.mobile.sdk:sdk-sister:0.1.0'
 ```
 
 使用sister-sdk库
@@ -40,14 +40,21 @@ class MyApp : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        SisterX.setup(this, BuildConfig.DEBUG)
+        SisterX.INSTANCE.setup(this, BuildConfig.DEBUG)
     }
 }
 
+// set servers
+SisterX.INSTANCE.setServers(_socketServer: String, _httpServer: String)
+
 // login or switch user
-SisterX.setUsername("barry123")
+SisterX.INSTANCE.setUsername("test001")
 
 // logout
-SisterX.setUsername("")
+SisterX.INSTANCE.setUsername("")
+
+// show and dismiss
+DialogFragment dialog = SisterX.INSTANCE.show(activity: FragmentActivity, cancelable: Boolean);
+dialog.dismiss();
 ```
 
