@@ -30,7 +30,7 @@ allprojects { project ->
 依赖sister-sdk库
 
 ```
-implementation 'com.mobile.sdk:sdk-sister:0.1.0'
+implementation 'com.mobile.sdk:sdk-sister:0.1.1'
 ```
 
 使用sister-sdk库
@@ -45,7 +45,7 @@ class MyApp : MultiDexApplication() {
 }
 
 // set servers
-SisterX.INSTANCE.setServers(_socketServer: String, _httpServer: String)
+SisterX.INSTANCE.setServers(server: String)
 
 // login or switch user
 SisterX.INSTANCE.setUsername("test001")

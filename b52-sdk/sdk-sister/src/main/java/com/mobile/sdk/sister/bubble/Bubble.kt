@@ -1,7 +1,6 @@
 package com.mobile.sdk.sister.bubble
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.PixelFormat
 import android.graphics.Point
 import android.graphics.PointF
@@ -10,12 +9,13 @@ import android.view.*
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.updatePadding
-import androidx.core.view.updatePaddingRelative
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.sdk.sister.databinding.SisterLayoutBubbleBinding
 import kotlin.math.abs
 
 object Bubble : View.OnTouchListener {
+
+    private const val MAX_CLICK_DURATION = 200L
 
     private val windowManager: WindowManager by lazy {
         AndroidX.myApp.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -23,12 +23,15 @@ object Bubble : View.OnTouchListener {
 
     private val firstDown = PointF()
     private val location = PointF()
+    private val finalLocation = Point()
     private var windowX: Int = 0
     private var windowY: Int = 0
     private var windowWidth = 0
     private var windowHeight = 0
     private var dockDirection = 0
     private var preDockDirection = 0
+    private var startClickTime = 0L
+    private var hasPendingMovement = false
 
     var isShowing = false
         private set
@@ -44,7 +47,7 @@ object Bubble : View.OnTouchListener {
         }
         flags = (WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                or WindowManager.LayoutParams.FLAG_FULLSCREEN
                 or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
         format = PixelFormat.RGBA_8888
@@ -55,7 +58,15 @@ object Bubble : View.OnTouchListener {
         y = windowY
     }
 
+    private val movementRunnable: Runnable = Runnable {
+        layoutParams.x = finalLocation.x
+        layoutParams.y = finalLocation.y
+        windowManager.updateViewLayout(binding.root, layoutParams)
+        hasPendingMovement = false
+    }
+
     private val screenSize: Point by lazy { resolveScreenSize() }
+
 
     var callback: Callback? = null
 
@@ -72,6 +83,7 @@ object Bubble : View.OnTouchListener {
             windowWidth = it.width
             windowHeight = it.height
         }
+        // binding.root.setBackgroundColor(Color.RED)
         windowManager.addView(binding.root, layoutParams)
     }
 
@@ -80,8 +92,11 @@ object Bubble : View.OnTouchListener {
         event.setLocation(event.rawX, event.rawY)
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
+                startClickTime = System.currentTimeMillis()
+                binding.root.removeCallbacks(movementRunnable)
                 firstDown.set(event.x, event.y)
                 location.set(layoutParams.x.toFloat(), layoutParams.y.toFloat())
+                return false
             }
             MotionEvent.ACTION_MOVE -> {
                 val dx = event.x - firstDown.x
@@ -89,15 +104,25 @@ object Bubble : View.OnTouchListener {
                 layoutParams.x = (location.x + dx).toInt()
                 layoutParams.y = (location.y + dy).toInt()
                 windowManager.updateViewLayout(v, layoutParams)
-                binding.root.updatePadding(0)
+                return true
             }
             MotionEvent.ACTION_UP -> {
+                if (
+                    System.currentTimeMillis() - startClickTime < MAX_CLICK_DURATION &&
+                    abs(event.x - firstDown.x) < 4 &&
+                    abs(event.y - firstDown.y) < 4
+                ) {
+                    if (hasPendingMovement) {
+                        movementRunnable.run()
+                    }
+                    return false
+                }
                 val rawX = event.rawX.toInt()
                 val rawY = event.rawY.toInt()
                 val rawX2 = screenSize.x - rawX
                 val rawY2 = screenSize.y - rawY
                 preDockDirection = dockDirection
-                dockDirection = if (abs(rawY - rawY2) <= 10) {
+                dockDirection = if (abs(rawY - rawY2) <= 16) {
                     if (rawX > rawX2) 3 else 1
                 } else {
                     when (minOf(rawX, rawY, rawX2, rawY2)) {
@@ -107,23 +132,32 @@ object Bubble : View.OnTouchListener {
                         else -> 4
                     }
                 }
-                val finalLocation = when (dockDirection) {
-                    1, 3 -> Point((0 - windowWidth / 2), layoutParams.y)
-                    2 -> Point(layoutParams.x, (0 - windowHeight / 2))
-                    4 -> Point(layoutParams.x, (screenSize.y - windowHeight / 2))
-                    else -> Point((screenSize.x - windowWidth / 2), layoutParams.y)
+                applyViewPadding()
+                when (dockDirection) {
+                    1 -> finalLocation.set((0 - windowWidth / 2), layoutParams.y)
+                    3 -> finalLocation.set((screenSize.x - windowWidth / 2), layoutParams.y)
+                    2 -> finalLocation.set(layoutParams.x, (0 - windowHeight / 2))
+                    4 -> finalLocation.set(layoutParams.x, (screenSize.y - windowHeight / 2))
                 }
-                animate(v, finalLocation)
+                // 坐标系是左上角，假如是右边或者底部贴边修正
+                if (dockDirection == 3) {
+                    finalLocation.x = finalLocation.x - binding.root.paddingLeft
+                }
+                if (dockDirection == 4) {
+                    finalLocation.y = finalLocation.y - binding.root.paddingTop
+                }
+                hasPendingMovement = true
+                binding.root.postDelayed(movementRunnable, 2000)
+                // Timber.tag("ABS").e("====%s,%s", finalLocation.x, finalLocation.y)
+                // Timber.tag("ABS").e("====%s,%s", windowWidth, windowHeight)
+                // Timber.tag("ABS").e("====%s,%s", layoutParams.x, layoutParams.y)
+                // Timber.tag("ABS").e("====%s,%s", screenSize.x, screenSize.y)
+                // Timber.tag("ABS").e("====%s", dockDirection)
+                // Timber.tag("ABS").e("***************")
+                return true
             }
+            else -> return false
         }
-        return true
-    }
-
-    private fun animate(view: View, finalLocation: Point) {
-        layoutParams.x = finalLocation.x
-        layoutParams.y = finalLocation.y
-        windowManager.updateViewLayout(view, layoutParams)
-        applyViewPadding()
     }
 
     private fun resolveScreenSize(): Point {
@@ -133,12 +167,15 @@ object Bubble : View.OnTouchListener {
     }
 
     private fun applyViewPadding() {
+        if (preDockDirection == dockDirection) {
+            return
+        }
         when (dockDirection) {
-            1 -> binding.root.updatePadding(0)
-            2 -> binding.root.updatePadding(0, 0, 0, 56)
-            3 -> binding.root.updatePadding(56, 0, 0, 0)
-            4 -> binding.root.updatePadding(0)
-            else -> binding.root.updatePadding(0)
+            1 -> binding.root.updatePadding(0, 0, windowWidth / 2, 0)
+            2 -> binding.root.updatePadding(0, 0, 0, 48)
+            3 -> binding.root.updatePadding(108, 0, 0, 0)
+            4 -> binding.root.updatePadding(0, windowHeight / 2, 0, 0)
+            else -> binding.root.updatePadding(0, 0, 0, 0)
         }
     }
 
@@ -168,12 +205,13 @@ object Bubble : View.OnTouchListener {
         dockDirection = 0
         isShowing = false
         binding.root.setOnTouchListener(null)
+        binding.root.removeCallbacks(movementRunnable)
         callback?.onDismiss()
         mBinding = null
         callback = null
     }
 
-    fun setViewBadge(neededShowBadge: Boolean) {
+    fun setBadge(neededShowBadge: Boolean) {
         if (null == mBinding) {
             return
         }

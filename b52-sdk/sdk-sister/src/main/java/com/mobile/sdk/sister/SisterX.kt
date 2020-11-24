@@ -105,11 +105,9 @@ object SisterX {
         AppManager.initialize()
     }
 
-    fun setServers(_socketServer: String, _httpServer: String) {
-        // socketServer = "wss://${_socketServer}:30301/ws/csms?from=android"
-        // httpServer = "https://${_httpServer}:30301/"
-        socketServer = "wss://${_socketServer}:31301/ws/csms?from=android"
-        httpServer = "https://${_httpServer}:31301/"
+    fun setServers(server: String) {
+        socketServer = "wss://${server}/ws/csms?from=android"
+        httpServer = "https://${server}/"
     }
 
     fun setUser(_loginName: String) = GlobalScope.launch(Dispatchers.IO) {

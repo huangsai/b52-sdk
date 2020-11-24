@@ -18,7 +18,7 @@ object MyKeyboardHelper : Bubble.Callback {
 
     init {
         SisterX.hasBufferMsgItems.observeForever {
-            Bubble.setViewBadge(SisterX.bufferMsgItems.isNotEmpty())
+            Bubble.setBadge(SisterX.bufferMsgItems.isNotEmpty() && Bubble.isShowing)
         }
         AndroidX.isAppInForeground.observeForever {
             if (true == it) {
@@ -51,9 +51,9 @@ object MyKeyboardHelper : Bubble.Callback {
 
     override fun onViewCreated(view: View) {
         view.setOnClickListener {
-            AppManager.currentActivity()?.let {
-                if (it is FragmentActivity) {
-                    SisterX.show(it, false)
+            AppManager.currentActivity()?.let { activity ->
+                if (activity is FragmentActivity) {
+                    SisterX.show(activity, false)
                 }
             }
         }

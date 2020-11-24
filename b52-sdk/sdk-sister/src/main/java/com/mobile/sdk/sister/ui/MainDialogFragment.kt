@@ -23,7 +23,6 @@ import com.mobile.sdk.sister.data.http.BUZ_LOGOUT_MSG
 import com.mobile.sdk.sister.databinding.SisterDialogMainBinding
 import com.mobile.sdk.sister.ui.chat.ChatFragment
 import com.mobile.sdk.sister.ui.system.SystemFragment
-import com.mobile.sdk.sister.ui.views.MyKeyboardHelper
 import kotlin.math.max
 import kotlin.math.min
 
@@ -134,7 +133,7 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
 
     override fun onDestroy() {
         super.onDestroy()
-        if (PermissionUtils.checkPermission(AndroidX.myApp)) {
+        if (PermissionUtils.checkPermission(AndroidX.myApp) && SisterX.hasSister()) {
             Bubble.show()
         }
     }
