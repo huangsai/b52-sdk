@@ -40,7 +40,7 @@
             android:layout_marginTop="@dimen/size_5dp"
             android:layout_marginBottom="@dimen/size_5dp"
             android:text="@string/sister_leave_msg_click_content"
-            android:textColor="@color/sister_color_black"
+            android:textColor="@color/sister_text_link"
             android:textSize="@dimen/sister_msg_text_font"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

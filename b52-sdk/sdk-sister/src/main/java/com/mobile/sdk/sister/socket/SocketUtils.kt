@@ -130,8 +130,7 @@ object SocketUtils {
             BUZ_SISTER_REQUEST_TIMEOUT -> {
                 QueueTimeOutMsg.ADAPTER.decode(commonMessage.content).let {
                     SisterX.resetChatSession()
-                    Bus.offer(
-                        SisterX.BUS_MSG_NEW,
+                    dispatchMsgItem(
                         MsgItem.create(
                             createTextMessage(
                                 TYPE_LEAVE_MSG,
@@ -146,8 +145,7 @@ object SocketUtils {
             BUZ_CHAT_CLOSE_TIMEOUT -> {
                 ChatTimeOutMsg.ADAPTER.decode(commonMessage.content).let {
                     SisterX.resetChatSession()
-                    Bus.offer(
-                        SisterX.BUS_MSG_NEW,
+                    dispatchMsgItem(
                         MsgItem.create(createTextMessage(TYPE_TEXT, "", it.timeOutMsg.jsonToText()))
                     )
                     Timber.tag(SisterX.TAG).d(it.timeOutMsg.ifEmpty { "会话超时" })
@@ -155,8 +153,7 @@ object SocketUtils {
             }
             BUZ_SISTER_REQUEST_PROGRESS -> {
                 QueueMsg.ADAPTER.decode(commonMessage.content).let {
-                    Bus.offer(
-                        SisterX.BUS_MSG_NEW,
+                    dispatchMsgItem(
                         MsgItem.create(createTextMessage(TYPE_TEXT, "", it.msg.jsonToText()))
                     )
                     Timber.tag(SisterX.TAG).d(it.msg.ifEmpty { "排队匹配客服中，请耐心等待" })
@@ -165,8 +162,7 @@ object SocketUtils {
             BUZ_SISTER_REQUEST_ERROR -> {
                 CSOfflineMsg.ADAPTER.decode(commonMessage.content).let {
                     SisterX.resetChatSession()
-                    Bus.offer(
-                        SisterX.BUS_MSG_NEW,
+                    dispatchMsgItem(
                         MsgItem.create(
                             createTextMessage(
                                 TYPE_LEAVE_MSG,
@@ -214,6 +210,9 @@ object SocketUtils {
             BUZ_CHAT_CLOSE_BY_SISTER -> {
                 CloseChatMsg.ADAPTER.decode(commonMessage.content).let {
                     SisterX.resetChatSession()
+                    dispatchMsgItem(
+                        MsgItem.create(createTextMessage(TYPE_TEXT, "", DbMessage.Text("本次服务已结束")))
+                    )
                     Timber.tag(SisterX.TAG).d("客服关闭会话")
                 }
             }
@@ -227,14 +226,18 @@ object SocketUtils {
         }
     }
 
-    fun insertDbMessage(dbMessage: DbMessage) {
-        val newMsgItem = MsgItem.create(dbMessage)
+    private fun dispatchMsgItem(msgItem: MsgItem) {
         if (true == SisterX.isUiPrepared.value) {
-            Bus.offer(SisterX.BUS_MSG_NEW, MsgItem.create(dbMessage))
+            Bus.offer(SisterX.BUS_MSG_NEW, msgItem)
         } else {
-            SisterX.bufferMsgItems.add(newMsgItem)
+            SisterX.bufferMsgItems.add(msgItem)
             SisterX.hasBufferMsgItems.postValue(true)
         }
+    }
+
+    fun insertDbMessage(dbMessage: DbMessage) {
+        val newMsgItem = MsgItem.create(dbMessage)
+        dispatchMsgItem(newMsgItem)
 
         GlobalScope.launch(Dispatchers.IO) {
             SisterX.component.sisterRepository().let {
