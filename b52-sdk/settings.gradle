@@ -1,3 +1,4 @@
+include ':sdk-call'
 include ':app'
 include ':sdk-sister'
 include ':sdk-ipv6'
