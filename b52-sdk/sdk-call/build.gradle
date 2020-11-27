@@ -1,0 +1,33 @@
+apply from: "../gradle/android_lib_module.gradle"
+apply plugin: 'com.squareup.wire'
+
+android {
+
+    sourceSets {
+        main.java.srcDirs += "${buildDir}/generated/source/wire"
+    }
+
+    resourcePrefix "sister_"
+}
+
+wire {
+    kotlin {
+        javaInterop true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation dep.company.guavaJvm
+    implementation dep.company.guavaAndroid
+    implementation dep.company.guavaMvvm
+    implementation dep.company.guavaAndroidUi
+    implementation dep.company.guavaData
+    implementation dep.company.extGlide
+    implementation dep.company.extRxjava3
+
+    api 'com.squareup.wire:wire-runtime:3.5.0'
+    implementation 'org.webrtc:google-webrtc:1.0.+'
+
+}
