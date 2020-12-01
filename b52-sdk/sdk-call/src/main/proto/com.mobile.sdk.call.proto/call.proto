@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package com.mobile.sdk.call.socket;
+
+option java_package = "com.mobile.sdk.call.proto";
+
+//通用pb协议
+message CommonMessage{
+  int32 bizId = 1;
+  //消息类型1心跳2业务消息
+  int32 msgType = 2;
+  //数据
+  bytes content = 3;
+}
+
