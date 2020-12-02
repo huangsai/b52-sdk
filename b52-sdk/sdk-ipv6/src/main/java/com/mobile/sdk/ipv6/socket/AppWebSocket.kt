@@ -3,15 +3,20 @@ package com.mobile.sdk.ipv6.socket
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.sdk.ipv6.Ipv6X
 import com.mobile.sdk.ipv6.proto.CommonMessage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
 import timber.log.Timber
+import java.util.*
 
 object AppWebSocket : LongLiveSocket() {
 
+    private var task: TimerTask? = null
+    private var timer: Timer? = null
     private val webSocketListener: WebSocketListener = object : WebSocketListener() {
 
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
@@ -51,8 +56,8 @@ object AppWebSocket : LongLiveSocket() {
         override fun onOpen(webSocket: WebSocket, response: Response) {
             log("---------onOpen---------")
             connectFailCount = 0
-            Ipv6X.isSocketConnected.postValue(true)
             SocketUtils.postPhone()
+            sendBeatData()
         }
     }
 
@@ -78,8 +83,8 @@ object AppWebSocket : LongLiveSocket() {
                 socket.close(1000, "reconnect")
             } else {
                 request = Request.Builder()
-                    .url("ws://192.168.2.91:30302/csms")
-                    .build()
+                        .url("ws://172.31.8.110:30402/ip")//"ws://192.168.2.91:30302/csms")
+                        .build()
             }
             realSocket = Ipv6X.component.okHttpClient().newWebSocket(request, webSocketListener)
             log("---------connect---------")
@@ -98,6 +103,7 @@ object AppWebSocket : LongLiveSocket() {
     }
 
     override fun post(bytes: ByteString) {
+        log("---------value:" + Ipv6X.isSocketConnected.value.toString())
         if (realSocket != null && true == Ipv6X.isSocketConnected.value) {
             suspendAction {
                 socket.send(SocketUtils.encrypt(bytes))
@@ -106,11 +112,36 @@ object AppWebSocket : LongLiveSocket() {
         }
     }
 
-    override fun log(message: String) {
+    public override fun log(message: String) {
         Timber.tag(Ipv6X.TAG).d(message)
     }
 
     override fun log(t: Throwable) {
         Timber.tag(Ipv6X.TAG).d(t)
+    }
+
+    //定时发送数据
+    private fun sendBeatData() {
+        if (timer == null) {
+            timer = Timer()
+        }
+        if (task == null) {
+            task = object : TimerTask() {
+                override fun run() {
+                    try {
+                        val msg = CommonMessage.Builder()
+                                .bizId(0)
+                                .msgType(1)
+                                .build()
+                        post(CommonMessage.ADAPTER.encodeByteString(msg))
+                    } catch (e: Exception) {
+                        log("连接断开，正在重连")
+                        reconnect(0)
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
+        timer?.schedule(task, 0, 55000)
     }
 }

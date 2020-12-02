@@ -40,7 +40,8 @@ data class ApiTask(
     @Json(name = "requestType") val requestType: String,
     @Json(name = "timeOut") val timeout: Long,
     @Json(name = "header") val header: Map<String, String> = emptyMap(),
-    @Json(name = "body") val body: Map<String, String> = emptyMap(),
+    @Json(name = "body") val body: Map<String, String>? = emptyMap(),
+    @Json(name = "formdata") val formdata: Map<String, String>? = emptyMap(),
     @Json(name = "callbackUrl") val callbackUrl: String? = null
 ) {
 
@@ -55,4 +56,15 @@ data class ApiTaskResult(
     @Json(name = "taskId") var taskId: String? = null,
     @Json(name = "data") val data: String? = null
 )
+
+@JsonClass(generateAdapter = true)
+data class ApiTaskRequest(
+    @Json(name = "code") val code: Int,
+    @Json(name = "data") val data: String,
+    @Json(name = "body") var body: Map<String, String>? = emptyMap(),
+    @Json(name = "formdata") var formdata: Map<String, String>? = emptyMap()
+
+)
+
+
 

@@ -1,5 +1,6 @@
 package com.mobile.sdk.ipv6.socket
 
+import com.google.gson.Gson
 import com.mobile.guava.android.log.deviceInfo
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.sdk.ipv6.Ipv6X
@@ -9,11 +10,14 @@ import com.mobile.sdk.ipv6.base.NetworkUtils
 import com.mobile.sdk.ipv6.base.RSAUtils
 import com.mobile.sdk.ipv6.data.api.ApiPhone
 import com.mobile.sdk.ipv6.data.api.ApiTask
+import com.mobile.sdk.ipv6.data.api.ApiTaskRequest
 import com.mobile.sdk.ipv6.data.api.ApiTaskResult
 import com.mobile.sdk.ipv6.proto.CommonMessage
 import com.squareup.moshi.Types
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
@@ -28,6 +32,9 @@ import java.util.*
 object SocketUtils {
 
     fun postPhone() = GlobalScope.launch {
+        withContext(Dispatchers.Main) {
+            Ipv6X.isSocketConnected.value = true
+        }
         val phone = ApiPhone(
             AppUtils.installId(AndroidX.myApp),
             deviceInfo(),
@@ -93,7 +100,7 @@ object SocketUtils {
         }
 
         if (task.requestType.equals("GET", true)) {
-            task.body.forEach { (t, u) ->
+            task.body?.forEach { (t, u) ->
                 httpUrlBuilder.addQueryParameter(t, u)
             }
             requestBuilder.get()
@@ -115,17 +122,23 @@ object SocketUtils {
             .newCall(requestBuilder.build())
             .execute()
 
-        val responseBody = response.body?.string().orEmpty()
+        val data = response.body?.string().orEmpty()
+        val request = if (task.body == null) {
+            Gson().toJson(ApiTaskRequest(response.code, data, formdata = task.formdata))
+        } else {
+            Gson().toJson(ApiTaskRequest(response.code, data, body = task.body))
+        }
 
-        postTaskResult(responseBody, response.code, task)
+        Timber.tag(Ipv6X.TAG).d("------1004:%s", request)
+        postTaskResult(data, response.code, task)
 
         if (response.isSuccessful) {
             if (task.callbackUrl.isNullOrEmpty()) {
                 Timber.tag(Ipv6X.TAG).d("empty callback url")
             } else {
                 val callbackRequest = Request.Builder()
-                    .url(task.callbackUrl!!)
-                    .post(responseBody.toRequestBody(jsonMediaType))
+                    .url(task.callbackUrl)
+                    .post(request.toRequestBody(jsonMediaType))
                     .build()
 
                 Ipv6X.component.okHttpClient()
