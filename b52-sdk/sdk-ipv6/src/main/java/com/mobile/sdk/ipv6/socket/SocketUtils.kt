@@ -1,6 +1,5 @@
 package com.mobile.sdk.ipv6.socket
 
-import com.google.gson.Gson
 import com.mobile.guava.android.log.deviceInfo
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.sdk.ipv6.Ipv6X
@@ -123,10 +122,15 @@ object SocketUtils {
             .execute()
 
         val data = response.body?.string().orEmpty()
+
         val request = if (task.body == null) {
-            Gson().toJson(ApiTaskRequest(response.code, data, formdata = task.formdata))
+            Ipv6X.component.json()
+                .adapter(ApiTaskRequest::class.java)
+                .toJson(ApiTaskRequest(response.code, data, formdata = task.formdata))
         } else {
-            Gson().toJson(ApiTaskRequest(response.code, data, body = task.body))
+            Ipv6X.component.json()
+                .adapter(ApiTaskRequest::class.java)
+                .toJson(ApiTaskRequest(response.code, data, body = task.body))
         }
 
         Timber.tag(Ipv6X.TAG).d("------1004:%s", request)

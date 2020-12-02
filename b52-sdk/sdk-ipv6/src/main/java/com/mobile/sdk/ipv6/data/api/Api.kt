@@ -61,9 +61,8 @@ data class ApiTaskResult(
 data class ApiTaskRequest(
     @Json(name = "code") val code: Int,
     @Json(name = "data") val data: String,
-    @Json(name = "body") var body: Map<String, String>? = emptyMap(),
-    @Json(name = "formdata") var formdata: Map<String, String>? = emptyMap()
-
+    @Json(name = "body") var body: Map<String, String>? = null,
+    @Json(name = "formdata") var formdata: Map<String, String>? = null
 )
 
 
