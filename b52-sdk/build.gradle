@@ -3,7 +3,7 @@
 buildscript {
     apply from: file('gradle/dependencies.gradle')
     ext {
-        kotlin_version = '1.4.10'
+        kotlin_version = '1.4.20'
     }
     repositories {
         google()
@@ -22,7 +22,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-serialization:${versions.kotlin}"
         classpath "org.jlleitschuh.gradle:ktlint-gradle:${versions.ktLint}"
         classpath "com.vanniktech:gradle-maven-publish-plugin:${versions.mavenPublish}"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:${versions.kotlin}"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:${versions.dokka}"
 
         classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.10'
         classpath 'com.squareup.wire:wire-gradle-plugin:3.5.0'
