@@ -5,7 +5,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,18 +20,18 @@ import com.mobile.sdk.sister.bubble.permission.OnPermissionResult
 import com.mobile.sdk.sister.bubble.permission.PermissionUtils
 import com.mobile.sdk.sister.data.http.BUZ_LOGOUT_MSG
 import com.mobile.sdk.sister.databinding.SisterDialogMainBinding
+import com.mobile.sdk.sister.ui.chat.ChargeFragment
 import com.mobile.sdk.sister.ui.chat.ChatFragment
-import com.mobile.sdk.sister.ui.system.SystemFragment
 import kotlin.math.max
 import kotlin.math.min
 
-class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedChangeListener,
-    View.OnClickListener {
+class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
 
     private var _binding: SisterDialogMainBinding? = null
     private val binding: SisterDialogMainBinding get() = _binding!!
 
     private var sCancelable: Boolean = false
+    private var tabPosition = 0
 
     val model: SisterViewModel by viewModels { SisterX.component.viewModelFactory() }
     var currentFragment: TopMainFragment? = null
@@ -57,35 +56,34 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
         binding.viewPager.isUserInputEnabled = false
         binding.viewPager.offscreenPageLimit = 2
         binding.viewPager.adapter = MyAdapter(this)
-        binding.mainRg.setOnCheckedChangeListener(this)
         binding.close.setOnClickListener(this)
         binding.voiceBtn.setOnClickListener(this)
         binding.callBtn.setOnClickListener(this)
+
+        binding.rbChat.setOnClickListener {
+            tabPosition = 0
+            onTabChanged()
+        }
+        binding.rbCharge.setOnClickListener {
+            tabPosition = 1
+            onTabChanged()
+        }
         return binding.root
     }
 
-    /**
-     * 加载红点提示
-     */
-    private fun loadPoint() {
-        viewLifecycleOwner.lifecycle.currentState
-
-    }
-
-    override fun onCheckedChanged(group: RadioGroup, checkedId: Int) {
-        val pos = when (checkedId) {
-            R.id.rb_system -> {
-                binding.callBtn.visibility = View.GONE
-                binding.voiceBtn.visibility = View.GONE
-                1
-            }
-            else -> {
+    private fun onTabChanged() {
+        when (tabPosition) {
+            0 -> {
                 binding.callBtn.visibility = View.VISIBLE
                 binding.voiceBtn.visibility = View.VISIBLE
-                0
             }
+            1 -> {
+                binding.callBtn.visibility = View.GONE
+                binding.voiceBtn.visibility = View.GONE
+            }
+            else -> throw IllegalStateException()
         }
-        binding.viewPager.setCurrentItem(pos, false)
+        binding.viewPager.setCurrentItem(tabPosition, false)
     }
 
     override fun onClick(v: View?) {
@@ -172,7 +170,7 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), RadioGroup.OnCheckedCh
             if (0 == position) {
                 return ChatFragment.newInstance()
             }
-            return SystemFragment.newInstance()
+            return ChargeFragment.newInstance()
         }
 
         override fun getItemCount(): Int {

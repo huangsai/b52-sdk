@@ -14,7 +14,6 @@ import com.mobile.sdk.sister.R
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-
 object EmotionHandle {
 
     private const val PAGE_COUNT = 24
