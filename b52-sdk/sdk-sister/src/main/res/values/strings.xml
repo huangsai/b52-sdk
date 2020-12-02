@@ -1,5 +1,6 @@
 <resources>
     <string name="sister_main_tab_system_text">系\n统</string>
+    <string name="sister_main_tab_charge_text">充\n值</string>
     <string name="sister_main_tab_csms_text">客\n服</string>
     <string name="sister_system_notice_item_title">系统</string>
     <string name="sister_system_notice_mute_text">该频道下无法发言</string>
