@@ -11,6 +11,7 @@ import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.data.http.ApiCharge
 import com.mobile.sdk.sister.databinding.SisterFragmentChargeBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
+import com.mobile.sdk.sister.ui.chat.ChatFragment
 import com.mobile.sdk.sister.ui.items.ChargeItem
 import com.pacific.adapter.RecyclerAdapter
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +38,7 @@ class ChargeFragment : TopMainFragment(), View.OnClickListener {
                 .build()
         )
         binding.recycler.adapter = adapter
+        adapter.onClickListener = this
         return binding.root
     }
 
@@ -66,6 +68,12 @@ class ChargeFragment : TopMainFragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.root -> {
+                fParent.addFragment(R.id.layout_fragment, ChatFragment.newInstance(true))
+                binding.recycler.visibility = View.GONE
+            }
+        }
     }
 
     companion object {

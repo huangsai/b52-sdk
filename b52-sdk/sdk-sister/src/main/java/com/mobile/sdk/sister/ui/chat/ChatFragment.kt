@@ -12,7 +12,8 @@ import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
 import com.mobile.sdk.sister.ui.views.MyKeyboardHelper
 
-class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.OnKeyListener {
+class ChatFragment(private val isCharge: Boolean) :
+    TopMainFragment(), View.OnClickListener, TextWatcher, View.OnKeyListener {
 
     private var _binding: SisterFragmentChatBinding? = null
     private val binding: SisterFragmentChatBinding get() = _binding!!
@@ -30,7 +31,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
 
     companion object {
         @JvmStatic
-        fun newInstance(): ChatFragment = ChatFragment()
+        fun newInstance(isCharge: Boolean): ChatFragment = ChatFragment(isCharge)
     }
 
     private val globalLayoutListener = object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -83,6 +84,10 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
         fParent.dialog?.window?.decorView?.viewTreeObserver?.addOnGlobalLayoutListener(
             globalLayoutListener
         )
+        if (isCharge) {
+            binding.layoutTitle.visibility = View.VISIBLE
+            binding.chatBack.setOnClickListener(this)
+        }
         return binding.root
     }
 
@@ -134,6 +139,8 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
                 }
             }
             R.id.chat_emotion -> chatEmotionPresenter.showPop()
+            R.id.chat_back -> {
+            }
         }
     }
 
