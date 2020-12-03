@@ -1,4 +1,4 @@
-package com.mobile.sdk.sister.ui.chat
+package com.mobile.sdk.sister.ui.charge
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,9 +8,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.sdk.sister.R
+import com.mobile.sdk.sister.data.http.ApiCharge
 import com.mobile.sdk.sister.databinding.SisterFragmentChargeBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
-import com.mobile.sdk.sister.ui.items.NoticeItem
+import com.mobile.sdk.sister.ui.items.ChargeItem
 import com.pacific.adapter.RecyclerAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,9 +45,13 @@ class ChargeFragment : TopMainFragment(), View.OnClickListener {
     }
 
     private fun load() {
+        val data = listOf(
+            ApiCharge(1), ApiCharge(2), ApiCharge(3),
+            ApiCharge(4), ApiCharge(5), ApiCharge(6)
+        )
         lifecycleScope.launch(Dispatchers.IO) {
-            val items = fParent.model.loadSystemNotices().map {
-                NoticeItem(it)
+            val items = data.map {
+                ChargeItem(it)
             }
             withContext(Dispatchers.Main) {
                 adapter.addAll(items)

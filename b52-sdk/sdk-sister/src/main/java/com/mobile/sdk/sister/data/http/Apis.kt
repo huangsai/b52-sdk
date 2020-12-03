@@ -77,3 +77,8 @@ data class ApiNotice1(
     @Json(name = "id") val id: Long,
     @Json(name = "content") val content: String
 )
+
+@JsonClass(generateAdapter = true)
+data class ApiCharge(
+    @Json(name = "id") val id: Long
+)
