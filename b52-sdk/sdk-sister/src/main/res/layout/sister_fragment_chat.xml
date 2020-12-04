@@ -5,6 +5,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_30dp"
+        android:background="@color/sister_color_EDEDED"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/layout_recycler"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/chat_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_10dp"
+            android:src="@drawable/sister_icon_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="客服昵称"
+            android:textColor="@color/sister_color_black"
+            android:textSize="@dimen/font_13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_05dp"
+            android:background="@color/sister_color_gray_transparent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <LinearLayout
         android:id="@+id/layout_recycler"
         android:layout_width="match_parent"
@@ -15,7 +53,7 @@
         android:paddingRight="@dimen/size_10dp"
         android:paddingBottom="@dimen/size_10dp"
         app:layout_constraintBottom_toTopOf="@id/layout_input"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/layout_title">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -38,8 +76,8 @@
                 android:background="@drawable/sister_chat_newest"
                 android:gravity="center"
                 android:text="@string/sister_chat_newest"
-                android:textSize="@dimen/sister_msg_text_font"
                 android:textColor="@android:color/white"
+                android:textSize="@dimen/sister_msg_text_font"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/chat_recycler"
                 app:layout_constraintLeft_toLeftOf="parent"

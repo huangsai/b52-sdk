@@ -168,7 +168,7 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
 
         override fun createFragment(position: Int): Fragment {
             if (0 == position) {
-                return ChatFragment.newInstance()
+                return ChatFragment.newInstance(false)
             }
             return ChargeFragment.newInstance()
         }
@@ -176,5 +176,16 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
         override fun getItemCount(): Int {
             return 2
         }
+    }
+
+    fun addFragment(containerViewId: Int, fragment: Fragment) {
+        childFragmentManager.beginTransaction()
+            .disallowAddToBackStack()
+            .add(containerViewId, fragment, fragment.javaClass.simpleName)
+            .commit()
+    }
+
+    fun finishFragment() {
+        childFragmentManager.popBackStack()
     }
 }

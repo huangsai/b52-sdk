@@ -10,6 +10,7 @@ class ChargeItem(val data: ApiCharge) : SimpleRecyclerItem() {
 
     override fun bind(holder: AdapterViewHolder) {
         val binding = holder.binding(SisterItemChargeBinding::bind)
+        holder.attachOnClickListener(R.id.root)
     }
 
     override fun getLayout(): Int {
