@@ -13,5 +13,5 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(':sdk-ipv6')
     implementation project(':sdk-sister')
-    implementation project(':sdk-call')
+    // implementation project(':sdk-call')
 }
