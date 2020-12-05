@@ -7,8 +7,10 @@ import okhttp3.RequestBody
 import okio.BufferedSink
 import okio.IOException
 import okio.source
-import kotlin.jvm.Throws
 
+/**
+ * Uri方式读取文件，只要作用是适配Android 10 Scope
+ */
 class InputStreamRequestBody(
     private val contentType: MediaType,
     private val contentResolver: ContentResolver,
