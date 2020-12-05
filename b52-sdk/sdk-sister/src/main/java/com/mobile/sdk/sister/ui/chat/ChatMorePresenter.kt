@@ -16,6 +16,7 @@ import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
+import com.mobile.sdk.sister.ui.TopMainFragment
 import com.pacific.adapter.AdapterViewHolder
 import com.skydoves.balloon.ArrowOrientation
 import com.skydoves.balloon.Balloon
@@ -24,7 +25,7 @@ import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 import java.io.File
 
 class ChatMorePresenter(
-    fragment: ChatFragment,
+    fragment: TopMainFragment,
     binding: SisterFragmentChatBinding,
     model: SisterViewModel,
 ) : BaseChatPresenter(fragment, binding, model) {

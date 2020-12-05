@@ -385,10 +385,20 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
     class Deposit(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
+            val binding = holder.binding(SisterItemChatDepositBinding::bind)
             holder.attachImageLoader(R.id.profile)
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.deposit_wechat)
             holder.attachOnClickListener(R.id.deposit_alipay)
+            when (deposit.type) {
+                TYPE_DEPOSIT_ALIPAY -> {
+                    binding.depositAlipay.visibility = View.VISIBLE
+                }
+                TYPE_DEPOSIT_WECHAT -> {
+                    binding.depositWechat.visibility = View.VISIBLE
+                }
+                else -> throw IllegalStateException()
+            }
         }
 
         override fun getLayout(): Int {

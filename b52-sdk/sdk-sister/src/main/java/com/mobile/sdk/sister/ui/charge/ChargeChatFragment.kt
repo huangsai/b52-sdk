@@ -1,18 +1,24 @@
-package com.mobile.sdk.sister.ui.chat
+package com.mobile.sdk.sister.ui.charge
 
 import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import androidx.fragment.app.commit
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
+import com.mobile.sdk.sister.ui.chat.*
 import com.mobile.sdk.sister.ui.views.MyKeyboardHelper
 
-class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.OnKeyListener {
+/**
+ * 充值聊天页面
+ */
+class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
+    View.OnKeyListener {
 
     private var _binding: SisterFragmentChatBinding? = null
     private val binding: SisterFragmentChatBinding get() = _binding!!
@@ -27,7 +33,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
 
     companion object {
         @JvmStatic
-        fun newInstance(): ChatFragment = ChatFragment()
+        fun newInstance(): ChargeChatFragment = ChargeChatFragment()
     }
 
     private val globalLayoutListener = object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -67,8 +73,8 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
         savedInstanceState: Bundle?
     ): View? {
         _binding = SisterFragmentChatBinding.inflate(inflater, container, false)
-        chatListPresenter = ChatListPresenter(this, binding, fParent.model, false)
-        chatHelpPresenter = ChatHelpPresenter(this, binding, fParent.model, false)
+        chatListPresenter = ChatListPresenter(this, binding, fParent.model, true)
+        chatHelpPresenter = ChatHelpPresenter(this, binding, fParent.model, true)
         chatMorePresenter = ChatMorePresenter(this, binding, fParent.model)
         chatVoicePresenter = ChatVoicePresenter(this, binding, fParent.model)
         chatEmotionPresenter = ChatEmotionPresenter(this, binding, fParent.model)
@@ -80,6 +86,8 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
         fParent.dialog?.window?.decorView?.viewTreeObserver?.addOnGlobalLayoutListener(
             globalLayoutListener
         )
+        binding.layoutTitle.visibility = View.VISIBLE
+        binding.chatBack.setOnClickListener(this)
         return binding.root
     }
 
@@ -125,12 +133,15 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
         when (v!!.id) {
             R.id.chat_add -> {
                 if (binding.chatAdd.isSelected) {
-                    chatListPresenter.postText(textContent)
+                    chatListPresenter.postChargeText(textContent)
                 } else {
                     chatMorePresenter.showPop()
                 }
             }
             R.id.chat_emotion -> chatEmotionPresenter.showPop()
+            R.id.chat_back -> {
+                parentFragmentManager.popBackStack()
+            }
         }
     }
 
@@ -145,6 +156,21 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
         }
         if (event.first == SisterX.BUS_MSG_AUTO_REPLY) {
             fParent.model.postSysReply(false, event.second.cast())
+            return
+        }
+        if (event.first == SisterX.BUS_CLICK_WECHAT) {
+            parentFragmentManager.commit {
+                this.addToBackStack(null)
+                    .replace(
+                        R.id.layout_fragment,
+                        ChargeReceiveFragment.newInstance(),
+                        ChargeReceiveFragment.newInstance().javaClass.simpleName
+                    )
+            }
+            return
+        }
+        if (event.first == SisterX.BUS_CLICK_ALIPAY) {
+//            addFragment(R.id.layout_fragment, ChargeReceiveFragment.newInstance())
             return
         }
     }

@@ -8,6 +8,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
+import com.mobile.sdk.sister.ui.TopMainFragment
 import com.mobile.sdk.sister.ui.chat.EmotionHandle.splitEmotionInfo
 import com.mobile.sdk.sister.ui.items.ViewerEmotionItem
 import com.pacific.adapter.AdapterViewHolder
@@ -17,7 +18,7 @@ import com.skydoves.balloon.createBalloon
 import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 
 class ChatEmotionPresenter(
-    fragment: ChatFragment,
+    fragment: TopMainFragment,
     binding: SisterFragmentChatBinding,
     model: SisterViewModel,
 ) : BaseChatPresenter(fragment, binding, model) {
@@ -69,7 +70,7 @@ class ChatEmotionPresenter(
     }
 
     fun updateButtonStatus() {
-        val isSelected = fragment.textContent.isNotEmpty()
+        val isSelected = binding.chatEt.text.toString().trim().isNotEmpty()
         emotionSend?.isSelected = isSelected
         emotionDelete?.isSelected = isSelected
     }
@@ -82,7 +83,7 @@ class ChatEmotionPresenter(
             }
             R.id.emotion_send -> {
                 if (!v.isSelected) return
-                fragment.chatListPresenter.postText(fragment.textContent)
+                fragment.chatListPresenter.postText(binding.chatEt.text.toString().trim())
                 balloon?.dismiss()
             }
         }

@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_30dp"
         android:background="@color/sister_color_EDEDED"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/layout_recycler"
         app:layout_constraintTop_toTopOf="parent">
 

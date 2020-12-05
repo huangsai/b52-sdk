@@ -67,7 +67,7 @@
             android:paddingLeft="@dimen/size_10dp"
             android:paddingRight="@dimen/size_10dp"
             android:src="@drawable/sister_icon_call"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/voice_btn"
             app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -78,8 +78,8 @@
             android:layout_marginBottom="@dimen/size_5dp"
             android:paddingLeft="@dimen/size_10dp"
             android:paddingRight="@dimen/size_10dp"
-            android:visibility="invisible"
             android:src="@drawable/sister_voice_icon_selector"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
 

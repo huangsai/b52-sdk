@@ -157,6 +157,10 @@ fun String.sisterTextDbMessage(): DbMessage {
     return DbMessage.Text(this).toJson().dbMessageFromJson(TYPE_TEXT)
 }
 
+fun DbMessage.Deposit.sisterDepositDbMessage(): DbMessage {
+    return toJson().dbMessageFromJson(TYPE_DEPOSIT)
+}
+
 private fun String.dbMessageFromJson(type: Int): DbMessage {
     return DbMessage(
         0L,

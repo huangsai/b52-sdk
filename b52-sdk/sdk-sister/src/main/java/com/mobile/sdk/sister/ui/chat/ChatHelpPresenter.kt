@@ -10,6 +10,7 @@ import com.mobile.guava.jvm.domain.Source
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.SisterViewModel
+import com.mobile.sdk.sister.ui.TopMainFragment
 import com.mobile.sdk.sister.ui.items.HelpItem
 import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
@@ -19,9 +20,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ChatHelpPresenter(
-    fragment: ChatFragment,
+    fragment: TopMainFragment,
     binding: SisterFragmentChatBinding,
-    model: SisterViewModel
+    model: SisterViewModel,
+    private val isCharge: Boolean
 ) : BaseChatPresenter(fragment, binding, model) {
 
     private val adapter = RecyclerAdapter()
@@ -47,6 +49,24 @@ class ChatHelpPresenter(
             return
         }
 
+        if (isCharge) {
+            requestChargeSysReply()
+        } else {
+            requestSisterSysReply()
+        }
+    }
+
+    /**
+     * 请求充值会话系统回复
+     */
+    private fun requestChargeSysReply() {
+
+    }
+
+    /**
+     * 请求充值会话系统回复
+     */
+    private fun requestSisterSysReply() {
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             val source = model.getSysReply()
             withContext(Dispatchers.Main) {

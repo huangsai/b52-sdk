@@ -25,6 +25,7 @@ import com.mobile.sdk.sister.ui.chat.ChatFragment
 import kotlin.math.max
 import kotlin.math.min
 
+
 class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
 
     private var _binding: SisterDialogMainBinding? = null
@@ -72,17 +73,17 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
     }
 
     private fun onTabChanged() {
-        when (tabPosition) {
-            0 -> {
-                binding.callBtn.visibility = View.VISIBLE
-                binding.voiceBtn.visibility = View.VISIBLE
-            }
-            1 -> {
-                binding.callBtn.visibility = View.GONE
-                binding.voiceBtn.visibility = View.GONE
-            }
-            else -> throw IllegalStateException()
-        }
+//        when (tabPosition) {
+//            0 -> {
+//                binding.callBtn.visibility = View.VISIBLE
+//                binding.voiceBtn.visibility = View.VISIBLE
+//            }
+//            1 -> {
+//                binding.callBtn.visibility = View.GONE
+//                binding.voiceBtn.visibility = View.GONE
+//            }
+//            else -> throw IllegalStateException()
+//        }
         binding.viewPager.setCurrentItem(tabPosition, false)
     }
 
@@ -168,7 +169,7 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
 
         override fun createFragment(position: Int): Fragment {
             if (0 == position) {
-                return ChatFragment.newInstance(false)
+                return ChatFragment.newInstance()
             }
             return ChargeFragment.newInstance()
         }
@@ -176,16 +177,5 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
         override fun getItemCount(): Int {
             return 2
         }
-    }
-
-    fun addFragment(containerViewId: Int, fragment: Fragment) {
-        childFragmentManager.beginTransaction()
-            .disallowAddToBackStack()
-            .add(containerViewId, fragment, fragment.javaClass.simpleName)
-            .commit()
-    }
-
-    fun finishFragment() {
-        childFragmentManager.popBackStack()
     }
 }

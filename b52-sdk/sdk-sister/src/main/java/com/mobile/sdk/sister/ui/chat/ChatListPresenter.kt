@@ -17,18 +17,15 @@ import com.mobile.guava.android.mvvm.Msg
 import com.mobile.guava.android.mvvm.showDialogFragment
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.guava.android.ui.view.recyclerview.keepItemViewVisible
+import com.mobile.guava.jvm.coroutines.Bus
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.data.db.DbMessage
-import com.mobile.sdk.sister.data.http.TYPE_AUDIO
-import com.mobile.sdk.sister.data.http.TYPE_IMAGE
-import com.mobile.sdk.sister.data.http.TYPE_TEXT
+import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
-import com.mobile.sdk.sister.ui.MSG_TIME_DIFF
-import com.mobile.sdk.sister.ui.SisterViewModel
-import com.mobile.sdk.sister.ui.crossTime
+import com.mobile.sdk.sister.socket.SocketUtils
+import com.mobile.sdk.sister.ui.*
 import com.mobile.sdk.sister.ui.items.MsgItem
-import com.mobile.sdk.sister.ui.toJson
 import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
@@ -39,9 +36,10 @@ import timber.log.Timber
 import java.io.File
 
 class ChatListPresenter(
-    fragment: ChatFragment,
+    fragment: TopMainFragment,
     binding: SisterFragmentChatBinding,
-    model: SisterViewModel
+    model: SisterViewModel,
+    private val isCharge: Boolean
 ) : BaseChatPresenter(fragment, binding, model), MediaPlayer.OnPreparedListener,
     MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
 
@@ -104,6 +102,24 @@ class ChatListPresenter(
             return
         }
 
+        if (isCharge) {
+            requestChargeMsg()
+        } else {
+            requestSisterMsg()
+        }
+    }
+
+    /**
+     * 请求充值会话聊天记录
+     */
+    private fun requestChargeMsg() {
+
+    }
+
+    /**
+     * 请求客服会话聊天记录
+     */
+    private fun requestSisterMsg() {
         fragment.lifecycleScope.launch(Dispatchers.IO) {
             val sourceItems = model.loadMessages().map {
                 MsgItem.create(it)
@@ -176,10 +192,10 @@ class ChatListPresenter(
                 clickAudio(AdapterUtils.getHolder(v))
             }
             R.id.deposit_wechat -> {
-                Msg.toast("点击微信充值")
+                Bus.offer(SisterX.BUS_CLICK_WECHAT)
             }
             R.id.deposit_alipay -> {
-                Msg.toast("点击支付宝充值")
+                Bus.offer(SisterX.BUS_CLICK_ALIPAY)
             }
             R.id.status_failed -> {
                 retryPostMsg(AdapterUtils.getHolder(v).item<MsgItem>().data)
@@ -226,6 +242,18 @@ class ChatListPresenter(
             }
             model.postText(dbMessage)
         }
+    }
+
+    //TODO 测试
+    fun postChargeText(text: String) {
+        postText(text)
+        SocketUtils.insertDbMessage(
+            DbMessage.Deposit(
+                "",
+                if (text == "微信") TYPE_DEPOSIT_WECHAT else TYPE_DEPOSIT_ALIPAY,
+                ""
+            ).sisterDepositDbMessage()
+        )
     }
 
     fun postImage(uri: Uri) {

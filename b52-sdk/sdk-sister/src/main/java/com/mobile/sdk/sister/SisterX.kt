@@ -33,6 +33,9 @@ object SisterX {
     const val BUS_MSG_NEW = 20050
     const val BUS_MSG_AUTO_REPLY = 20051
 
+    const val BUS_CLICK_ALIPAY = 20052
+    const val BUS_CLICK_WECHAT = 20053
+
     internal val isSocketConnected = MutableLiveData<Boolean>()
     internal val isUiPrepared = MutableLiveData<Boolean>()
     internal val isLogin = MutableLiveData<Boolean>()

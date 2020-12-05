@@ -20,6 +20,7 @@
         android:layout_height="70dp"
         android:layout_marginStart="@dimen/size_10dp"
         android:background="@drawable/sister_deposit_wechat_bg"
+        android:visibility="gone"
         app:layout_constraintLeft_toRightOf="@id/profile"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -73,10 +74,11 @@
         android:id="@+id/deposit_alipay"
         android:layout_width="200dp"
         android:layout_height="70dp"
-        android:layout_marginTop="@dimen/size_10dp"
+        android:layout_marginStart="@dimen/size_10dp"
         android:background="@drawable/sister_deposit_alipay_bg"
-        app:layout_constraintLeft_toLeftOf="@id/deposit_wechat"
-        app:layout_constraintTop_toBottomOf="@id/deposit_wechat">
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/profile"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/icon_alipay"

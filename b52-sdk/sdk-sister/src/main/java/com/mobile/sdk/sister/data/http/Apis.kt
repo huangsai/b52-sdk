@@ -6,11 +6,15 @@ import com.squareup.moshi.JsonClass
 const val TYPE_TEXT = 1
 const val TYPE_IMAGE = 2
 const val TYPE_AUDIO = 3
-const val TYPE_TIME = 4
-const val TYPE_SYSTEM = 5
-const val TYPE_DEPOSIT = 6
+const val TYPE_DEPOSIT = 4
+const val TYPE_TIME = 5
+const val TYPE_SYSTEM = 6
 const val TYPE_ROBOT = 7
 const val TYPE_LEAVE_MSG = 8
+
+const val TYPE_DEPOSIT_ALIPAY = 20
+const val TYPE_DEPOSIT_WECHAT = 21
+
 
 const val BUZ_LOGIN = 20001// 登录20001
 const val BUZ_LOGOUT = 20002// 登出20002

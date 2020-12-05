@@ -24,5 +24,6 @@
     <string name="sister_leave_msg_input_content_toast">内容至少10个字</string>
     <string name="sister_leave_msg_input_num">0/200</string>
     <string name="sister_auto_msg_title">您是否遇到了以下问题:</string>
+    <string name="sister_charge_receive_title">收款</string>
 
 </resources>
