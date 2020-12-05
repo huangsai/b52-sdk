@@ -102,6 +102,9 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
 
     override fun onDestroyView() {
         super.onDestroyView()
+        fParent.dialog?.window?.decorView?.viewTreeObserver?.removeOnGlobalLayoutListener(
+            globalLayoutListener
+        )
         binding.chatEt.setOnKeyListener(null)
         binding.chatEt.removeTextChangedListener(this)
         chatHelpPresenter.onDestroyView()

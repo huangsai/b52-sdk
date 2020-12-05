@@ -25,7 +25,7 @@ class ChargeFragment : TopMainFragment() {
                 .replace(
                     R.id.layout_fragment,
                     ChargeItemFragment.newInstance(),
-                    ChargeItemFragment.newInstance().javaClass.simpleName
+                    ChargeItemFragment.javaClass.simpleName
                 )
         }
         return binding.root

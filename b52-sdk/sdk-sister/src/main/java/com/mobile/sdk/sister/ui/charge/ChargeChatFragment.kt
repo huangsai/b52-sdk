@@ -110,6 +110,9 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
 
     override fun onDestroyView() {
         super.onDestroyView()
+        fParent.dialog?.window?.decorView?.viewTreeObserver?.removeOnGlobalLayoutListener(
+            globalLayoutListener
+        )
         binding.chatEt.setOnKeyListener(null)
         binding.chatEt.removeTextChangedListener(this)
         chatHelpPresenter.onDestroyView()
@@ -161,10 +164,11 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
         if (event.first == SisterX.BUS_CLICK_WECHAT) {
             parentFragmentManager.commit {
                 this.addToBackStack(null)
-                    .replace(
+                    .hide(this@ChargeChatFragment)
+                    .add(
                         R.id.layout_fragment,
                         ChargeReceiveFragment.newInstance(),
-                        ChargeReceiveFragment.newInstance().javaClass.simpleName
+                        ChargeReceiveFragment.javaClass.simpleName
                     )
             }
             return

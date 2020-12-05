@@ -29,9 +29,9 @@ class ChargeReceiveFragment : TopMainFragment() {
         childFragmentManager.commit {
             this.disallowAddToBackStack()
                 .replace(
-                    R.id.layout_fragment,
+                    R.id.container_receive,
                     ChargeReceiveWechatFragment.newInstance(),
-                    ChargeReceiveWechatFragment.newInstance().javaClass.simpleName
+                    ChargeReceiveWechatFragment.javaClass.simpleName
                 )
         }
         return binding.root

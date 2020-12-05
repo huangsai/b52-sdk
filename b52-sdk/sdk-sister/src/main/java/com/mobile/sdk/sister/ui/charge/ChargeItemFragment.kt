@@ -75,10 +75,11 @@ class ChargeItemFragment : TopMainFragment(), View.OnClickListener {
             R.id.root -> {
                 parentFragmentManager.commit {
                     this.addToBackStack(null)
-                        .replace(
+                        .hide(this@ChargeItemFragment)
+                        .add(
                             R.id.layout_fragment,
                             ChargeChatFragment.newInstance(),
-                            ChargeChatFragment.newInstance().javaClass.simpleName
+                            ChargeChatFragment.javaClass.simpleName
                         )
                 }
             }
