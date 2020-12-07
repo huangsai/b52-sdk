@@ -30,6 +30,13 @@ class SisterViewModel @Inject constructor(
     private val sisterRepository: SisterRepository
 ) : ViewModel() {
 
+    fun loadChargeChatList(): List<ApiCharge> {
+        return listOf(
+            ApiCharge(1), ApiCharge(2), ApiCharge(3),
+            ApiCharge(4), ApiCharge(5), ApiCharge(6)
+        )
+    }
+
     fun loadSystemNotices(): List<ApiNotice1> {
         return emptyList()
     }

@@ -23,16 +23,13 @@ class ChargeReceiveFragment : TopMainFragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = SisterFragmentChargeReceiveBinding.inflate(inflater, container, false)
-        binding.chatBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
-        }
+        binding.chatBack.setOnClickListener { parentFragmentManager.popBackStack() }
         childFragmentManager.commit {
-            this.disallowAddToBackStack()
-                .replace(
-                    R.id.container_receive,
-                    ChargeReceiveWechatFragment.newInstance(),
-                    ChargeReceiveWechatFragment.javaClass.simpleName
-                )
+            disallowAddToBackStack().add(
+                R.id.container_receive,
+                ChargeReceiveWechatFragment.newInstance(),
+                ChargeReceiveWechatFragment.javaClass.simpleName
+            )
         }
         return binding.root
     }

@@ -21,12 +21,11 @@ class ChargeFragment : TopMainFragment() {
     ): View? {
         _binding = SisterFragmentChargeBinding.inflate(inflater, container, false)
         childFragmentManager.commit {
-            this.disallowAddToBackStack()
-                .replace(
-                    R.id.layout_fragment,
-                    ChargeItemFragment.newInstance(),
-                    ChargeItemFragment.javaClass.simpleName
-                )
+            disallowAddToBackStack().add(
+                R.id.layout_fragment,
+                ChargeListFragment.newInstance(),
+                ChargeListFragment.javaClass.simpleName
+            )
         }
         return binding.root
     }

@@ -18,6 +18,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/sister_CircleImageView" />
 
+    <ImageView
+        android:id="@+id/view_dot_right_top"
+        style="@style/WrapWrap"
+        android:layout_margin="@dimen/size_3dp"
+        android:src="@drawable/sister_red_dot"
+        android:visibility="visible"
+        app:layout_constraintRight_toRightOf="@id/profile"
+        app:layout_constraintTop_toTopOf="@id/profile" />
+
     <View
         android:id="@+id/line"
         android:layout_width="@dimen/size_1dp"

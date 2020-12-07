@@ -142,9 +142,7 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
                 }
             }
             R.id.chat_emotion -> chatEmotionPresenter.showPop()
-            R.id.chat_back -> {
-                parentFragmentManager.popBackStack()
-            }
+            R.id.chat_back -> parentFragmentManager.popBackStack()
         }
     }
 
@@ -163,13 +161,11 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
         }
         if (event.first == SisterX.BUS_CLICK_WECHAT) {
             parentFragmentManager.commit {
-                this.addToBackStack(null)
-                    .hide(this@ChargeChatFragment)
-                    .add(
-                        R.id.layout_fragment,
-                        ChargeReceiveFragment.newInstance(),
-                        ChargeReceiveFragment.javaClass.simpleName
-                    )
+                addToBackStack(null).hide(this@ChargeChatFragment).add(
+                    R.id.layout_fragment,
+                    ChargeReceiveFragment.newInstance(),
+                    ChargeReceiveFragment.javaClass.simpleName
+                )
             }
             return
         }
