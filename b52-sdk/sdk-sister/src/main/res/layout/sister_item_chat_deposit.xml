@@ -16,8 +16,8 @@
     <!--    微信充值-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/deposit_wechat"
-        android:layout_width="200dp"
-        android:layout_height="70dp"
+        android:layout_width="@dimen/size_184dp"
+        android:layout_height="@dimen/size_60dp"
         android:layout_marginStart="@dimen/size_10dp"
         android:background="@drawable/sister_deposit_wechat_bg"
         android:visibility="gone"
@@ -42,7 +42,7 @@
             android:layout_marginTop="@dimen/size_5dp"
             android:text="@string/sister_deposit_type_wechat_text"
             android:textColor="@color/sister_color_white"
-            android:textSize="@dimen/font_15sp"
+            android:textSize="@dimen/font_12sp"
             app:layout_constraintLeft_toRightOf="@id/icon_wechat"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,7 +52,7 @@
             android:layout_marginStart="@dimen/size_10dp"
             android:text="@string/sister_deposit_click_text"
             android:textColor="@color/sister_color_white"
-            android:textSize="@dimen/font_12sp"
+            android:textSize="@dimen/font_10sp"
             app:layout_constraintLeft_toRightOf="@id/icon_wechat"
             app:layout_constraintTop_toBottomOf="@id/text_wechat" />
 
@@ -63,7 +63,7 @@
             android:layout_marginBottom="@dimen/size_3dp"
             android:text="@string/sister_deposit_receive_text"
             android:textColor="@color/sister_color_black"
-            android:textSize="@dimen/font_12sp"
+            android:textSize="@dimen/font_10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -72,8 +72,8 @@
     <!--    支付宝充值-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/deposit_alipay"
-        android:layout_width="200dp"
-        android:layout_height="70dp"
+        android:layout_width="@dimen/size_184dp"
+        android:layout_height="@dimen/size_60dp"
         android:layout_marginStart="@dimen/size_10dp"
         android:background="@drawable/sister_deposit_alipay_bg"
         android:visibility="gone"
@@ -98,7 +98,7 @@
             android:layout_marginTop="@dimen/size_5dp"
             android:text="@string/sister_deposit_type_alipay_text"
             android:textColor="@color/sister_color_white"
-            android:textSize="@dimen/font_15sp"
+            android:textSize="@dimen/font_12sp"
             app:layout_constraintLeft_toRightOf="@id/icon_alipay"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -108,7 +108,7 @@
             android:layout_marginStart="@dimen/size_10dp"
             android:text="@string/sister_deposit_click_text"
             android:textColor="@color/sister_color_white"
-            android:textSize="@dimen/font_12sp"
+            android:textSize="@dimen/font_10sp"
             app:layout_constraintLeft_toRightOf="@id/icon_alipay"
             app:layout_constraintTop_toBottomOf="@id/text_alipay" />
 
@@ -119,7 +119,7 @@
             android:layout_marginBottom="@dimen/size_3dp"
             android:text="@string/sister_deposit_receive_text"
             android:textColor="@color/sister_color_black"
-            android:textSize="@dimen/font_12sp"
+            android:textSize="@dimen/font_10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
 
