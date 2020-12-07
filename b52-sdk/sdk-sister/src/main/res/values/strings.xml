@@ -25,5 +25,8 @@
     <string name="sister_leave_msg_input_num">0/200</string>
     <string name="sister_auto_msg_title">您是否遇到了以下问题:</string>
     <string name="sister_charge_receive_title">收款</string>
+    <string name="sister_payment_wechat_code">微信收款码</string>
+    <string name="sister_payment_wechat_desc">保存二维码到相册，微信【扫一扫】付钱</string>
+    <string name="sister_payment_save_pic">保存图片</string>
 
 </resources>

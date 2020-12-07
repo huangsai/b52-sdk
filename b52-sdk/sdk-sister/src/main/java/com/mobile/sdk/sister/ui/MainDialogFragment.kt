@@ -73,18 +73,8 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
     }
 
     private fun onTabChanged() {
-//        when (tabPosition) {
-//            0 -> {
-//                binding.callBtn.visibility = View.VISIBLE
-//                binding.voiceBtn.visibility = View.VISIBLE
-//            }
-//            1 -> {
-//                binding.callBtn.visibility = View.GONE
-//                binding.voiceBtn.visibility = View.GONE
-//            }
-//            else -> throw IllegalStateException()
-//        }
         binding.viewPager.setCurrentItem(tabPosition, false)
+        currentFragment?.switchInputView(binding.voiceBtn.isSelected)
     }
 
     override fun onClick(v: View?) {

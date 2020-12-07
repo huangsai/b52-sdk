@@ -1,5 +1,6 @@
 package com.mobile.sdk.sister.ui.charge
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,8 @@ class ChargeReceiveWechatFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = SisterFragmentChargeReceiveWechatBinding.inflate(inflater, container, false)
+        binding.savePic.paint.flags = Paint.UNDERLINE_TEXT_FLAG
+        binding.savePic.paint.isAntiAlias = true
         return binding.root
     }
 

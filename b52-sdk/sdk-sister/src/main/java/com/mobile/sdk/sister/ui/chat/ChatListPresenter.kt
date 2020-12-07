@@ -192,10 +192,12 @@ class ChatListPresenter(
                 clickAudio(AdapterUtils.getHolder(v))
             }
             R.id.deposit_wechat -> {
-                Bus.offer(SisterX.BUS_CLICK_WECHAT)
+                if (isCharge)
+                    Bus.offer(SisterX.BUS_CLICK_WECHAT)
             }
             R.id.deposit_alipay -> {
-                Bus.offer(SisterX.BUS_CLICK_ALIPAY)
+                if (isCharge)
+                    Bus.offer(SisterX.BUS_CLICK_ALIPAY)
             }
             R.id.status_failed -> {
                 retryPostMsg(AdapterUtils.getHolder(v).item<MsgItem>().data)
