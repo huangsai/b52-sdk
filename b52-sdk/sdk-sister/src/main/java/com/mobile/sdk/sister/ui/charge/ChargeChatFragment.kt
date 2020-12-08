@@ -70,6 +70,11 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
         }
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        fParent.hideLeftButton(hidden)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -91,6 +96,7 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
         )
         binding.layoutTitle.visibility = View.VISIBLE
         binding.chatBack.setOnClickListener(this)
+        fParent.hideLeftButton(false)
         return binding.root
     }
 
@@ -124,6 +130,7 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
         _binding = null
 
         SisterX.isUiPrepared.value = false
+        fParent.hideLeftButton(true)
     }
 
     override fun onDestroy() {

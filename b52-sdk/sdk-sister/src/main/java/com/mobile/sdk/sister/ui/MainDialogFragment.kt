@@ -20,6 +20,7 @@ import com.mobile.sdk.sister.bubble.permission.OnPermissionResult
 import com.mobile.sdk.sister.bubble.permission.PermissionUtils
 import com.mobile.sdk.sister.data.http.BUZ_LOGOUT_MSG
 import com.mobile.sdk.sister.databinding.SisterDialogMainBinding
+import com.mobile.sdk.sister.ui.charge.ChargeChatFragment
 import com.mobile.sdk.sister.ui.charge.ChargeFragment
 import com.mobile.sdk.sister.ui.chat.ChatFragment
 import kotlin.math.max
@@ -74,7 +75,17 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
 
     private fun onTabChanged() {
         binding.viewPager.setCurrentItem(tabPosition, false)
-        currentFragment?.switchInputView(binding.voiceBtn.isSelected)
+        if (currentFragment is ChargeChatFragment || currentFragment is ChatFragment) {
+            hideLeftButton(false)
+            currentFragment?.switchInputView(binding.voiceBtn.isSelected)
+        } else {
+            hideLeftButton(true)
+        }
+    }
+
+    fun hideLeftButton(hidden: Boolean) {
+        binding.callBtn.visibility = if (hidden) View.GONE else View.VISIBLE
+        binding.voiceBtn.visibility = if (hidden) View.GONE else View.VISIBLE
     }
 
     override fun onClick(v: View?) {
