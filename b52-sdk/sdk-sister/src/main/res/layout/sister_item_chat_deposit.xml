@@ -14,114 +14,36 @@
         app:shapeAppearanceOverlay="@style/sister_CircleImageView" />
 
     <!--    微信充值-->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ImageView
         android:id="@+id/deposit_wechat"
-        android:layout_width="@dimen/size_184dp"
-        android:layout_height="@dimen/size_60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_10dp"
-        android:background="@drawable/sister_deposit_wechat_bg"
+        android:src="@drawable/sister_deposit_wechat_bg"
         android:visibility="gone"
         app:layout_constraintLeft_toRightOf="@id/profile"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/icon_wechat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_10dp"
-            android:layout_marginTop="@dimen/size_10dp"
-            android:src="@drawable/sister_icon_wechat"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/text_wechat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_10dp"
-            android:layout_marginTop="@dimen/size_5dp"
-            android:text="@string/sister_deposit_type_wechat_text"
-            android:textColor="@color/sister_color_white"
-            android:textSize="@dimen/font_12sp"
-            app:layout_constraintLeft_toRightOf="@id/icon_wechat"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_10dp"
-            android:text="@string/sister_deposit_click_text"
-            android:textColor="@color/sister_color_white"
-            android:textSize="@dimen/font_10sp"
-            app:layout_constraintLeft_toRightOf="@id/icon_wechat"
-            app:layout_constraintTop_toBottomOf="@id/text_wechat" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_16dp"
-            android:layout_marginBottom="@dimen/size_3dp"
-            android:text="@string/sister_deposit_receive_text"
-            android:textColor="@color/sister_color_black"
-            android:textSize="@dimen/font_10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--    支付宝充值-->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ImageView
         android:id="@+id/deposit_alipay"
-        android:layout_width="@dimen/size_184dp"
-        android:layout_height="@dimen/size_60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_10dp"
-        android:background="@drawable/sister_deposit_alipay_bg"
+        android:src="@drawable/sister_deposit_alipay_bg"
         android:visibility="gone"
         app:layout_constraintLeft_toRightOf="@id/profile"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/icon_alipay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_10dp"
-            android:layout_marginTop="@dimen/size_10dp"
-            android:src="@drawable/sister_icon_alipay"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <!--    银行卡充值-->
+    <ImageView
+        android:id="@+id/deposit_union"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_10dp"
+        android:src="@drawable/sister_deposit_union_bg"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/profile"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/text_alipay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_10dp"
-            android:layout_marginTop="@dimen/size_5dp"
-            android:text="@string/sister_deposit_type_alipay_text"
-            android:textColor="@color/sister_color_white"
-            android:textSize="@dimen/font_12sp"
-            app:layout_constraintLeft_toRightOf="@id/icon_alipay"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_10dp"
-            android:text="@string/sister_deposit_click_text"
-            android:textColor="@color/sister_color_white"
-            android:textSize="@dimen/font_10sp"
-            app:layout_constraintLeft_toRightOf="@id/icon_alipay"
-            app:layout_constraintTop_toBottomOf="@id/text_alipay" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_16dp"
-            android:layout_marginBottom="@dimen/size_3dp"
-            android:text="@string/sister_deposit_receive_text"
-            android:textColor="@color/sister_color_black"
-            android:textSize="@dimen/font_10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

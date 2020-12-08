@@ -390,12 +390,16 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.deposit_wechat)
             holder.attachOnClickListener(R.id.deposit_alipay)
+            holder.attachOnClickListener(R.id.deposit_union)
             when (deposit.type) {
                 TYPE_DEPOSIT_ALIPAY -> {
                     binding.depositAlipay.visibility = View.VISIBLE
                 }
                 TYPE_DEPOSIT_WECHAT -> {
                     binding.depositWechat.visibility = View.VISIBLE
+                }
+                TYPE_DEPOSIT_UNION -> {
+                    binding.depositUnion.visibility = View.VISIBLE
                 }
                 else -> throw IllegalStateException()
             }

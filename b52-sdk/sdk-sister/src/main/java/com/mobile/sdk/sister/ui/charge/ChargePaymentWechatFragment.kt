@@ -6,22 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mobile.guava.android.mvvm.BaseFragment
-import com.mobile.sdk.sister.databinding.SisterFragmentChargeReceiveWechatBinding
+import com.mobile.sdk.sister.databinding.SisterFragmentChargePaymentWechatBinding
 
 /**
  * 微信收款码页面
  */
-class ChargeReceiveWechatFragment : BaseFragment() {
+class ChargePaymentWechatFragment : BaseFragment() {
 
-    private var _binding: SisterFragmentChargeReceiveWechatBinding? = null
-    private val binding: SisterFragmentChargeReceiveWechatBinding get() = _binding!!
+    private var _binding: SisterFragmentChargePaymentWechatBinding? = null
+    private val binding: SisterFragmentChargePaymentWechatBinding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = SisterFragmentChargeReceiveWechatBinding.inflate(inflater, container, false)
+        _binding = SisterFragmentChargePaymentWechatBinding.inflate(inflater, container, false)
         binding.savePic.paint.flags = Paint.UNDERLINE_TEXT_FLAG
         binding.savePic.paint.isAntiAlias = true
         return binding.root
@@ -33,6 +33,6 @@ class ChargeReceiveWechatFragment : BaseFragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(): ChargeReceiveWechatFragment = ChargeReceiveWechatFragment()
+        fun newInstance(): ChargePaymentWechatFragment = ChargePaymentWechatFragment()
     }
 }

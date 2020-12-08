@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sister_charge_receive_title"
+            android:text="@string/sister_payment_title"
             android:textColor="@color/sister_color_black"
             android:textSize="@dimen/font_13sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +44,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/container_receive"
+        android:id="@+id/container_payment"
         style="@style/ConCon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

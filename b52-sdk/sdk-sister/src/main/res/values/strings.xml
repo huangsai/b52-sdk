@@ -9,7 +9,7 @@
     <string name="sister_deposit_type_wechat_text">微信充值</string>
     <string name="sister_deposit_type_alipay_text">支付宝充值</string>
     <string name="sister_deposit_click_text">点击开始充值</string>
-    <string name="sister_deposit_receive_text">收款</string>
+    <string name="sister_deposit_payment_text">收款</string>
     <string name="sister_chat_more_picture_text">照片</string>
     <string name="sister_chat_more_camera_text">拍摄</string>
     <string name="sister_popup_voice_press_cancel_text">手指松开，取消发送</string>
@@ -24,9 +24,24 @@
     <string name="sister_leave_msg_input_content_toast">内容至少10个字</string>
     <string name="sister_leave_msg_input_num">0/200</string>
     <string name="sister_auto_msg_title">您是否遇到了以下问题:</string>
-    <string name="sister_charge_receive_title">收款</string>
-    <string name="sister_payment_wechat_code">微信收款码</string>
+    <string name="sister_payment_title">收款</string>
+    <string name="sister_payment_wechat_title">微信收款码</string>
     <string name="sister_payment_wechat_desc">保存二维码到相册，微信【扫一扫】付钱</string>
     <string name="sister_payment_save_pic">保存图片</string>
+    <string name="sister_payment_union_title">银行卡收款</string>
+    <string name="sister_payment_union_desc">可使用支付宝、微信【转账银行卡】功能付款</string>
+    <string name="sister_payment_union_name">银行卡姓名：</string>
+    <string name="sister_payment_union_num">银行卡号：</string>
+    <string name="sister_payment_union_address">开户银行：</string>
+    <string name="sister_payment_union_branch">开户支行：</string>
+    <string name="sister_payment_tip">温馨提示</string>
+    <string name="sister_payment_tip_union">支持各种银行、支付宝、微信的银行卡转账\n支付宝转到银行卡：打开支付宝>转账>转账到银行卡\n微信转到银行卡：打开微信>转账>右上角+号>收付款>转账到银行卡</string>
+    <string name="sister_payment_alipay_title">支付宝账号转账</string>
+    <string name="sister_payment_alipay_desc">复制支付宝账号，支付宝【转账】付钱</string>
+    <string name="sister_payment_alipay_account">支付宝账号：</string>
+    <string name="sister_payment_alipay_first_name">支付宝姓：</string>
+    <string name="sister_payment_alipay_last_name">支付宝名：</string>
+    <string name="sister_payment_alipay_name">支付宝姓名：</string>
+
 
 </resources>

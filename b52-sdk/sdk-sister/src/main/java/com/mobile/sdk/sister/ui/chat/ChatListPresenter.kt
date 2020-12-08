@@ -199,6 +199,10 @@ class ChatListPresenter(
                 if (isCharge)
                     Bus.offer(SisterX.BUS_CLICK_ALIPAY)
             }
+            R.id.deposit_union -> {
+                if (isCharge)
+                    Bus.offer(SisterX.BUS_CLICK_UNION)
+            }
             R.id.status_failed -> {
                 retryPostMsg(AdapterUtils.getHolder(v).item<MsgItem>().data)
             }
@@ -249,10 +253,15 @@ class ChatListPresenter(
     //TODO 测试
     fun postChargeText(text: String) {
         postText(text)
+        val type = when (text) {
+            "微信" -> TYPE_DEPOSIT_WECHAT
+            "支付宝" -> TYPE_DEPOSIT_ALIPAY
+            else -> TYPE_DEPOSIT_UNION
+        }
         SocketUtils.insertDbMessage(
             DbMessage.Deposit(
                 "",
-                if (text == "微信") TYPE_DEPOSIT_WECHAT else TYPE_DEPOSIT_ALIPAY,
+                type,
                 ""
             ).sisterDepositDbMessage()
         )

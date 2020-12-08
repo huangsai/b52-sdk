@@ -9,6 +9,9 @@ import androidx.fragment.app.commit
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
+import com.mobile.sdk.sister.data.http.TYPE_DEPOSIT_ALIPAY
+import com.mobile.sdk.sister.data.http.TYPE_DEPOSIT_UNION
+import com.mobile.sdk.sister.data.http.TYPE_DEPOSIT_WECHAT
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
 import com.mobile.sdk.sister.ui.chat.*
@@ -159,19 +162,33 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
             fParent.model.postSysReply(false, event.second.cast())
             return
         }
+        //点击微信充值
         if (event.first == SisterX.BUS_CLICK_WECHAT) {
-            parentFragmentManager.commit {
-                addToBackStack(null).hide(this@ChargeChatFragment).add(
-                    R.id.layout_fragment,
-                    ChargeReceiveFragment.newInstance(),
-                    ChargeReceiveFragment.javaClass.simpleName
-                )
-            }
+            jumpPaymentFragment(TYPE_DEPOSIT_WECHAT)
             return
         }
+        //点击支付宝充值
         if (event.first == SisterX.BUS_CLICK_ALIPAY) {
-//            addFragment(R.id.layout_fragment, ChargeReceiveFragment.newInstance())
+            jumpPaymentFragment(TYPE_DEPOSIT_ALIPAY)
             return
+        }
+        //点击银行卡充值
+        if (event.first == SisterX.BUS_CLICK_UNION) {
+            jumpPaymentFragment(TYPE_DEPOSIT_UNION)
+            return
+        }
+    }
+
+    /**
+     * 跳转充值页面
+     */
+    private fun jumpPaymentFragment(depositType: Int) {
+        parentFragmentManager.commit {
+            addToBackStack(null).hide(this@ChargeChatFragment).add(
+                R.id.layout_fragment,
+                ChargePaymentFragment.newInstance(depositType),
+                ChargePaymentFragment.javaClass.simpleName
+            )
         }
     }
 
