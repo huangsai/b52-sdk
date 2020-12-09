@@ -243,7 +243,7 @@
                 android:id="@+id/tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_10dp"
+                android:layout_marginStart="@dimen/size_5dp"
                 android:text="@string/sister_payment_tip"
                 android:textColor="@color/sister_color_black"
                 android:textSize="@dimen/font_12sp"
