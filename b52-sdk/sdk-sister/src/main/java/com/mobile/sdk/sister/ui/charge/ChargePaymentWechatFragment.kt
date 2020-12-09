@@ -24,10 +24,11 @@ class ChargePaymentWechatFragment : BaseFragment() {
         _binding = SisterFragmentChargePaymentWechatBinding.inflate(inflater, container, false)
         binding.savePic.paint.flags = Paint.UNDERLINE_TEXT_FLAG
         binding.savePic.paint.isAntiAlias = true
+        binding.savePic.setOnClickListener {
+            //保存图片
+            ToastPop(requireParentFragment()).show("保存成功")
+        }
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     }
 
     companion object {
