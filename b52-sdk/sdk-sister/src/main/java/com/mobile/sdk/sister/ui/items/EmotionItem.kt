@@ -6,6 +6,9 @@ import com.mobile.sdk.sister.ui.chat.EmotionHandle
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
 
+/**
+ * 单个表情Item
+ */
 class EmotionItem(val data: EmotionHandle.EmotionInfo) : SimpleRecyclerItem() {
 
     override fun bind(holder: AdapterViewHolder) {

@@ -6,6 +6,9 @@ import com.mobile.sdk.sister.databinding.SisterItemChargeBinding
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
 
+/**
+ * 充值Item
+ */
 class ChargeItem(val data: ApiCharge) : SimpleRecyclerItem() {
 
     override fun bind(holder: AdapterViewHolder) {

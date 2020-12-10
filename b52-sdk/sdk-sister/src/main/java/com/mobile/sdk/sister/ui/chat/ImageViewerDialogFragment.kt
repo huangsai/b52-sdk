@@ -18,6 +18,9 @@ import com.pacific.adapter.AdapterImageLoader
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
 
+/**
+ * 查看大图
+ */
 class ImageViewerDialogFragment : BaseAppCompatDialogFragment(), AdapterImageLoader,
     View.OnClickListener {
 

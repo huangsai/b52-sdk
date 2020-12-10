@@ -24,6 +24,9 @@ import com.skydoves.balloon.createBalloon
 import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 import java.io.File
 
+/**
+ * 更多功能
+ */
 class ChatMorePresenter(
     fragment: TopMainFragment,
     binding: SisterFragmentChatBinding,

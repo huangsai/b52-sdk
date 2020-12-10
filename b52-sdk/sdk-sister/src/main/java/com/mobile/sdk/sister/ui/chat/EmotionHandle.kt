@@ -14,9 +14,14 @@ import com.mobile.sdk.sister.R
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
+/**
+ * 处理表情数据
+ */
 object EmotionHandle {
 
+    //每页显示个数
     private const val PAGE_COUNT = 24
+    //列数
     const val ROW_COUNT = 9
     private val sPatternEmotion: Pattern = Pattern.compile("\\[([\u4e00-\u9fa5\\w])+\\]")
 
@@ -104,6 +109,7 @@ object EmotionHandle {
         )
     }
 
+    //根据
     fun splitEmotionInfo(): ArrayList<List<EmotionInfo>> {
         val size = emotionInfo.size
         //计算可以分成多少页

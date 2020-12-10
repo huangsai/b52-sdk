@@ -35,6 +35,9 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 
+/**
+ * 聊天功能业务逻辑代码
+ */
 class ChatListPresenter(
     fragment: TopMainFragment,
     binding: SisterFragmentChatBinding,
@@ -147,10 +150,16 @@ class ChatListPresenter(
         )
     }
 
+    /**
+     * 清除消息
+     */
     fun cleanMessages() {
         adapter.clear()
     }
 
+    /**
+     * 消息状态改变
+     */
     fun onMessageStatusChanged(dbMessage: DbMessage) {
         adapter.getAll()
             .filterIsInstance<MsgItem>()
@@ -161,6 +170,9 @@ class ChatListPresenter(
             }
     }
 
+    /**
+     * 新消息
+     */
     fun onNewMessage(msgItem: MsgItem) {
         if (binding.chatRecycler.canScrollVertically(1)) {
             adapter.add(msgItem)

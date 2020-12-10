@@ -73,6 +73,9 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
         return binding.root
     }
 
+    /**
+     * 切换左边栏顶部按钮
+     */
     private fun onTabChanged() {
         binding.viewPager.setCurrentItem(tabPosition, false)
         if (currentFragment is ChargeChatFragment || currentFragment is ChatFragment) {
@@ -83,6 +86,9 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
         }
     }
 
+    /**
+     * 显示或隐藏左边栏底部按钮
+     */
     fun hideLeftButton(hidden: Boolean) {
         binding.callBtn.visibility = if (hidden) View.GONE else View.VISIBLE
         binding.voiceBtn.visibility = if (hidden) View.GONE else View.VISIBLE

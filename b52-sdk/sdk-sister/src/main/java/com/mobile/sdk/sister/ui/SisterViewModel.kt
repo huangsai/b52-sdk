@@ -30,6 +30,9 @@ class SisterViewModel @Inject constructor(
     private val sisterRepository: SisterRepository
 ) : ViewModel() {
 
+    /**
+     * 获取充值聊天记录
+     */
     fun loadChargeChatList(): List<ApiCharge> {
         return listOf(
             ApiCharge(1), ApiCharge(2), ApiCharge(3),
@@ -41,34 +44,50 @@ class SisterViewModel @Inject constructor(
         return emptyList()
     }
 
+    /**
+     * 发送留言消息
+     */
     fun leaveMessage(msg: String) {
         SocketUtils.leaveMessage(msg)
     }
 
+    /**
+     * 请求联系客服
+     */
     fun requestSister() {
         if (!SisterX.hasSister()) {
             SocketUtils.requestSister()
         }
     }
 
+    /**
+     * 获取客服系统回复
+     */
     @WorkerThread
     suspend fun getSysReply(): Source<List<ApiSysReply>> {
         ensureWorkThread()
         return sisterRepository.sysReply(1, "")
     }
 
+    /**
+     * 获取客服聊天记录
+     */
     @WorkerThread
     fun loadMessages(): List<DbMessage> {
         ensureWorkThread()
         return sisterRepository.loadMessage()
     }
 
+    /**
+     * 发送普通文本消息
+     */
     @WorkerThread
     fun postText(dbMessage: DbMessage) {
         ensureWorkThread()
         val isExist = sisterRepository.messageCountById(dbMessage.id) > 0
         if (isExist) {
             dbMessage.status = STATUS_MSG_PROCESSING
+            //通知消息状态
             Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
         } else {
             sisterRepository.insetMessage(dbMessage)
@@ -76,6 +95,9 @@ class SisterViewModel @Inject constructor(
         SocketUtils.postMessage(dbMessage)
     }
 
+    /**
+     * 发送图片消息
+     */
     @WorkerThread
     fun postImage(dbMessage: DbMessage) {
         ensureWorkThread()
@@ -83,6 +105,7 @@ class SisterViewModel @Inject constructor(
         val isExist = sisterRepository.messageCountById(dbMessage.id) > 0
         if (isExist) {
             dbMessage.status = STATUS_MSG_PROCESSING
+            //通知消息状态
             Bus.offer(SisterX.BUS_MSG_STATUS, dbMessage)
             if (image.url.startsWith("http", true)) {
                 SocketUtils.postMessage(dbMessage)
@@ -91,6 +114,7 @@ class SisterViewModel @Inject constructor(
         }
 
         require(STATUS_MSG_PROCESSING == dbMessage.status)
+        //上传文件
         val uploadedUrl = sisterRepository.uploadFile(createImageRequestBody(image.url))
         if (uploadedUrl.isNotEmpty()) {
             dbMessage.content = DbMessage.Image(uploadedUrl).toJson()
@@ -109,6 +133,9 @@ class SisterViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 发送语音消息
+     */
     @WorkerThread
     fun postAudio(dbMessage: DbMessage) {
         ensureWorkThread()
@@ -163,6 +190,9 @@ class SisterViewModel @Inject constructor(
         )
     }
 
+    /**
+     * 发送系统回复消息
+     */
     fun postSysReply(isHelp: Boolean, apiSysReply: ApiSysReply) {
         viewModelScope.launch(Dispatchers.IO) {
             createDbMessage(

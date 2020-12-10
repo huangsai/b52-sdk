@@ -19,6 +19,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * 系统回复业务逻辑代码
+ */
 class ChatHelpPresenter(
     fragment: TopMainFragment,
     binding: SisterFragmentChatBinding,

@@ -7,6 +7,9 @@ import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase
 
+/**
+ * 大图片条目
+ */
 class ViewerImageItem(val data: Uri) : SimpleRecyclerItem() {
 
     override fun bind(holder: AdapterViewHolder) {

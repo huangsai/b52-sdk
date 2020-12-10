@@ -157,14 +157,17 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
     }
 
     override fun onBusEvent(event: Pair<Int, Any>) {
+        //消息状态改变
         if (event.first == SisterX.BUS_MSG_STATUS) {
             chatListPresenter.onMessageStatusChanged(event.second.cast())
             return
         }
+        //收到新消息
         if (event.first == SisterX.BUS_MSG_NEW) {
             chatListPresenter.onNewMessage(event.second.cast())
             return
         }
+        //点击系统回复Item
         if (event.first == SisterX.BUS_MSG_AUTO_REPLY) {
             fParent.model.postSysReply(false, event.second.cast())
             return
