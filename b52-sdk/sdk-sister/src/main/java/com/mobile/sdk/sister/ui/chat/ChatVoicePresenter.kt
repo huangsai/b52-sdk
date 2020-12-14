@@ -28,6 +28,9 @@ import io.reactivex.rxjava3.disposables.Disposable
 import java.io.File
 import java.util.concurrent.TimeUnit
 
+/**
+ * 发送语音业务逻辑代码
+ */
 class ChatVoicePresenter(
     fragment: TopMainFragment,
     binding: SisterFragmentChatBinding,

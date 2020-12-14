@@ -17,6 +17,9 @@ import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
 import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 
+/**
+ * 处理表情业务逻辑代码
+ */
 class ChatEmotionPresenter(
     fragment: TopMainFragment,
     binding: SisterFragmentChatBinding,
@@ -36,6 +39,7 @@ class ChatEmotionPresenter(
             return
         }
         val popWidth = binding.layoutInput.width
+        //创建表情弹窗
         balloon = createBalloon(fragment.requireContext()) {
             setLayout(R.layout.sister_popup_chat_emotion)
             cornerRadius = 10f
@@ -69,6 +73,9 @@ class ChatEmotionPresenter(
         adapter.addAll(items)
     }
 
+    /**
+     * 更新删除、发送按钮状态
+     */
     fun updateButtonStatus() {
         val isSelected = binding.chatEt.text.toString().trim().isNotEmpty()
         emotionSend?.isSelected = isSelected

@@ -14,6 +14,7 @@ const val TYPE_LEAVE_MSG = 8
 
 const val TYPE_DEPOSIT_ALIPAY = 20
 const val TYPE_DEPOSIT_WECHAT = 21
+const val TYPE_DEPOSIT_UNION = 22
 
 
 const val BUZ_LOGIN = 20001// 登录20001

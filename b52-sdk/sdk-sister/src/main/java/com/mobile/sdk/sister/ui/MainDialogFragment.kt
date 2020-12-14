@@ -20,6 +20,7 @@ import com.mobile.sdk.sister.bubble.permission.OnPermissionResult
 import com.mobile.sdk.sister.bubble.permission.PermissionUtils
 import com.mobile.sdk.sister.data.http.BUZ_LOGOUT_MSG
 import com.mobile.sdk.sister.databinding.SisterDialogMainBinding
+import com.mobile.sdk.sister.ui.charge.ChargeChatFragment
 import com.mobile.sdk.sister.ui.charge.ChargeFragment
 import com.mobile.sdk.sister.ui.chat.ChatFragment
 import kotlin.math.max
@@ -72,19 +73,25 @@ class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
         return binding.root
     }
 
+    /**
+     * 切换左边栏顶部按钮
+     */
     private fun onTabChanged() {
-//        when (tabPosition) {
-//            0 -> {
-//                binding.callBtn.visibility = View.VISIBLE
-//                binding.voiceBtn.visibility = View.VISIBLE
-//            }
-//            1 -> {
-//                binding.callBtn.visibility = View.GONE
-//                binding.voiceBtn.visibility = View.GONE
-//            }
-//            else -> throw IllegalStateException()
-//        }
         binding.viewPager.setCurrentItem(tabPosition, false)
+        if (currentFragment is ChargeChatFragment || currentFragment is ChatFragment) {
+            hideLeftButton(false)
+            currentFragment?.switchInputView(binding.voiceBtn.isSelected)
+        } else {
+            hideLeftButton(true)
+        }
+    }
+
+    /**
+     * 显示或隐藏左边栏底部按钮
+     */
+    fun hideLeftButton(hidden: Boolean) {
+        binding.callBtn.visibility = if (hidden) View.GONE else View.VISIBLE
+        binding.voiceBtn.visibility = if (hidden) View.GONE else View.VISIBLE
     }
 
     override fun onClick(v: View?) {

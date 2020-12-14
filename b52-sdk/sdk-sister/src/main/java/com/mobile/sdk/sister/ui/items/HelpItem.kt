@@ -6,6 +6,9 @@ import com.mobile.sdk.sister.databinding.SisterItemHelpBinding
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
 
+/**
+ * 系统回复Item
+ */
 class HelpItem(val data: ApiSysReply) : SimpleRecyclerItem() {
 
     override fun bind(holder: AdapterViewHolder) {

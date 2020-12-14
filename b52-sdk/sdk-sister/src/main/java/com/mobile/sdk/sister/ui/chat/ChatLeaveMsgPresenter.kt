@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.mobile.guava.android.context.dp2px2
 import com.mobile.guava.android.ime.ImeUtils
-import com.mobile.guava.android.mvvm.BaseFragment
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
@@ -20,6 +19,9 @@ import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
 import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 
+/**
+ * 留言消息业务逻辑代码
+ */
 class ChatLeaveMsgPresenter(
     fragment: TopMainFragment,
     binding: SisterFragmentChatBinding,
@@ -30,11 +32,13 @@ class ChatLeaveMsgPresenter(
     private val inputContentEt: EditText
     private val inputNumTv: TextView
 
+    //创建发送留言消息弹窗
     private var balloon: Balloon = createBalloon(fragment.requireContext()) {
         setLayout(R.layout.sister_popup_chat_leave_msg)
         arrowVisible = false
         cornerRadius = 0f
-        marginTop = (binding.chatRecycler.measuredHeight - fragment.requireContext().dp2px2(160f)) / 2
+        marginTop =
+            (binding.chatRecycler.measuredHeight - fragment.requireContext().dp2px2(160f)) / 2
         width = binding.chatRecycler.width - 16
         setBackgroundDrawableResource(R.drawable.sister_leave_msg_bg)
         setElevation(0)

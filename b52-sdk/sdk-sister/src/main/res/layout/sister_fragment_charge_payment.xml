@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/size_10dp"
             android:paddingEnd="@dimen/size_10dp"
-            android:src="@drawable/sister_icon_back"
+            android:src="@drawable/sister_return2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sister_charge_receive_title"
+            android:text="@string/sister_payment_title"
             android:textColor="@color/sister_color_black"
             android:textSize="@dimen/font_13sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +44,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/layout_fragment"
+        android:id="@+id/container_payment"
         style="@style/ConCon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

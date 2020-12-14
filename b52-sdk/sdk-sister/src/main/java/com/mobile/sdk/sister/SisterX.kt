@@ -35,6 +35,7 @@ object SisterX {
 
     const val BUS_CLICK_ALIPAY = 20052
     const val BUS_CLICK_WECHAT = 20053
+    const val BUS_CLICK_UNION = 20054
 
     internal val isSocketConnected = MutableLiveData<Boolean>()
     internal val isUiPrepared = MutableLiveData<Boolean>()
@@ -90,6 +91,11 @@ object SisterX {
         }
     }
 
+    /**
+     * 初始化客服SDK
+     * @param app Application
+     * @param isDebug 是否是debug模式
+     */
     fun setup(app: Application, isDebug: Boolean) {
         if (::component.isInitialized) {
             return
@@ -108,11 +114,19 @@ object SisterX {
         AppManager.initialize()
     }
 
+    /**
+     * 设置服务器地址
+     * @param server 服务器地址
+     */
     fun setServers(server: String) {
         socketServer = "wss://${server}/ws/csms?from=android"
         httpServer = "https://${server}/"
     }
 
+    /**
+     * 设置用户
+     * @param _loginName 用户名称
+     */
     fun setUser(_loginName: String) = GlobalScope.launch(Dispatchers.IO) {
         if (true == isLogin.value && _loginName == AppPrefs.loginName) {
             return@launch
@@ -130,6 +144,11 @@ object SisterX {
         }
     }
 
+    /**
+     * 打开客服弹窗
+     * @param activity FragmentActivity
+     * @param cancelable 是否可以取消弹窗
+     */
     fun show(activity: FragmentActivity, cancelable: Boolean): DialogFragment {
         return MainDialogFragment.newInstance(cancelable).also {
             activity.showDialogFragment(it)

@@ -9,6 +9,9 @@ import androidx.fragment.app.commit
 import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
+import com.mobile.sdk.sister.data.http.TYPE_DEPOSIT_ALIPAY
+import com.mobile.sdk.sister.data.http.TYPE_DEPOSIT_UNION
+import com.mobile.sdk.sister.data.http.TYPE_DEPOSIT_WECHAT
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
 import com.mobile.sdk.sister.ui.chat.*
@@ -67,6 +70,11 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
         }
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        fParent.hideLeftButton(hidden)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -88,6 +96,7 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
         )
         binding.layoutTitle.visibility = View.VISIBLE
         binding.chatBack.setOnClickListener(this)
+        fParent.hideLeftButton(false)
         return binding.root
     }
 
@@ -110,6 +119,9 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
 
     override fun onDestroyView() {
         super.onDestroyView()
+        fParent.dialog?.window?.decorView?.viewTreeObserver?.removeOnGlobalLayoutListener(
+            globalLayoutListener
+        )
         binding.chatEt.setOnKeyListener(null)
         binding.chatEt.removeTextChangedListener(this)
         chatHelpPresenter.onDestroyView()
@@ -118,6 +130,7 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
         _binding = null
 
         SisterX.isUiPrepared.value = false
+        fParent.hideLeftButton(true)
     }
 
     override fun onDestroy() {
@@ -139,39 +152,53 @@ class ChargeChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher,
                 }
             }
             R.id.chat_emotion -> chatEmotionPresenter.showPop()
-            R.id.chat_back -> {
-                parentFragmentManager.popBackStack()
-            }
+            R.id.chat_back -> parentFragmentManager.popBackStack()
         }
     }
 
     override fun onBusEvent(event: Pair<Int, Any>) {
+        //消息状态改变
         if (event.first == SisterX.BUS_MSG_STATUS) {
             chatListPresenter.onMessageStatusChanged(event.second.cast())
             return
         }
+        //收到新消息
         if (event.first == SisterX.BUS_MSG_NEW) {
             chatListPresenter.onNewMessage(event.second.cast())
             return
         }
+        //点击系统回复Item
         if (event.first == SisterX.BUS_MSG_AUTO_REPLY) {
             fParent.model.postSysReply(false, event.second.cast())
             return
         }
+        //点击微信充值
         if (event.first == SisterX.BUS_CLICK_WECHAT) {
-            parentFragmentManager.commit {
-                this.addToBackStack(null)
-                    .replace(
-                        R.id.layout_fragment,
-                        ChargeReceiveFragment.newInstance(),
-                        ChargeReceiveFragment.newInstance().javaClass.simpleName
-                    )
-            }
+            jumpPaymentFragment(TYPE_DEPOSIT_WECHAT)
             return
         }
+        //点击支付宝充值
         if (event.first == SisterX.BUS_CLICK_ALIPAY) {
-//            addFragment(R.id.layout_fragment, ChargeReceiveFragment.newInstance())
+            jumpPaymentFragment(TYPE_DEPOSIT_ALIPAY)
             return
+        }
+        //点击银行卡充值
+        if (event.first == SisterX.BUS_CLICK_UNION) {
+            jumpPaymentFragment(TYPE_DEPOSIT_UNION)
+            return
+        }
+    }
+
+    /**
+     * 跳转充值页面
+     */
+    private fun jumpPaymentFragment(depositType: Int) {
+        parentFragmentManager.commit {
+            addToBackStack(null).hide(this@ChargeChatFragment).add(
+                R.id.layout_fragment,
+                ChargePaymentFragment.newInstance(depositType),
+                ChargePaymentFragment.javaClass.simpleName
+            )
         }
     }
 

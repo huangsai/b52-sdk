@@ -12,6 +12,9 @@ import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
 import com.mobile.sdk.sister.ui.views.MyKeyboardHelper
 
+/**
+ * 客服聊天页面
+ */
 class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.OnKeyListener {
 
     private var _binding: SisterFragmentChatBinding? = null
@@ -102,6 +105,9 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
 
     override fun onDestroyView() {
         super.onDestroyView()
+        fParent.dialog?.window?.decorView?.viewTreeObserver?.removeOnGlobalLayoutListener(
+            globalLayoutListener
+        )
         binding.chatEt.setOnKeyListener(null)
         binding.chatEt.removeTextChangedListener(this)
         chatHelpPresenter.onDestroyView()
@@ -135,14 +141,17 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
     }
 
     override fun onBusEvent(event: Pair<Int, Any>) {
+        //消息状态改变
         if (event.first == SisterX.BUS_MSG_STATUS) {
             chatListPresenter.onMessageStatusChanged(event.second.cast())
             return
         }
+        //收到新消息
         if (event.first == SisterX.BUS_MSG_NEW) {
             chatListPresenter.onNewMessage(event.second.cast())
             return
         }
+        //点击系统回复Item
         if (event.first == SisterX.BUS_MSG_AUTO_REPLY) {
             fParent.model.postSysReply(false, event.second.cast())
             return

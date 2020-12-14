@@ -9,8 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.sdk.sister.R
-import com.mobile.sdk.sister.data.http.ApiCharge
-import com.mobile.sdk.sister.databinding.SisterFragmentChargeItemBinding
+import com.mobile.sdk.sister.databinding.SisterFragmentChargeListBinding
 import com.mobile.sdk.sister.ui.TopMainFragment
 import com.mobile.sdk.sister.ui.items.ChargeItem
 import com.pacific.adapter.RecyclerAdapter
@@ -19,12 +18,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * 一级充值会话条目页面
+ * 充值会话列表页面
  */
-class ChargeItemFragment : TopMainFragment(), View.OnClickListener {
+class ChargeListFragment : TopMainFragment(), View.OnClickListener {
 
-    private var _binding: SisterFragmentChargeItemBinding? = null
-    private val binding: SisterFragmentChargeItemBinding get() = _binding!!
+    private var _binding: SisterFragmentChargeListBinding? = null
+    private val binding: SisterFragmentChargeListBinding get() = _binding!!
 
     private val adapter = RecyclerAdapter()
 
@@ -33,7 +32,7 @@ class ChargeItemFragment : TopMainFragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = SisterFragmentChargeItemBinding.inflate(inflater, container, false)
+        _binding = SisterFragmentChargeListBinding.inflate(inflater, container, false)
         binding.recycler.layoutManager = LinearLayoutManager(requireContext())
         binding.recycler.addItemDecoration(
             LinearItemDecoration.builder(requireContext())
@@ -50,12 +49,8 @@ class ChargeItemFragment : TopMainFragment(), View.OnClickListener {
     }
 
     private fun load() {
-        val data = listOf(
-            ApiCharge(1), ApiCharge(2), ApiCharge(3),
-            ApiCharge(4), ApiCharge(5), ApiCharge(6)
-        )
         lifecycleScope.launch(Dispatchers.IO) {
-            val items = data.map {
+            val items = fParent.model.loadChargeChatList().map {
                 ChargeItem(it)
             }
             withContext(Dispatchers.Main) {
@@ -74,12 +69,11 @@ class ChargeItemFragment : TopMainFragment(), View.OnClickListener {
         when (v?.id) {
             R.id.root -> {
                 parentFragmentManager.commit {
-                    this.addToBackStack(null)
-                        .replace(
-                            R.id.layout_fragment,
-                            ChargeChatFragment.newInstance(),
-                            ChargeChatFragment.javaClass.simpleName
-                        )
+                    addToBackStack(null).hide(this@ChargeListFragment).add(
+                        R.id.layout_fragment,
+                        ChargeChatFragment.newInstance(),
+                        ChargeChatFragment.javaClass.simpleName
+                    )
                 }
             }
         }
@@ -88,6 +82,6 @@ class ChargeItemFragment : TopMainFragment(), View.OnClickListener {
     companion object {
 
         @JvmStatic
-        fun newInstance(): ChargeItemFragment = ChargeItemFragment()
+        fun newInstance(): ChargeListFragment = ChargeListFragment()
     }
 }

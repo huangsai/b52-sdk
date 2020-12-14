@@ -10,6 +10,9 @@ import com.mobile.sdk.sister.databinding.SisterItemAutoReplyBinding
 import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.SimpleRecyclerItem
 
+/**
+ * 消息自动回复Item
+ */
 class AutoReplyItem(val data: ApiSysReply) : SimpleRecyclerItem() {
 
     override fun bind(holder: AdapterViewHolder) {

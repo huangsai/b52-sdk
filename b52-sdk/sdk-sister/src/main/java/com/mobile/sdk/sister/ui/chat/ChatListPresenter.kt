@@ -35,6 +35,9 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 
+/**
+ * 聊天功能业务逻辑代码
+ */
 class ChatListPresenter(
     fragment: TopMainFragment,
     binding: SisterFragmentChatBinding,
@@ -147,10 +150,16 @@ class ChatListPresenter(
         )
     }
 
+    /**
+     * 清除消息
+     */
     fun cleanMessages() {
         adapter.clear()
     }
 
+    /**
+     * 消息状态改变
+     */
     fun onMessageStatusChanged(dbMessage: DbMessage) {
         adapter.getAll()
             .filterIsInstance<MsgItem>()
@@ -161,6 +170,9 @@ class ChatListPresenter(
             }
     }
 
+    /**
+     * 新消息
+     */
     fun onNewMessage(msgItem: MsgItem) {
         if (binding.chatRecycler.canScrollVertically(1)) {
             adapter.add(msgItem)
@@ -192,10 +204,16 @@ class ChatListPresenter(
                 clickAudio(AdapterUtils.getHolder(v))
             }
             R.id.deposit_wechat -> {
-                Bus.offer(SisterX.BUS_CLICK_WECHAT)
+                if (isCharge)
+                    Bus.offer(SisterX.BUS_CLICK_WECHAT)
             }
             R.id.deposit_alipay -> {
-                Bus.offer(SisterX.BUS_CLICK_ALIPAY)
+                if (isCharge)
+                    Bus.offer(SisterX.BUS_CLICK_ALIPAY)
+            }
+            R.id.deposit_union -> {
+                if (isCharge)
+                    Bus.offer(SisterX.BUS_CLICK_UNION)
             }
             R.id.status_failed -> {
                 retryPostMsg(AdapterUtils.getHolder(v).item<MsgItem>().data)
@@ -247,10 +265,15 @@ class ChatListPresenter(
     //TODO 测试
     fun postChargeText(text: String) {
         postText(text)
+        val type = when (text) {
+            "微信" -> TYPE_DEPOSIT_WECHAT
+            "支付宝" -> TYPE_DEPOSIT_ALIPAY
+            else -> TYPE_DEPOSIT_UNION
+        }
         SocketUtils.insertDbMessage(
             DbMessage.Deposit(
                 "",
-                if (text == "微信") TYPE_DEPOSIT_WECHAT else TYPE_DEPOSIT_ALIPAY,
+                type,
                 ""
             ).sisterDepositDbMessage()
         )

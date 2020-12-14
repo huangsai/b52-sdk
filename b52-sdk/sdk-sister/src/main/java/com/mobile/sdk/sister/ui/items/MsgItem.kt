@@ -26,6 +26,9 @@ import com.pacific.adapter.RecyclerAdapter
 import com.pacific.adapter.SimpleRecyclerItem
 import timber.log.Timber
 
+/**
+ * 聊天消息条目
+ */
 abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
     lateinit var text: DbMessage.Text
@@ -112,6 +115,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 发出文本消息Item
+     */
     class Text(data: DbMessage) : MsgItem(data) {
 
         private lateinit var binding: SisterItemChatToTextBinding
@@ -146,6 +152,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 发出图片消息Item
+     */
     class Image(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -174,6 +183,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 发出语音消息Item
+     */
     class Audio(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -215,6 +227,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 收到文本消息Item
+     */
     class Text2(data: DbMessage) : MsgItem(data) {
 
         private lateinit var binding: SisterItemChatFromTextBinding
@@ -237,6 +252,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 收到图片消息Item
+     */
     class Image2(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -252,6 +270,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 收到语音消息Item
+     */
     class Audio2(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -285,6 +306,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 发出不支持消息类型Item
+     */
     class Upgrade(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -297,6 +321,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 收到不支持消息类型Item
+     */
     class Upgrade2(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -309,6 +336,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 留言消息Item
+     */
     class LeaveMsg(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -327,6 +357,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 联系客服消息Item
+     */
     class Robot(data: DbMessage) : MsgItem(data), View.OnClickListener {
         private val adapter: RecyclerAdapter by lazy {
             RecyclerAdapter().apply {
@@ -382,6 +415,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 充值消息Item
+     */
     class Deposit(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {
@@ -390,12 +426,17 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             holder.attachOnClickListener(R.id.profile)
             holder.attachOnClickListener(R.id.deposit_wechat)
             holder.attachOnClickListener(R.id.deposit_alipay)
+            holder.attachOnClickListener(R.id.deposit_union)
+            //根据充值类型显示不同充值条目:微信-支付宝-银行卡
             when (deposit.type) {
                 TYPE_DEPOSIT_ALIPAY -> {
                     binding.depositAlipay.visibility = View.VISIBLE
                 }
                 TYPE_DEPOSIT_WECHAT -> {
                     binding.depositWechat.visibility = View.VISIBLE
+                }
+                TYPE_DEPOSIT_UNION -> {
+                    binding.depositUnion.visibility = View.VISIBLE
                 }
                 else -> throw IllegalStateException()
             }
@@ -406,6 +447,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 时间Item
+     */
     class Time(data: DbMessage) : MsgItem(data) {
         private val nanoStr: String by lazy {
             time.nano.yyyy_mm_dd_hh_mm()
@@ -421,6 +465,9 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
         }
     }
 
+    /**
+     * 系统通知Item
+     */
     class System(data: DbMessage) : MsgItem(data) {
 
         override fun bind(holder: AdapterViewHolder) {

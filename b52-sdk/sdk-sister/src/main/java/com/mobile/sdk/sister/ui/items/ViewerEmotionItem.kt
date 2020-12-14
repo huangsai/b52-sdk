@@ -11,7 +11,9 @@ import com.pacific.adapter.AdapterViewHolder
 import com.pacific.adapter.RecyclerAdapter
 import com.pacific.adapter.SimpleRecyclerItem
 
-
+/**
+ * 显示表情条目Item
+ */
 class ViewerEmotionItem(
     val data: List<EmotionHandle.EmotionInfo>,
     val binding: SisterFragmentChatBinding
