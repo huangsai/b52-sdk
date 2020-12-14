@@ -78,7 +78,7 @@ class ChargeItemFragment : TopMainFragment(), View.OnClickListener {
                         .replace(
                             R.id.layout_fragment,
                             ChargeChatFragment.newInstance(),
-                            ChargeChatFragment.newInstance().javaClass.simpleName
+                            ChargeChatFragment.javaClass.simpleName
                         )
                 }
             }
