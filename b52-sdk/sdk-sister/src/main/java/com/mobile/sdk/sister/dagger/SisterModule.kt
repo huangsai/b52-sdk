@@ -84,7 +84,7 @@ class SisterModule : DataModule {
             .baseUrl("https://www.google.com/")
             .client(okHttpClient)
             .addConverterFactory(ApiConverterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create(json))
+            .addConverterFactory(MoshiConverterFactory.create(json).asLenient())
             .build()
     }
 

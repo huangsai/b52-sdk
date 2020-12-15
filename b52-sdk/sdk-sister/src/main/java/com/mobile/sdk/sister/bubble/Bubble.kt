@@ -83,7 +83,6 @@ object Bubble : View.OnTouchListener {
             windowWidth = it.width
             windowHeight = it.height
         }
-        // binding.root.setBackgroundColor(Color.RED)
         windowManager.addView(binding.root, layoutParams)
     }
 
