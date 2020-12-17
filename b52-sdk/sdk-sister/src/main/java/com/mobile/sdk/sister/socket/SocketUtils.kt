@@ -94,6 +94,23 @@ object SocketUtils {
             }
     }
 
+    fun requestSister2() = GlobalScope.launch(Dispatchers.IO) {
+        CommonMessage.Builder()
+            .bizId(BUZ_SISTER_REQUEST2)
+            .msgType(2)
+            .content(
+                MathRechargeCsReq.Builder()
+                    .chatType(1)
+                    .toUserId("26")
+                    .build()
+                    .encodeByteString()
+            )
+            .build()
+            .let {
+                AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
+            }
+    }
+
     @WorkerThread
     fun postMessage(dbMessage: DbMessage) {
         ensureWorkThread()
@@ -101,7 +118,7 @@ object SocketUtils {
             CommonMessage.Builder()
                 .bizId(BUZ_MSG_REQUEST)
                 .msgType(2)
-                .content(dbMessage.toChatRes().encodeByteString())
+                .content(dbMessage.toChatRes(1).encodeByteString())
                 .build()
                 .let {
                     if (true == SisterX.isSocketConnected.value) {
@@ -258,6 +275,7 @@ object SocketUtils {
             }
             BUZ_LOGIN -> {
                 SisterX.isLogin.postValue(response.result == 1)
+                requestSister2()
             }
             BUZ_LOGOUT -> {
                 SisterX.isLogin.postValue(false)

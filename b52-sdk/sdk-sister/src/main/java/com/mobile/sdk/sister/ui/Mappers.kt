@@ -184,12 +184,12 @@ private fun String.dbMessageFromJson(type: Int): DbMessage {
     )
 }
 
-fun DbMessage.toChatRes(): ChatReq {
+fun DbMessage.toChatRes(chatType:Int): ChatReq {
     return ChatReq.Builder()
         .id(id)
         .msgType(type)
         .sayContent(content)
-        .chatType(0)
+        .chatType(chatType)
         .toUserId(toUserId)
         .chatId(SisterX.chatId)
         .build()
