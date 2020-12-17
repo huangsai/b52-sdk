@@ -222,7 +222,7 @@ class ChatListPresenter(
                 ChatLeaveMsgPresenter(fragment, binding, model).showPop()
             }
             R.id.auto_reply_click -> {
-                model.requestSister()
+                model.requestSister(0)
             }
         }
     }
@@ -262,7 +262,7 @@ class ChatListPresenter(
         }
     }
 
-    //TODO 测试
+    // TODO 测试
     fun postChargeText(text: String) {
         postText(text)
         val type = when (text) {

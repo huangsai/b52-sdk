@@ -1,4 +1,4 @@
 // include ':sdk-call'
+// include ':sdk-ipv6'
 include ':app'
 include ':sdk-sister'
-include ':sdk-ipv6'

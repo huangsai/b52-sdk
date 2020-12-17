@@ -40,10 +40,6 @@ class SisterViewModel @Inject constructor(
         )
     }
 
-    fun loadSystemNotices(): List<ApiNotice1> {
-        return emptyList()
-    }
-
     /**
      * 发送留言消息
      */
@@ -54,9 +50,9 @@ class SisterViewModel @Inject constructor(
     /**
      * 请求联系客服
      */
-    fun requestSister() {
+    fun requestSister(chatType: Int) {
         if (!SisterX.hasSister()) {
-            SocketUtils.requestSister()
+            SocketUtils.requestSister(chatType)
         }
     }
 

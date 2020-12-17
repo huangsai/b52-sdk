@@ -56,3 +56,15 @@ data class DbMessage(
         @Json(name = "url") val url: String
     )
 }
+
+@Entity(
+    tableName = "sister_session"
+)
+data class DbSession(
+    @ColumnInfo(name = "_id") @PrimaryKey(autoGenerate = true) val _id: Long,
+    @ColumnInfo(name = "sisterImage") val sisterImage: String,
+    @ColumnInfo(name = "sisterName") val sisterName: String,
+    @ColumnInfo(name = "sisterUserId") val sisterUserId: Long,
+    @ColumnInfo(name = "userId") val userId: Long,
+    @ColumnInfo(name = "chatId") val chatId: Long
+)

@@ -81,6 +81,9 @@ object SisterX {
 
     internal fun hasSister(): Boolean = chatId > 0 && sisterUserId != "0"
 
+    /**
+     * 充值会话
+     */
     internal fun resetChatSession() {
         sisterUserId = "0"
         chatId = 0L

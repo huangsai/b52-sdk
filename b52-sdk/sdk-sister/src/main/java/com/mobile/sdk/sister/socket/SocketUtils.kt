@@ -83,11 +83,11 @@ object SocketUtils {
             }
     }
 
-    fun requestSister() = GlobalScope.launch(Dispatchers.IO) {
+    fun requestSister(chatType: Int) = GlobalScope.launch(Dispatchers.IO) {
         CommonMessage.Builder()
             .bizId(BUZ_SISTER_REQUEST)
             .msgType(2)
-            .content(MathCsReq.Builder().chatType(0).build().encodeByteString())
+            .content(MathCsReq.Builder().chatType(chatType).build().encodeByteString())
             .build()
             .let {
                 AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
@@ -226,15 +226,6 @@ object SocketUtils {
         }
     }
 
-    private fun dispatchMsgItem(msgItem: MsgItem) {
-        if (true == SisterX.isUiPrepared.value) {
-            Bus.offer(SisterX.BUS_MSG_NEW, msgItem)
-        } else {
-            SisterX.bufferMsgItems.add(msgItem)
-            SisterX.hasBufferMsgItems.postValue(true)
-        }
-    }
-
     fun insertDbMessage(dbMessage: DbMessage) {
         val newMsgItem = MsgItem.create(dbMessage)
         dispatchMsgItem(newMsgItem)
@@ -245,6 +236,15 @@ object SocketUtils {
                     it.insetMessage(dbMessage)
                 }
             }
+        }
+    }
+
+    private fun dispatchMsgItem(msgItem: MsgItem) {
+        if (true == SisterX.isUiPrepared.value) {
+            Bus.offer(SisterX.BUS_MSG_NEW, msgItem)
+        } else {
+            SisterX.bufferMsgItems.add(msgItem)
+            SisterX.hasBufferMsgItems.postValue(true)
         }
     }
 
