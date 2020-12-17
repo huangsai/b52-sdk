@@ -26,7 +26,6 @@ import com.mobile.sdk.sister.ui.chat.ChatFragment
 import kotlin.math.max
 import kotlin.math.min
 
-
 class MainDialogFragment : BaseAppCompatDialogFragment(), View.OnClickListener {
 
     private var _binding: SisterDialogMainBinding? = null

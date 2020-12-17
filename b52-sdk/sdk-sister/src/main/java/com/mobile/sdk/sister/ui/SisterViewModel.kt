@@ -172,6 +172,7 @@ class SisterViewModel @Inject constructor(
         ensureWorkThread()
         return DbMessage(
             0,
+            "abc",
             UUID.randomUUID().toString(),
             type,
             SisterX.sisterUserId,
@@ -181,7 +182,7 @@ class SisterViewModel @Inject constructor(
             AppPrefs.loginName,
             AppPrefs.userId,
             0,
-            SisterX.chatId,
+            0,
             STATUS_MSG_PROCESSING,
         )
     }

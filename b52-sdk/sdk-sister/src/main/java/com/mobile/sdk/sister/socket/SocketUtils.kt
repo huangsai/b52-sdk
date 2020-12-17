@@ -299,6 +299,7 @@ object SocketUtils {
     private fun createTextMessage(type: Int, id: String, text: DbMessage.Text): DbMessage {
         return DbMessage(
             0L,
+            "abc",
             id,
             type,
             AppPrefs.userId,

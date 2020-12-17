@@ -16,48 +16,48 @@ message CommonMessage{
 //发送聊天消息30001
 message ChatReq{
   //消息id
-  string  id=1 ;
+  string  id = 1 ;
   //聊天内容
-  string sayContent=2;
-  string toUserId= 3;
+  string sayContent = 2;
+  string toUserId = 3;
   //0普通1充值
-  int32 chatType=4;
+  int32 chatType = 4;
   //消息类型1文本2图片3语音4充值
-  int32 msgType=5;
+  int32 msgType = 5;
   //会话id
   int64 chatId = 6;
 
 }
 //消息通知30002
 message ChatMsg{
-  string  id=1 ;
+  string  id = 1 ;
   //内容
-  string sayContent=2;
+  string sayContent = 2;
   //0普通1充值
-  int32 chatType=3;
+  int32 chatType = 3;
   //发言时间
-  int64 sayTime =4;
-  string fromImgUrl=5;
+  int64 sayTime = 4;
+  string fromImgUrl = 5;
   //0会员1客服
-  int32 fromUserType=6;
-  string fromUserName=7;
-  string fromUserId=8;
+  int32 fromUserType = 6;
+  string fromUserName = 7;
+  string fromUserId = 8;
   //消息类型1文本2图片3语音4充值
-  int32 msgType=9;
+  int32 msgType = 9;
   //会话id
   int64 chatId = 10;
 }
 
 //关闭当前聊天30003
 message CloseChatReq{
-  string toUserId= 1;
+  string toUserId = 1;
   //会话id
   int64 chatId = 2;
 }
 
 //关闭会话通知30004
 message CloseChatMsg{
-  string fromUserId=1;
+  string fromUserId = 1;
   //会话id
   int64 chatId = 2;
 }
@@ -66,18 +66,18 @@ message CloseChatMsg{
 message ChatTimeOutMsg{
   //会话id
   int64 chatId = 1;
-  string timeOutMsg= 2;
+  string timeOutMsg = 2;
 }
 
 //排队超时通知30006
 message QueueTimeOutMsg{
-  string timeOutMsg= 1;
+  string timeOutMsg = 1;
 }
 
 //匹配客服30007
 message MathCsReq{
   //0普通1充值
-  int32 chatType=1;
+  int32 chatType = 1;
 }
 
 //匹配客服结果30008
@@ -85,26 +85,26 @@ message MathCsMsg{
   //会话id
   int64 chatId = 1;
   //会话方id
-  string toUserId= 2;
+  string toUserId = 2;
 }
 
 //会员留言请求30009
 message LeaveMsgReq{
-  string msg= 1;
+  string msg = 1;
 }
 
 //留言回复与离线消息推送30010
 message LeaveMsg{
-  repeated ChatMsg chatMsg=1;
+  repeated ChatMsg chatMsg = 1;
 }
 
 //无人在线通知30011
 message CSOfflineMsg{
-  string offlineMsg= 1;
+  string offlineMsg = 1;
 }
 //排队提示30012
 message QueueMsg{
-  string msg= 1;
+  string msg = 1;
 }
 
 //登录20001
@@ -128,7 +128,7 @@ message LogoutReq{
 
 //登出20004
 message LogoutMsg{
-  string msg =1 ;
+  string msg = 1 ;
 }
 
 // 20003
@@ -139,4 +139,12 @@ message ResponseResult{
   int32 biz = 2;
   string msg = 3;
   string  id = 4;
+}
+
+//匹配充值客服30013
+message MathRechargeCsReq{
+  //0普通1充值
+  int32 chatType = 1;
+  //充值客服id
+  string toUserId = 2;
 }

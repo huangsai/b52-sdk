@@ -139,6 +139,7 @@ fun DbMessage.toJson(): String {
 fun ChatMsg.toDbMessage(): DbMessage {
     return DbMessage(
         0L,
+        "abc",
         id,
         msgType,
         AppPrefs.userId,
@@ -148,7 +149,7 @@ fun ChatMsg.toDbMessage(): DbMessage {
         fromUserName,
         fromUserId,
         1,
-        chatId,
+        0,
         STATUS_MSG_SUCCESS
     )
 }
@@ -168,6 +169,7 @@ fun DbMessage.Deposit.sisterDepositDbMessage(): DbMessage {
 private fun String.dbMessageFromJson(type: Int): DbMessage {
     return DbMessage(
         0L,
+        "abc",
         UUID.randomUUID().toString(),
         type,
         AppPrefs.userId,

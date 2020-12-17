@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/WrapWrap"
+    android:layout_gravity="center_vertical|left"
+    android:gravity="center_vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_content"
+        android:layout_width="340dp"
+        android:layout_height="340dp"
+        android:background="@drawable/sister_main_bg"
+        android:padding="@dimen/size_8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/close">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/img_close"
+        style="@style/WrapWrap"
+        android:padding="@dimen/size_10dp"
+        android:src="@drawable/sister_icon_close" />
+
+</LinearLayout>
