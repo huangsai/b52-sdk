@@ -10,6 +10,6 @@ class MyApp : MultiDexApplication() {
         SisterX.setup(this, BuildConfig.DEBUG)
         // SisterX.setServers("java.cg.xxx:30311")
         // SisterX.setServers("java.cg.xxx:31301")
-        SisterX.setServers("java.cg.xxx:30311")
+        SisterX.setServers("java.cg.xxx:30301")
     }
 }
