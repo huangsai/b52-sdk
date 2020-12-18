@@ -83,11 +83,28 @@ object SocketUtils {
             }
     }
 
-    fun requestSister() = GlobalScope.launch(Dispatchers.IO) {
+    fun requestSister(chatType: Int) = GlobalScope.launch(Dispatchers.IO) {
         CommonMessage.Builder()
             .bizId(BUZ_SISTER_REQUEST)
             .msgType(2)
-            .content(MathCsReq.Builder().chatType(0).build().encodeByteString())
+            .content(MathCsReq.Builder().chatType(chatType).build().encodeByteString())
+            .build()
+            .let {
+                AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
+            }
+    }
+
+    fun requestSister2() = GlobalScope.launch(Dispatchers.IO) {
+        CommonMessage.Builder()
+            .bizId(BUZ_SISTER_REQUEST2)
+            .msgType(2)
+            .content(
+                MathRechargeCsReq.Builder()
+                    .chatType(1)
+                    .toUserId("26")
+                    .build()
+                    .encodeByteString()
+            )
             .build()
             .let {
                 AppWebSocket.post(CommonMessage.ADAPTER.encodeByteString(it))
@@ -101,7 +118,7 @@ object SocketUtils {
             CommonMessage.Builder()
                 .bizId(BUZ_MSG_REQUEST)
                 .msgType(2)
-                .content(dbMessage.toChatRes().encodeByteString())
+                .content(dbMessage.toChatRes(1).encodeByteString())
                 .build()
                 .let {
                     if (true == SisterX.isSocketConnected.value) {
@@ -226,15 +243,6 @@ object SocketUtils {
         }
     }
 
-    private fun dispatchMsgItem(msgItem: MsgItem) {
-        if (true == SisterX.isUiPrepared.value) {
-            Bus.offer(SisterX.BUS_MSG_NEW, msgItem)
-        } else {
-            SisterX.bufferMsgItems.add(msgItem)
-            SisterX.hasBufferMsgItems.postValue(true)
-        }
-    }
-
     fun insertDbMessage(dbMessage: DbMessage) {
         val newMsgItem = MsgItem.create(dbMessage)
         dispatchMsgItem(newMsgItem)
@@ -248,6 +256,15 @@ object SocketUtils {
         }
     }
 
+    private fun dispatchMsgItem(msgItem: MsgItem) {
+        if (true == SisterX.isUiPrepared.value) {
+            Bus.offer(SisterX.BUS_MSG_NEW, msgItem)
+        } else {
+            SisterX.bufferMsgItems.add(msgItem)
+            SisterX.hasBufferMsgItems.postValue(true)
+        }
+    }
+
     private fun onResponseResult(response: ResponseResult) {
         Timber.tag(SisterX.TAG).d(response.msg)
         when (response.biz) {
@@ -258,6 +275,7 @@ object SocketUtils {
             }
             BUZ_LOGIN -> {
                 SisterX.isLogin.postValue(response.result == 1)
+                requestSister2()
             }
             BUZ_LOGOUT -> {
                 SisterX.isLogin.postValue(false)
@@ -299,6 +317,7 @@ object SocketUtils {
     private fun createTextMessage(type: Int, id: String, text: DbMessage.Text): DbMessage {
         return DbMessage(
             0L,
+            "abc",
             id,
             type,
             AppPrefs.userId,

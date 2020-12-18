@@ -42,7 +42,6 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
 
     lateinit var deposit: DbMessage.Deposit
         private set
-
     lateinit var time: DbMessage.Time
         private set
 
@@ -485,13 +484,13 @@ abstract class MsgItem(val data: DbMessage) : SimpleRecyclerItem() {
             return try {
                 when (data.type) {
                     TYPE_TEXT -> {
-                        (if (data.isSister()) Text2(data).ofText() else Text(data)).ofText()
+                        (if (data.isFromSister()) Text2(data).ofText() else Text(data)).ofText()
                     }
                     TYPE_IMAGE -> {
-                        (if (data.isSister()) Image2(data).ofImage() else Image(data)).ofImage()
+                        (if (data.isFromSister()) Image2(data).ofImage() else Image(data)).ofImage()
                     }
                     TYPE_AUDIO -> {
-                        (if (data.isSister()) Audio2(data).ofAudio() else Audio(data)).ofAudio()
+                        (if (data.isFromSister()) Audio2(data).ofAudio() else Audio(data)).ofAudio()
                     }
                     TYPE_TIME -> Time(data).ofTime()
                     TYPE_SYSTEM -> System(data).ofSystem()

@@ -7,7 +7,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [
-        DbMessage::class
+        DbMessage::class,
+        DbSession::class
     ],
     version = 1,
     exportSchema = true

@@ -44,4 +44,9 @@
         <item name="android:windowIsFloating">false</item>
     </style>
 
+    <style name="sister_DialogFragment" parent="Theme.MaterialComponents.Dialog.Bridge">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

@@ -39,11 +39,11 @@ import java.io.File
  * 聊天功能业务逻辑代码
  */
 class ChatListPresenter(
-    fragment: TopMainFragment,
+    fragment: SisterDialogFragment.MyFragment,
     binding: SisterFragmentChatBinding,
     model: SisterViewModel,
     private val isCharge: Boolean
-) : BaseChatPresenter(fragment, binding, model), MediaPlayer.OnPreparedListener,
+) : BasePresenter(fragment, binding, model), MediaPlayer.OnPreparedListener,
     MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
 
     private val adapter = RecyclerAdapter()
@@ -56,7 +56,7 @@ class ChatListPresenter(
                 if (adapter.itemCount == 0 || binding.txtNewest.isInvisible) {
                     return
                 }
-                binding.chatRecycler.layoutManager?.let { layoutManager ->
+                binding.recyclerChat.layoutManager?.let { layoutManager ->
                     val linearLayoutManager = LinearLayoutManager::class.java.cast(layoutManager)!!
                     val lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition()
                     if (layoutManager.itemCount - lastVisibleItemPosition == 1) {
@@ -71,16 +71,16 @@ class ChatListPresenter(
 
     init {
         binding.txtNewest.setOnClickListener(this)
-        binding.chatRecycler.layoutManager = LinearLayoutManager(fragment.requireContext())
-        binding.chatRecycler.addItemDecoration(
+        binding.recyclerChat.layoutManager = LinearLayoutManager(fragment.requireContext())
+        binding.recyclerChat.addItemDecoration(
             LinearItemDecoration.builder(fragment.requireContext())
                 .color(android.R.color.transparent, R.dimen.size_8dp)
                 .build()
         )
-        binding.chatRecycler.addOnScrollListener(scrollListener)
+        binding.recyclerChat.addOnScrollListener(scrollListener)
         adapter.onClickListener = this
         adapter.imageLoader = this
-        binding.chatRecycler.adapter = adapter
+        binding.recyclerChat.adapter = adapter
 
         mMediaPlayer.setOnPreparedListener(this)
         mMediaPlayer.setOnCompletionListener(this)
@@ -91,8 +91,8 @@ class ChatListPresenter(
     }
 
     override fun onDestroyView() {
-        binding.chatRecycler.removeOnScrollListener(scrollListener)
-        binding.chatRecycler.adapter = null
+        binding.recyclerChat.removeOnScrollListener(scrollListener)
+        binding.recyclerChat.adapter = null
     }
 
     override fun onDestroy() {
@@ -139,9 +139,9 @@ class ChatListPresenter(
     }
 
     private fun scrollToBottom() {
-        binding.chatRecycler.postDelayed(
+        binding.recyclerChat.postDelayed(
             {
-                binding.chatRecycler.keepItemViewVisible(
+                binding.recyclerChat.keepItemViewVisible(
                     adapter.itemCount - 1,
                     true
                 )
@@ -174,7 +174,7 @@ class ChatListPresenter(
      * 新消息
      */
     fun onNewMessage(msgItem: MsgItem) {
-        if (binding.chatRecycler.canScrollVertically(1)) {
+        if (binding.recyclerChat.canScrollVertically(1)) {
             adapter.add(msgItem)
             binding.txtNewest.isInvisible = false
         } else {
@@ -185,7 +185,7 @@ class ChatListPresenter(
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.txt_newest -> {
-                binding.chatRecycler.scrollToPosition(adapter.itemCount - 1)
+                binding.recyclerChat.scrollToPosition(adapter.itemCount - 1)
             }
             R.id.profile -> {
                 Msg.toast("点击头像")
@@ -222,7 +222,7 @@ class ChatListPresenter(
                 ChatLeaveMsgPresenter(fragment, binding, model).showPop()
             }
             R.id.auto_reply_click -> {
-                model.requestSister()
+                model.requestSister(0)
             }
         }
     }
@@ -262,7 +262,7 @@ class ChatListPresenter(
         }
     }
 
-    //TODO 测试
+    // TODO 测试
     fun postChargeText(text: String) {
         postText(text)
         val type = when (text) {

@@ -15,8 +15,8 @@ import androidx.core.app.ActivityCompat
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
+import com.mobile.sdk.sister.ui.SisterDialogFragment
 import com.mobile.sdk.sister.ui.SisterViewModel
-import com.mobile.sdk.sister.ui.TopMainFragment
 import com.mobile.sdk.sister.ui.views.RecordButtonTouchCallback
 import com.pacific.adapter.AdapterViewHolder
 import com.skydoves.balloon.Balloon
@@ -32,10 +32,10 @@ import java.util.concurrent.TimeUnit
  * 发送语音业务逻辑代码
  */
 class ChatVoicePresenter(
-    fragment: TopMainFragment,
+    fragment: SisterDialogFragment.MyFragment,
     binding: SisterFragmentChatBinding,
     model: SisterViewModel
-) : BaseChatPresenter(fragment, binding, model), RecordButtonTouchCallback {
+) : BasePresenter(fragment, binding, model), RecordButtonTouchCallback {
 
     private val balloon: Balloon
     private val pressDuration: TextView

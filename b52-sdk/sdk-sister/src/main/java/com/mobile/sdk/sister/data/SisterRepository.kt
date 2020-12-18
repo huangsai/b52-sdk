@@ -6,6 +6,7 @@ import com.mobile.guava.jvm.Guava
 import com.mobile.guava.jvm.domain.Source
 import com.mobile.sdk.sister.data.db.AppDatabase
 import com.mobile.sdk.sister.data.db.DbMessage
+import com.mobile.sdk.sister.data.db.DbSession
 import com.mobile.sdk.sister.data.file.PlatformPrefs
 import com.mobile.sdk.sister.data.http.*
 import com.mobile.sdk.sister.ui.MSG_TIME_DIFF
@@ -49,10 +50,41 @@ class SisterRepository @Inject constructor(
         }
     }
 
+    @Deprecated("DELETE")
     fun loadMessage(): List<DbMessage> {
         try {
             val list = appDatabase.messageDao()
                 .getByUserId(platformPrefs.userId)
+                .apply {
+                    forEach {
+                        if (it.status == STATUS_MSG_PROCESSING) {
+                            it.status = STATUS_MSG_FAILED
+                        }
+                    }
+                }
+                .toMutableList()
+
+            if (list.size > 2) {
+                for (i in 1 until list.size) {
+                    if (list[i].time - list[i - 1].time >= MSG_TIME_DIFF) {
+                        list.add(i, list[i].crossTime())
+                    }
+                }
+            }
+            if (list.isNotEmpty()) {
+                list.add(0, list[0].crossTime())
+            }
+            return list.toList()
+        } catch (e: Exception) {
+            Timber.d(e)
+        }
+        return emptyList()
+    }
+
+    fun loadMessage(sessionId: String): List<DbMessage> {
+        try {
+            val list = appDatabase.messageDao()
+                .getBySessionId(sessionId)
                 .apply {
                     forEach {
                         if (it.status == STATUS_MSG_PROCESSING) {
@@ -103,6 +135,16 @@ class SisterRepository @Inject constructor(
         } catch (e: Exception) {
             errorSource(e)
         }
+    }
+
+    fun loadSession(): List<DbSession> {
+        try {
+            val dao = appDatabase.sessionDao()
+            return dao.getByUserId(platformPrefs.userId)
+        } catch (e: Exception) {
+            Timber.d(e)
+        }
+        return emptyList()
     }
 
     private fun <T> errorSource(e: Throwable): Source<T> {

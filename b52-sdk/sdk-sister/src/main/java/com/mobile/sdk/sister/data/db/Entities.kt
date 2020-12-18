@@ -14,6 +14,7 @@ import com.squareup.moshi.JsonClass
 data class DbMessage(
     @ColumnInfo(name = "_id") @PrimaryKey(autoGenerate = true) val _id: Long,
     @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "sessionId") val sessionId: String,
     @ColumnInfo(name = "type") val type: Int,
     @ColumnInfo(name = "toUserId") val toUserId: String,
     @ColumnInfo(name = "content") var content: String,
@@ -22,11 +23,33 @@ data class DbMessage(
     @ColumnInfo(name = "fromUsername") val fromUsername: String,
     @ColumnInfo(name = "fromUserId") val fromUserId: String,
     @ColumnInfo(name = "fromUserType") val fromUserType: Int,
-    @ColumnInfo(name = "chatId") val chatId: Long,
+    @ColumnInfo(name = "chatType") val chatType: Int,
     @ColumnInfo(name = "status") var status: Int
 ) {
+    fun asProgressing(): DbMessage {
+        status = 1
+        return this
+    }
 
-    fun isSister(): Boolean = fromUserType == 1
+    fun asSuccess(): DbMessage {
+        status = 2
+        return this
+    }
+
+    fun asFailed(): DbMessage {
+        status = 3
+        return this
+    }
+
+    fun isProgressing(): Boolean = status == 1
+
+    fun isSuccess(): Boolean = status == 2
+
+    fun isFailed(): Boolean = status == 3
+
+    fun isFromSister(): Boolean = fromUserType == 1
+
+    fun isChargeType(): Boolean = chatType == 1
 
     @JsonClass(generateAdapter = true)
     data class Text(@Json(name = "msg") val msg: String)
@@ -55,4 +78,21 @@ data class DbMessage(
         @Json(name = "type") val type: Int,
         @Json(name = "url") val url: String
     )
+}
+
+@Entity(
+    tableName = "sister_session",
+    indices = [Index(value = ["userId", "sisterId"], unique = true)]
+)
+data class DbSession(
+    @ColumnInfo(name = "_id") @PrimaryKey val _id: String,
+    @ColumnInfo(name = "sisterImage") val sisterImage: String,
+    @ColumnInfo(name = "sisterName") val sisterName: String,
+    @ColumnInfo(name = "sisterId") val sisterId: String,
+    @ColumnInfo(name = "userId") val userId: String,
+    @ColumnInfo(name = "chatType") val chatType: Int,
+    @ColumnInfo(name = "time") var time: Long
+) {
+
+    fun isChargeType(): Boolean = chatType == 1
 }

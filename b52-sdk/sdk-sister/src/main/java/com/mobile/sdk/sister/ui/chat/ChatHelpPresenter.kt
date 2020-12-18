@@ -9,8 +9,8 @@ import com.mobile.guava.android.ui.view.recyclerview.LinearItemDecoration
 import com.mobile.guava.jvm.domain.Source
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
+import com.mobile.sdk.sister.ui.SisterDialogFragment
 import com.mobile.sdk.sister.ui.SisterViewModel
-import com.mobile.sdk.sister.ui.TopMainFragment
 import com.mobile.sdk.sister.ui.items.HelpItem
 import com.pacific.adapter.AdapterUtils
 import com.pacific.adapter.AdapterViewHolder
@@ -23,27 +23,27 @@ import kotlinx.coroutines.withContext
  * 系统回复业务逻辑代码
  */
 class ChatHelpPresenter(
-    fragment: TopMainFragment,
+    fragment: SisterDialogFragment.MyFragment,
     binding: SisterFragmentChatBinding,
     model: SisterViewModel,
     private val isCharge: Boolean
-) : BaseChatPresenter(fragment, binding, model) {
+) : BasePresenter(fragment, binding, model) {
 
     private val adapter = RecyclerAdapter()
 
     init {
-        binding.helpRecycler.layoutManager = LinearLayoutManager(
+        binding.recyclerHelp.layoutManager = LinearLayoutManager(
             fragment.requireContext(),
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        binding.helpRecycler.addItemDecoration(
+        binding.recyclerHelp.addItemDecoration(
             LinearItemDecoration.builder(fragment.requireContext())
                 .color(android.R.color.transparent, R.dimen.size_5dp)
                 .horizontal()
                 .build()
         )
-        binding.helpRecycler.adapter = adapter
+        binding.recyclerHelp.adapter = adapter
         adapter.onClickListener = this
     }
 
@@ -97,7 +97,7 @@ class ChatHelpPresenter(
     }
 
     override fun onDestroyView() {
-        binding.helpRecycler.adapter = null
+        binding.recyclerHelp.adapter = null
     }
 
     override fun load(view: ImageView, holder: AdapterViewHolder) {

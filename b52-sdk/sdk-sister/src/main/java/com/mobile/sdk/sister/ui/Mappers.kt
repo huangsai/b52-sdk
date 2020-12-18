@@ -12,7 +12,6 @@ import java.util.*
 /**
  * 数据转换器
  */
-
 const val MSG_TIME_DIFF = 10 * 60 * 1000L // 消息显示时间差
 
 fun String.jsonToRobot(): List<ApiSysReply> {
@@ -139,6 +138,7 @@ fun DbMessage.toJson(): String {
 fun ChatMsg.toDbMessage(): DbMessage {
     return DbMessage(
         0L,
+        "abc",
         id,
         msgType,
         AppPrefs.userId,
@@ -148,7 +148,7 @@ fun ChatMsg.toDbMessage(): DbMessage {
         fromUserName,
         fromUserId,
         1,
-        chatId,
+        0,
         STATUS_MSG_SUCCESS
     )
 }
@@ -168,6 +168,7 @@ fun DbMessage.Deposit.sisterDepositDbMessage(): DbMessage {
 private fun String.dbMessageFromJson(type: Int): DbMessage {
     return DbMessage(
         0L,
+        "abc",
         UUID.randomUUID().toString(),
         type,
         AppPrefs.userId,
@@ -182,12 +183,12 @@ private fun String.dbMessageFromJson(type: Int): DbMessage {
     )
 }
 
-fun DbMessage.toChatRes(): ChatReq {
+fun DbMessage.toChatRes(chatType:Int): ChatReq {
     return ChatReq.Builder()
         .id(id)
         .msgType(type)
         .sayContent(content)
-        .chatType(0)
+        .chatType(chatType)
         .toUserId(toUserId)
         .chatId(SisterX.chatId)
         .build()

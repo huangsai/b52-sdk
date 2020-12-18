@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/WrapWrap"
+    android:layout_gravity="center_vertical|left"
+    android:gravity="center_vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_content"
+        android:layout_width="340dp"
+        android:layout_height="340dp"
+        android:background="@drawable/sister_main_bg"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/img_close">
+
+        <RadioGroup
+            android:id="@+id/rg_tab"
+            style="@style/WrapWrap"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/size_6dp"
+            android:paddingEnd="@dimen/size_6dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/rb_chat"
+                style="@style/WrapWrap"
+                android:background="@drawable/sister_main_tab_selector"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="@string/sister_main_tab_csms_text"
+                android:textColor="@color/sister_main_tab_text_color"
+                android:textSize="@dimen/font_13sp" />
+
+            <RadioButton
+                android:id="@+id/rb_charge"
+                style="@style/WrapWrap"
+                android:layout_marginTop="@dimen/size_10dp"
+                android:background="@drawable/sister_main_tab_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:text="@string/sister_main_tab_charge_text"
+                android:textColor="@color/sister_main_tab_text_color"
+                android:textSize="@dimen/font_13sp" />
+
+        </RadioGroup>
+
+        <View
+            android:id="@+id/guideline1"
+            android:layout_width="@dimen/size_0dp"
+            android:layout_height="@dimen/sister_input_height"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/rg_tab" />
+
+        <ImageView
+            android:id="@+id/voice_btn"
+            style="@style/WrapWrap"
+            android:src="@drawable/sister_voice_icon_selector"
+            app:layout_constraintBottom_toBottomOf="@+id/guideline1"
+            app:layout_constraintEnd_toEndOf="@+id/rg_tab"
+            app:layout_constraintStart_toStartOf="@+id/rg_tab"
+            app:layout_constraintTop_toTopOf="@+id/guideline1" />
+
+        <ImageView
+            android:id="@+id/call_btn"
+            style="@style/WrapWrap"
+            android:layout_marginBottom="@dimen/size_14dp"
+            android:src="@drawable/sister_icon_call"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/voice_btn"
+            app:layout_constraintEnd_toEndOf="@+id/rg_tab"
+            app:layout_constraintStart_toStartOf="@+id/rg_tab" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            style="@style/ConCon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/rg_tab"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/img_close"
+        style="@style/WrapWrap"
+        android:padding="@dimen/size_10dp"
+        android:src="@drawable/sister_icon_close" />
+
+</LinearLayout>

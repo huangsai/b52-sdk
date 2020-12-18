@@ -10,12 +10,12 @@ import com.mobile.sdk.sister.data.http.TYPE_DEPOSIT_ALIPAY
 import com.mobile.sdk.sister.data.http.TYPE_DEPOSIT_UNION
 import com.mobile.sdk.sister.data.http.TYPE_DEPOSIT_WECHAT
 import com.mobile.sdk.sister.databinding.SisterFragmentChargePaymentBinding
-import com.mobile.sdk.sister.ui.TopMainFragment
+import com.mobile.sdk.sister.ui.SisterDialogFragment
 
 /**
  * 充值收款页面
  */
-class ChargePaymentFragment : TopMainFragment() {
+class ChargePaymentFragment : SisterDialogFragment.MyFragment() {
 
     private var _binding: SisterFragmentChargePaymentBinding? = null
     private val binding: SisterFragmentChargePaymentBinding get() = _binding!!
@@ -41,6 +41,9 @@ class ChargePaymentFragment : TopMainFragment() {
             )
         }
         return binding.root
+    }
+
+    override fun load() {
     }
 
     companion object {
