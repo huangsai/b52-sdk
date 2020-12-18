@@ -12,8 +12,8 @@ import com.mobile.guava.android.ime.ImeUtils
 import com.mobile.guava.android.mvvm.Msg
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
+import com.mobile.sdk.sister.ui.SisterDialogFragment
 import com.mobile.sdk.sister.ui.SisterViewModel
-import com.mobile.sdk.sister.ui.TopMainFragment
 import com.pacific.adapter.AdapterViewHolder
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.createBalloon
@@ -23,10 +23,10 @@ import com.skydoves.balloon.overlay.BalloonOverlayAnimation
  * 留言消息业务逻辑代码
  */
 class ChatLeaveMsgPresenter(
-    fragment: TopMainFragment,
+    fragment: SisterDialogFragment.MyFragment,
     binding: SisterFragmentChatBinding,
     model: SisterViewModel,
-) : BaseChatPresenter(fragment, binding, model) {
+) : BasePresenter(fragment, binding, model) {
 
     private val maxInputDesCount = 200
     private val inputContentEt: EditText
@@ -38,8 +38,8 @@ class ChatLeaveMsgPresenter(
         arrowVisible = false
         cornerRadius = 0f
         marginTop =
-            (binding.chatRecycler.measuredHeight - fragment.requireContext().dp2px2(160f)) / 2
-        width = binding.chatRecycler.width - 16
+            (binding.recyclerChat.measuredHeight - fragment.requireContext().dp2px2(160f)) / 2
+        width = binding.recyclerChat.width - 16
         setBackgroundDrawableResource(R.drawable.sister_leave_msg_bg)
         setElevation(0)
         setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
@@ -63,7 +63,7 @@ class ChatLeaveMsgPresenter(
     }
 
     fun showPop() {
-        balloon.showAlignTop(binding.chatRecycler)
+        balloon.showAlignTop(binding.recyclerChat)
     }
 
     override fun onClick(v: View?) {

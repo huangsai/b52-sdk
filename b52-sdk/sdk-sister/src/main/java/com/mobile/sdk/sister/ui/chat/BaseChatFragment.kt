@@ -9,29 +9,24 @@ import com.mobile.guava.jvm.extension.cast
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.SisterX
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
-import com.mobile.sdk.sister.ui.TopMainFragment
+import com.mobile.sdk.sister.ui.SisterDialogFragment
 import com.mobile.sdk.sister.ui.views.MyKeyboardHelper
 
 /**
  * 客服聊天页面
  */
-class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.OnKeyListener {
+abstract class BaseChatFragment : SisterDialogFragment.MyFragment(), View.OnClickListener, TextWatcher, View.OnKeyListener {
 
     private var _binding: SisterFragmentChatBinding? = null
-    private val binding: SisterFragmentChatBinding get() = _binding!!
+    protected val binding: SisterFragmentChatBinding get() = _binding!!
 
-    private val textContent: String
+    protected val textContent: String
         get() = binding.chatEt.text.toString().trim()
 
-    private lateinit var chatHelpPresenter: ChatHelpPresenter
-    private lateinit var chatMorePresenter: ChatMorePresenter
-    private lateinit var chatVoicePresenter: ChatVoicePresenter
-    private lateinit var chatEmotionPresenter: ChatEmotionPresenter
-
-    companion object {
-        @JvmStatic
-        fun newInstance(): ChatFragment = ChatFragment()
-    }
+    protected lateinit var chatHelpPresenter: ChatHelpPresenter
+    protected lateinit var chatMorePresenter: ChatMorePresenter
+    protected lateinit var chatVoicePresenter: ChatVoicePresenter
+    protected lateinit var chatEmotionPresenter: ChatEmotionPresenter
 
     private val globalLayoutListener = object : ViewTreeObserver.OnGlobalLayoutListener {
         private var mWindowHeight = 0
@@ -40,7 +35,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
 
         override fun onGlobalLayout() {
             val outRect = Rect()
-            fParent.dialog!!.window!!.decorView.getWindowVisibleDisplayFrame(outRect)
+            pFragment.dialog!!.window!!.decorView.getWindowVisibleDisplayFrame(outRect)
             val height: Int = outRect.height()
             if (mWindowHeight == 0) {
                 mWindowHeight = height
@@ -48,7 +43,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
                 if (mWindowHeight != height) {
                     mSoftKeyboardHeight = mWindowHeight - height
                 }
-                if (mIsKeyboardVisible != MyKeyboardHelper.isKeyboardVisible(fParent.dialog!!)) {
+                if (mIsKeyboardVisible != MyKeyboardHelper.isKeyboardVisible(pFragment.dialog!!)) {
                     mIsKeyboardVisible = !mIsKeyboardVisible
                     onKeyboardVisibility(mIsKeyboardVisible, mSoftKeyboardHeight)
                 }
@@ -70,25 +65,25 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
         savedInstanceState: Bundle?
     ): View? {
         _binding = SisterFragmentChatBinding.inflate(inflater, container, false)
-        chatListPresenter = ChatListPresenter(this, binding, fParent.model, false)
-        chatHelpPresenter = ChatHelpPresenter(this, binding, fParent.model, false)
-        chatMorePresenter = ChatMorePresenter(this, binding, fParent.model)
-        chatVoicePresenter = ChatVoicePresenter(this, binding, fParent.model)
-        chatEmotionPresenter = ChatEmotionPresenter(this, binding, fParent.model)
+        chatListPresenter = ChatListPresenter(this, binding, viewModel, false)
+        chatHelpPresenter = ChatHelpPresenter(this, binding, viewModel, false)
+        chatMorePresenter = ChatMorePresenter(this, binding, viewModel)
+        chatVoicePresenter = ChatVoicePresenter(this, binding, viewModel)
+        chatEmotionPresenter = ChatEmotionPresenter(this, binding, viewModel)
         binding.chatAdd.setOnClickListener(this)
         binding.chatEmotion.setOnClickListener(this)
         EmotionHandle.disableEmotion(binding.chatEt)
         binding.chatEt.addTextChangedListener(this)
         binding.chatEt.setOnKeyListener(this)
-        fParent.dialog?.window?.decorView?.viewTreeObserver?.addOnGlobalLayoutListener(
+        pFragment.dialog?.window?.decorView?.viewTreeObserver?.addOnGlobalLayoutListener(
             globalLayoutListener
         )
         return binding.root
     }
 
-    override fun switchInputView(isVoice: Boolean) {
-        binding.chatEt.visibility = if (isVoice) View.INVISIBLE else View.VISIBLE
-        binding.pressVoice.visibility = if (isVoice) View.VISIBLE else View.INVISIBLE
+    override fun setInputView(isVoiceEnable: Boolean) {
+        binding.chatEt.visibility = if (isVoiceEnable) View.INVISIBLE else View.VISIBLE
+        binding.pressVoice.visibility = if (isVoiceEnable) View.VISIBLE else View.INVISIBLE
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -105,7 +100,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
 
     override fun onDestroyView() {
         super.onDestroyView()
-        fParent.dialog?.window?.decorView?.viewTreeObserver?.removeOnGlobalLayoutListener(
+        pFragment.dialog?.window?.decorView?.viewTreeObserver?.removeOnGlobalLayoutListener(
             globalLayoutListener
         )
         binding.chatEt.setOnKeyListener(null)
@@ -153,7 +148,7 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
         }
         //点击系统回复Item
         if (event.first == SisterX.BUS_MSG_AUTO_REPLY) {
-            fParent.model.postSysReply(false, event.second.cast())
+            viewModel.postSysReply(false, event.second.cast())
             return
         }
     }
@@ -175,5 +170,8 @@ class ChatFragment : TopMainFragment(), View.OnClickListener, TextWatcher, View.
             return false
         }
         return true
+    }
+
+    override fun load() {
     }
 }

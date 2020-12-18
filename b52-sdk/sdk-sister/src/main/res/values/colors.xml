@@ -23,7 +23,6 @@
 -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName">
 
-    <color name="sister_color_transparent">#00000000</color>
     <color name="sister_color_white">#FFFFFF</color>
     <color name="sister_color_black">#000000</color>
     <color name="sister_color_black_transparent">#B2000000</color>
@@ -36,5 +35,6 @@
     <color name="sister_color_D82323">#D82323</color>
     <color name="sister_black_alpha_50">#4c939393</color>
     <color name="sister_text_link">#2271e6</color>
+    <color name="sister_main_dark">#27272E</color>
 
 </resources>

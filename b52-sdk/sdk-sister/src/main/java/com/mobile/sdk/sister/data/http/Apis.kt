@@ -34,13 +34,13 @@ const val BUZ_LEAVE_MSG_REQUEST = 30009// 新增留言30009
 const val BUZ_LEAVE_MSG_SUCCESS = 30010// 留言回复与离线消息推送30010
 const val BUZ_SISTER_REQUEST2 = 30013// 匹配充值客服30013
 
-@Deprecated("Error WAY")
+@Deprecated("Deprecated")
 const val STATUS_MSG_PROCESSING = 1
 
-@Deprecated("Error WAY")
+@Deprecated("Deprecated")
 const val STATUS_MSG_SUCCESS = 2
 
-@Deprecated("Error WAY")
+@Deprecated("Deprecated")
 const val STATUS_MSG_FAILED = 3
 
 @JsonClass(generateAdapter = true)

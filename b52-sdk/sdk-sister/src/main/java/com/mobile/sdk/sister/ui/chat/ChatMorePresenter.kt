@@ -15,8 +15,8 @@ import androidx.core.content.FileProvider
 import com.mobile.guava.android.mvvm.AndroidX
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
+import com.mobile.sdk.sister.ui.SisterDialogFragment
 import com.mobile.sdk.sister.ui.SisterViewModel
-import com.mobile.sdk.sister.ui.TopMainFragment
 import com.pacific.adapter.AdapterViewHolder
 import com.skydoves.balloon.ArrowOrientation
 import com.skydoves.balloon.Balloon
@@ -28,10 +28,10 @@ import java.io.File
  * 更多功能
  */
 class ChatMorePresenter(
-    fragment: TopMainFragment,
+    fragment: SisterDialogFragment.MyFragment,
     binding: SisterFragmentChatBinding,
     model: SisterViewModel,
-) : BaseChatPresenter(fragment, binding, model) {
+) : BasePresenter(fragment, binding, model) {
 
     private val authorities: String = AndroidX.myApp.packageName
     private var cameraImageFile: File? = null

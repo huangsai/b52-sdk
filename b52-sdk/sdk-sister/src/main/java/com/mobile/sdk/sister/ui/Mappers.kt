@@ -12,7 +12,6 @@ import java.util.*
 /**
  * 数据转换器
  */
-
 const val MSG_TIME_DIFF = 10 * 60 * 1000L // 消息显示时间差
 
 fun String.jsonToRobot(): List<ApiSysReply> {

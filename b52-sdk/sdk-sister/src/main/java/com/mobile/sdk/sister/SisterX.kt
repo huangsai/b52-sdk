@@ -17,7 +17,7 @@ import com.mobile.sdk.sister.data.db.RoomAppDatabase
 import com.mobile.sdk.sister.data.file.AppPrefs
 import com.mobile.sdk.sister.socket.AppWebSocket
 import com.mobile.sdk.sister.socket.SocketUtils
-import com.mobile.sdk.sister.ui.MainDialogFragment
+import com.mobile.sdk.sister.ui.SisterDialogFragment
 import com.mobile.sdk.sister.ui.items.MsgItem
 import com.mobile.sdk.sister.ui.views.MyKeyboardHelper
 import kotlinx.coroutines.Dispatchers
@@ -153,7 +153,7 @@ object SisterX {
      * @param cancelable 是否可以取消弹窗
      */
     fun show(activity: FragmentActivity, cancelable: Boolean): DialogFragment {
-        return MainDialogFragment.newInstance(cancelable).also {
+        return SisterDialogFragment.newInstance(cancelable).also {
             activity.showDialogFragment(it)
         }
     }

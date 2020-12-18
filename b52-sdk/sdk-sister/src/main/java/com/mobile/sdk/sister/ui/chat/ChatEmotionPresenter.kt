@@ -7,8 +7,8 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mobile.sdk.sister.R
 import com.mobile.sdk.sister.databinding.SisterFragmentChatBinding
+import com.mobile.sdk.sister.ui.SisterDialogFragment
 import com.mobile.sdk.sister.ui.SisterViewModel
-import com.mobile.sdk.sister.ui.TopMainFragment
 import com.mobile.sdk.sister.ui.chat.EmotionHandle.splitEmotionInfo
 import com.mobile.sdk.sister.ui.items.ViewerEmotionItem
 import com.pacific.adapter.AdapterViewHolder
@@ -21,10 +21,10 @@ import com.skydoves.balloon.overlay.BalloonOverlayAnimation
  * 处理表情业务逻辑代码
  */
 class ChatEmotionPresenter(
-    fragment: TopMainFragment,
+    fragment: SisterDialogFragment.MyFragment,
     binding: SisterFragmentChatBinding,
     model: SisterViewModel,
-) : BaseChatPresenter(fragment, binding, model) {
+) : BasePresenter(fragment, binding, model) {
 
     private var balloon: Balloon? = null
     private var viewPager: ViewPager2? = null

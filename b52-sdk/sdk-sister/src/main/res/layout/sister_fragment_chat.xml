@@ -2,27 +2,27 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    style="@style/MatchMatch"
+    android:background="@color/sister_color_EDEDED">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_title"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/size_0dp"
         android:layout_height="@dimen/size_30dp"
-        android:background="@color/sister_color_EDEDED"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/layout_recycler"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/chat_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/WrapWrap"
             android:paddingStart="@dimen/size_10dp"
             android:paddingEnd="@dimen/size_10dp"
             android:src="@drawable/sister_return2"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -37,73 +37,23 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/size_0dp"
             android:layout_height="@dimen/size_05dp"
             android:background="@color/sister_color_gray_transparent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/sister_color_EDEDED"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/size_10dp"
-        android:paddingRight="@dimen/size_10dp"
-        android:paddingBottom="@dimen/size_10dp"
-        app:layout_constraintBottom_toTopOf="@id/layout_input"
-        app:layout_constraintTop_toBottomOf="@id/layout_title">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/chat_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                android:paddingTop="@dimen/size_10dp" />
-
-            <TextView
-                android:id="@+id/txt_newest"
-                android:layout_width="@dimen/size_84dp"
-                android:layout_height="@dimen/size_30dp"
-                android:layout_marginBottom="@dimen/size_10dp"
-                android:background="@drawable/sister_chat_newest"
-                android:gravity="center"
-                android:text="@string/sister_chat_newest"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/sister_msg_text_font"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/chat_recycler"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:visibility="visible" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/help_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_10dp"
-            android:overScrollMode="never"
-            android:scrollbars="none" />
-    </LinearLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_input"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_34dp"
-        android:layout_marginTop="@dimen/size_6dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="@dimen/sister_input_height"
+        android:background="@color/sister_main_dark"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_recycler">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <EditText
             android:id="@+id/chat_et"
@@ -157,5 +107,54 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="@dimen/size_7dp"
+        android:background="@color/sister_main_dark"
+        app:layout_constraintBottom_toTopOf="@id/layout_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_help"
+        android:layout_width="@dimen/size_0dp"
+        android:layout_height="@dimen/size_40dp"
+        android:overScrollMode="always"
+        android:padding="@dimen/size_9dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/divider1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_chat"
+        style="@style/ConCon"
+        android:clipToPadding="false"
+        android:overScrollMode="always"
+        android:padding="@dimen/size_9dp"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_help"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_title" />
+
+    <TextView
+        android:id="@+id/txt_newest"
+        android:layout_width="@dimen/size_84dp"
+        android:layout_height="@dimen/size_30dp"
+        android:layout_marginBottom="@dimen/size_16dp"
+        android:background="@drawable/sister_chat_newest"
+        android:gravity="center"
+        android:text="@string/sister_chat_newest"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sister_msg_text_font"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_chat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
